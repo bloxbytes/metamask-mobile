@@ -424,7 +424,7 @@ export const SNAPS_CONTROLLER_STATE = {
       preinstalled: true,
       id: 'npm:@metamask/message-signing-snap',
       initialConnections: {
-        'https://portfolio.metamask.io': {},
+        'https://portfolio.iopn.io': {},
         'https://portfolio-builds.metafi-dev.codefi.network': {},
         'https://docs.metamask.io': {},
         'https://developer.metamask.io': {},
@@ -458,7 +458,7 @@ export const SNAPS_CONTROLLER_STATE = {
           },
         },
         initialConnections: {
-          'https://portfolio.metamask.io': {},
+          'https://portfolio.iopn.io': {},
           'https://portfolio-builds.metafi-dev.codefi.network': {},
           'https://docs.metamask.io': {},
           'https://developer.metamask.io': {},

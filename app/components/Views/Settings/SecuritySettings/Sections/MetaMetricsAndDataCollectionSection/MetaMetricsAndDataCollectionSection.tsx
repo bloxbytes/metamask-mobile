@@ -275,8 +275,8 @@ const MetaMetricsAndDataCollectionSection: React.FC<
 
   return (
     <>
-      {renderMetaMetricsSection()}
-      {!hideMarketingSection && renderDataCollectionSection()}
+      {/* {renderMetaMetricsSection()}
+      {!hideMarketingSection && renderDataCollectionSection()} */}
     </>
   );
 };

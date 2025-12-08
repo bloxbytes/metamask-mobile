@@ -1,5 +1,5 @@
 import React, { useCallback, useLayoutEffect, useMemo } from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Button, {
   ButtonSize,
@@ -86,11 +86,12 @@ export const OnboardingSuccessComponent: React.FC<OnboardingSuccessProps> = ({
 
   const renderContent = () => (
     <>
-      <OnboardingSuccessEndAnimation
+      {/* <OnboardingSuccessEndAnimation
         onAnimationComplete={() => {
           // No-op: Animation completion not needed in success mode
         }}
-      />
+      /> */}
+      <Image source={require('../../../images/transaction-icons/approve.png')} style={{ width: 100, height: 100 }}/>
       <Text variant={TextVariant.DisplayMD} style={styles.textTitle}>
         {getTitleString()}
       </Text>

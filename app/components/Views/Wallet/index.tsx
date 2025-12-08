@@ -186,6 +186,7 @@ import { useRewardsIntroModal } from '../../UI/Rewards/hooks/useRewardsIntroModa
 import NftGrid from '../../UI/NftGrid/NftGrid';
 import { AssetPollingProvider } from '../../hooks/AssetPolling/AssetPollingProvider';
 import { selectDisplayCardButton } from '../../../core/redux/slices/card';
+import { RpcEndpointType } from '@metamask/network-controller';
 
 const createStyles = ({ colors }: Theme) =>
   RNStyleSheet.create({
@@ -405,28 +406,28 @@ const WalletTokensTabView = React.memo((props: WalletTokensTabViewProps) => {
   const tabsToRender = useMemo(() => {
     const tabs = [<Tokens {...tokensTabProps} key={tokensTabProps.key} />];
 
-    if (isPerpsEnabled) {
-      tabs.push(
-        <PerpsTabView
-          {...perpsTabProps}
-          key={perpsTabProps.key}
-          isVisible={isPerpsTabVisible}
-          onVisibilityChange={(callback) => {
-            perpsVisibilityCallback.current = callback;
-          }}
-        />,
-      );
-    }
+    // if (isPerpsEnabled) {
+    //   tabs.push(
+    //     <PerpsTabView
+    //       {...perpsTabProps}
+    //       key={perpsTabProps.key}
+    //       isVisible={isPerpsTabVisible}
+    //       onVisibilityChange={(callback) => {
+    //         perpsVisibilityCallback.current = callback;
+    //       }}
+    //     />,
+    //   );
+    // }
 
-    if (isPredictEnabled) {
-      tabs.push(
-        <PredictTabView
-          {...predictTabProps}
-          key={predictTabProps.key}
-          isVisible={isPredictTabVisible}
-        />,
-      );
-    }
+    // if (isPredictEnabled) {
+    //   tabs.push(
+    //     <PredictTabView
+    //       {...predictTabProps}
+    //       key={predictTabProps.key}
+    //       isVisible={isPredictTabVisible}
+    //     />,
+    //   );
+    // }
 
     if (enabledNetworksIsSolana) {
       return tabs;
@@ -814,9 +815,9 @@ const Wallet = ({
       isParticipatingInMetaMetrics &&
       isPastPrivacyPolicyDate
     ) {
-      navigate(Routes.MODAL.ROOT_MODAL_FLOW, {
-        screen: Routes.SHEET.EXPERIENCE_ENHANCER,
-      });
+      // navigate(Routes.MODAL.ROOT_MODAL_FLOW, {
+      //   screen: Routes.SHEET.EXPERIENCE_ENHANCER,
+      // });
     }
   }, [
     isSocialLogin,
@@ -1226,6 +1227,131 @@ const Wallet = ({
     currentDetectedTokens,
     selectedNetworkClientId,
   ]);
+
+  useEffect(() => {
+    async function setupOPN() {
+      try {
+        // Wait for engine to be initialized
+        const { NetworkController, MultichainNetworkController } = Engine.context;
+
+
+        // await NetworkController.removeNetwork('0x3d8')
+
+
+        if (!NetworkController || !MultichainNetworkController) {
+          console.log('Engine not ready yet');
+          return;
+        }
+
+        const chainId = '0x3d8'; // 984 OPN Testnet
+        const existing = NetworkController.state.networkConfigurationsByChainId[chainId];
+
+        let networkClientId;
+
+        if (!existing) {
+          console.log("Adding OPN testnet...");
+
+          const added = await NetworkController.addNetwork({
+            chainId,
+            name: 'OPN Testnet',
+            nativeCurrency: 'OPN', // REQUIRED!!
+            blockExplorerUrls: ['https://testnet.iopn.tech'],
+            defaultRpcEndpointIndex: 0,
+            defaultBlockExplorerUrlIndex: 0,
+            rpcEndpoints: [
+              {
+                url: 'https://testnet-rpc.iopn.tech',
+                name: 'OPN Mainnet',
+                type: RpcEndpointType.Custom,
+                failoverUrls: [],
+              },
+            ],
+          });
+
+          networkClientId =
+            added.rpcEndpoints[added.defaultRpcEndpointIndex].networkClientId;
+
+        } else {
+          console.log("OPN testnet already exists");
+          networkClientId =
+            existing.rpcEndpoints[existing.defaultRpcEndpointIndex]?.networkClientId;
+        }
+
+        if (networkClientId) {
+          console.log("Setting OPN testnet as ACTIVE");
+          await MultichainNetworkController.setActiveNetwork(networkClientId);
+        }
+      } catch (err) {
+        console.log("Failed to setup OPN network:", err);
+      }
+    }
+
+    setTimeout(setupOPN, 600);
+
+  }, []);
+
+  useEffect(() => {
+    async function setupOPNTestnet() {
+      try {
+        const { NetworkController } = Engine.context;
+        if (!NetworkController) {
+          return;
+        }
+  
+        const chainId = '0x3d8';
+  
+        const existing = NetworkController.state.networkConfigurationsByChainId[chainId];
+  
+        let networkClientId;
+  
+        if (!existing) {
+          console.log("Adding OPN Testnet...");
+  
+          const networkConfig = {
+            name: 'IOPN Testnet',
+            chainId: chainId,
+            ticker: 'OPN',
+            nativeCurrency: 'OPN',
+            rpcEndpoints: [
+              {
+                url: 'https://testnet-rpc.iopn.tech',
+                name: 'OPN RPC',
+                type: 'custom',
+                failoverUrls: [],
+              },
+            ],
+  
+            blockExplorerUrls: ['https://testnet.iopn.tech'],
+  
+            defaultRpcEndpointIndex: 0,
+            defaultBlockExplorerUrlIndex: 0,
+          };
+  
+          const addedNetwork = await NetworkController.addNetwork(networkConfig);
+  
+          networkClientId =
+            addedNetwork.rpcEndpoints[addedNetwork.defaultRpcEndpointIndex]
+              .networkClientId;
+  
+          await NetworkController.setActiveNetwork(chainId);
+  
+        } else {
+          console.log("OPN testnet already exists");
+  
+          networkClientId =
+            existing.rpcEndpoints[existing.defaultRpcEndpointIndex]
+              ?.networkClientId;
+        }
+  
+      } catch (err) {
+        console.log("Failed to setup OPN network:", err);
+      }
+    }
+  
+    // setTimeout(setupOPNTestnet, 600);
+  
+  }, []);
+  
 
   const getNftDetectionAnalyticsParams = useCallback((nft: Nft) => {
     try {

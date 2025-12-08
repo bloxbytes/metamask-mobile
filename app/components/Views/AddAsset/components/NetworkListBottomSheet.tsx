@@ -56,9 +56,19 @@ export default function NetworkListBottomSheet({
       }
 
       configs[chainId] = config;
+      console.log('chainId::', chainId)
     }
 
-    return configs;
+    // return configs; // vaival
+    // vaival
+    const sorted = Object.entries(configs).sort(([chainIdA], [chainIdB]) => {
+      if (chainIdA === '0x3d8') return -1; // OPN Testnet always on top
+      if (chainIdB === '0x3d8') return 1;
+      return 0;
+    });
+
+    return Object.fromEntries(sorted);
+    //end
   }, [displayEvmNetworksOnly, networkConfigurations]);
 
   return (

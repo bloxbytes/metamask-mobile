@@ -164,13 +164,25 @@ const CustomNetworkSelector = ({
     [goToNetworkSettings, colors, styles],
   );
 
+  const OPN_CHAIN_ID = '984'; // CAIP uses decimal reference
+  const sortedNetworks = [...networksToUse].sort((a, b) => {
+    const idA = a.caipChainId;
+    const idB = b.caipChainId;
+  
+    if (idA === 'eip155:984') return -1;
+    if (idB === 'eip155:984') return 1;
+  
+    return 0;
+  });
+
   return (
     <ScrollView
       testID={NETWORK_MULTI_SELECTOR_TEST_IDS.CUSTOM_NETWORKS_CONTAINER}
       style={styles.container}
     >
       <FlashList
-        data={networksToUse}
+        // data={networksToUse}
+        data={sortedNetworks}
         renderItem={renderNetworkItem}
         keyExtractor={(item) => item.caipChainId}
         ListFooterComponent={renderFooter}

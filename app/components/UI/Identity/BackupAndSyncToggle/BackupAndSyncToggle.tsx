@@ -165,7 +165,9 @@ const BackupAndSyncToggle = ({
       </View>
       <Text variant={TextVariant.BodyMD} color={TextColor.Alternative}>
         {strings('backupAndSync.enable.description')}
-        <Text color={TextColor.Info} onPress={handleLink}>
+        <Text color={TextColor.Info}
+        // onPress={handleLink}
+        >
           {strings('backupAndSync.privacyLink')}
         </Text>
       </Text>

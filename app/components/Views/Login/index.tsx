@@ -600,7 +600,7 @@ const Login: React.FC<LoginProps> = ({ saveOnboardingEvent }) => {
           onLongPress={handleDownloadStateLogs}
           activeOpacity={1}
         >
-          <FoxAnimation hasFooter={false} trigger={startFoxAnimation} />
+          {/* <FoxAnimation hasFooter={false} trigger={startFoxAnimation} /> */}
         </TouchableOpacity>
       </SafeAreaView>
     </ErrorBoundary>

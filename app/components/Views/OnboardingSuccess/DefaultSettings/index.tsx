@@ -19,7 +19,7 @@ const DefaultSettings = () => {
   const navigation = useNavigation();
 
   const handleLink = () => {
-    Linking.openURL(AppConstants.URLS.PRIVACY_BEST_PRACTICES);
+    // Linking.openURL(AppConstants.URLS.PRIVACY_BEST_PRACTICES);
   };
 
   return (

@@ -43,7 +43,7 @@ interface Props {
 }
 
 const SUPPORT_URL =
-  'https://support.metamask.io/metamask-portfolio/buy/my-country-region-isnt-supported-for-buying-crypto/';
+  'https://iopn.io/contact';
 
 const RegionAlert: React.FC<Props> = ({
   isVisible,

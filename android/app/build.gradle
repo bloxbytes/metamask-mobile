@@ -184,11 +184,11 @@ android {
     namespace"io.metamask"
 
     defaultConfig {
-        applicationId "io.metamask"
+        applicationId "io.opnwallet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionName "7.61.0"
-        versionCode 3092
+        versionName "1.0.0"
+        versionCode 1
         testBuildType System.getProperty('testBuildType', 'debug')
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         manifestPlaceholders.MM_BRANCH_KEY_TEST = "$System.env.MM_BRANCH_KEY_TEST"
@@ -218,10 +218,15 @@ android {
 
 	  signingConfigs {
       mainProd {
-        storeFile file('../keystores/release.keystore')
-        storePassword System.getenv("BITRISEIO_ANDROID_KEYSTORE_PASSWORD")
-        keyAlias System.getenv("BITRISEIO_ANDROID_KEYSTORE_ALIAS")
-        keyPassword System.getenv("BITRISEIO_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD")
+        // storeFile file('../keystores/release.keystore')
+        // storePassword System.getenv("BITRISEIO_ANDROID_KEYSTORE_PASSWORD")
+        // keyAlias System.getenv("BITRISEIO_ANDROID_KEYSTORE_ALIAS")
+        // keyPassword System.getenv("BITRISEIO_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD")
+
+        storeFile file('../keystores/prodDebug.jks')
+        storePassword 'opnwallet'
+        keyAlias 'opnwallet'
+        keyPassword 'opnwallet'
       }
       mainBeta {
         storeFile file('../keystores/rc.keystore')
@@ -314,7 +319,7 @@ android {
           }
           prod {
             dimension "version"
-            applicationId "io.metamask"
+            applicationId "io.opnwallet"
             // Use appropriate signing config based on environment
             def env = System.getenv("METAMASK_ENVIRONMENT")
             def isE2E = System.getenv("E2E")

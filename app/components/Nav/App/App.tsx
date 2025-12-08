@@ -1283,6 +1283,12 @@ const AppContent: React.FC = () => {
 const App: React.FC = () => {
   const { isCheckingUpdates } = useOTAUpdates();
 
+  const { enable } = useMetrics();
+  
+  useEffect(() => {
+    enable(true);
+  }, [])
+
   if (isCheckingUpdates) {
     return <FoxLoader />;
   }

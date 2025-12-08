@@ -32,6 +32,14 @@ import {
   AvatarVariant,
 } from '../../../component-library/components/Avatars/Avatar/index.ts';
 import { IconName } from '../../../component-library/components/Icons/Icon/Icon.types';
+import { useTheme } from '../../../util/theme/index.ts';
+import { createCustomNetworkStyles } from '../../Views/Settings/NetworksSettings/NetworkSettings/styles.ts';
+// import Text, {
+//   TextVariant,
+// } from '../../../../../../component-library/components/Texts/Text';
+import Text, {
+  TextVariant,
+} from '../../../component-library/components/Texts/Text';
 
 interface ModalState {
   showPopularNetworkModal: boolean;
@@ -198,6 +206,21 @@ const NetworkMultiSelector = ({
     [areAllNetworksSelectedCombined, onSelectAllPopularNetworks],
   );
 
+  const { colors } = useTheme();
+  const customNetworkStyles = createCustomNetworkStyles({ colors });
+
+  const selectAllNetworksComponent2 = useMemo(
+    () => (
+      <Text
+          style={customNetworkStyles.listHeader}
+          variant={TextVariant.BodyMDBold}
+        >
+          Popular networks
+        </Text>
+    ),
+    [],
+  );
+
   return (
     <ScrollView
       style={styles.bodyContainer}
@@ -210,7 +233,8 @@ const NetworkMultiSelector = ({
         selectedChainIds={selectedChainIds}
         onSelectNetwork={onSelectNetwork}
         additionalNetworksComponent={additionalNetworksComponent}
-        selectAllNetworksComponent={selectAllNetworksComponent}
+        // selectAllNetworksComponent={selectAllNetworksComponent}
+        selectAllNetworksComponent={selectAllNetworksComponent2}
         areAllNetworksSelected={areAllNetworksSelectedCombined}
         openRpcModal={openRpcModal}
       />

@@ -5,29 +5,29 @@ const infuraProjectId = InfuraKey === 'null' ? '' : InfuraKey;
 
 // Support
 export const SRP_GUIDE_URL =
-  'https://support.metamask.io/getting-started/user-guide-secret-recovery-phrase-password-and-private-keys/';
+  'https://support.iopn.io/getting-started/user-guide-secret-recovery-phrase-password-and-private-keys/';
 export const NON_CUSTODIAL_WALLET_URL =
-  'https://support.metamask.io/getting-started/metamask-is-a-self-custodial-wallet/';
+  'https://support.iopn.io/getting-started/metamask-is-a-self-custodial-wallet/';
 export const KEEP_SRP_SAFE_URL =
-  'https://support.metamask.io/privacy-and-security/staying-safe-in-web3/scammers-and-phishers-rugpulls-and-airdrop-scams/';
+  'https://support.iopn.io/privacy-and-security/staying-safe-in-web3/scammers-and-phishers-rugpulls-and-airdrop-scams/';
 export const PRIVATE_KEY_GUIDE_URL =
-  'https://support.metamask.io/start/user-guide-secret-recovery-phrase-password-and-private-keys/#private-keys';
+  'https://support.iopn.io/start/user-guide-secret-recovery-phrase-password-and-private-keys/#private-keys';
 export const LEARN_MORE_URL =
-  'https://support.metamask.io/privacy-and-security/basic-safety-and-security-tips-for-metamask/';
+  'https://support.iopn.io/privacy-and-security/basic-safety-and-security-tips-for-metamask/';
 export const WHY_TRANSACTION_TAKE_TIME_URL =
   'https://community.metamask.io/t/what-is-gas-why-do-transactions-take-so-long/3172';
 export const SIMULATION_DETALS_ARTICLE_URL =
-  'https://support.metamask.io/transactions-and-gas/transactions/simulations/';
+  'https://support.iopn.io/transactions-and-gas/transactions/simulations/';
 
-export const TOKEN_APPROVAL_SPENDING_CAP = `https://support.metamask.io/privacy-and-security/how-to-customize-token-approvals-with-a-spending-cap/`;
+export const TOKEN_APPROVAL_SPENDING_CAP = `https://support.iopn.io/privacy-and-security/how-to-customize-token-approvals-with-a-spending-cap/`;
 export const CONNECTING_TO_A_DECEPTIVE_SITE =
-  'https://support.metamask.io/troubleshooting/deceptive-site-ahead-when-trying-to-connect-to-a-site/';
+  'https://support.iopn.io/troubleshooting/deceptive-site-ahead-when-trying-to-connect-to-a-site/';
 
 export const CONNECTING_TO_DEPRECATED_NETWORK =
-  'https://support.metamask.io/networks-and-sidechains/eth-on-testnets/';
+  'https://support.iopn.io/networks-and-sidechains/eth-on-testnets/';
 
 export const HOWTO_MANAGE_METAMETRICS =
-  'https://support.metamask.io/privacy-and-security/how-to-manage-your-metametrics-settings';
+  'https://support.iopn.io/privacy-and-security/how-to-manage-your-metametrics-settings';
 
 // Policies
 export const CONSENSYS_PRIVACY_POLICY = 'https://consensys.net/privacy-policy/';
@@ -52,6 +52,7 @@ export const MAINNET_BLOCK_EXPLORER = 'https://etherscan.io';
 export const SEPOLIA_BLOCK_EXPLORER = 'https://sepolia.etherscan.io';
 export const BASE_MAINNET_BLOCK_EXPLORER = 'https://basescan.org';
 export const BSC_MAINNET_BLOCK_EXPLORER = 'https://bscscan.com';
+// export const OPN_TESTNET_BLOCK_EXPLORER = 'https://testnet.iopn.tech';
 
 // Rpcs
 export const MAINNET_DEFAULT_RPC_URL = `https://mainnet.infura.io/v3/${infuraProjectId}`;
@@ -94,7 +95,7 @@ export const LINEA_FAUCET = 'https://www.infura.io/faucet/linea';
 
 // Add custom network
 export const ADD_CUSTOM_NETWORK_ARTCILE =
-  'https://support.metamask.io/networks-and-sidechains/managing-networks/verifying-custom-network-information/';
+  'https://support.iopn.io/networks-and-sidechains/managing-networks/verifying-custom-network-information/';
 
 export const LEDGER_SUPPORT_LINK =
   'https://support.ledger.com/article/16748796611613-zd';
@@ -106,4 +107,4 @@ export const ETHEREUM_LOGO =
   'https://token.api.cx.metamask.io/assets/nativeCurrencyLogos/ethereum.svg';
 
 export const HOW_TO_MANAGE_METRAMETRICS_SETTINGS =
-  'https://support.metamask.io/privacy-and-security/how-to-manage-your-metametrics-settings';
+  'https://support.iopn.io/privacy-and-security/how-to-manage-your-metametrics-settings';

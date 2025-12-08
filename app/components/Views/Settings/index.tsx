@@ -153,19 +153,19 @@ const Settings = () => {
   ///: END:ONLY_INCLUDE_IF
 
   const submitFeedback = () => {
-    trackEvent(
-      createEventBuilder(
-        MetaMetricsEvents.NAVIGATION_TAPS_SEND_FEEDBACK,
-      ).build(),
-    );
-    goToBrowserUrl(
-      'https://community.metamask.io/c/feature-requests-ideas/',
-      strings('app_settings.request_feature'),
-    );
+    // trackEvent(
+    //   createEventBuilder(
+    //     MetaMetricsEvents.NAVIGATION_TAPS_SEND_FEEDBACK,
+    //   ).build(),
+    // );
+    // goToBrowserUrl(
+    //   'https://community.metamask.io/c/feature-requests-ideas/',
+    //   strings('app_settings.request_feature'),
+    // );
   };
 
   const showHelp = () => {
-    let supportUrl = 'https://support.metamask.io';
+    let supportUrl = 'https://iopn.io/contact';
 
     ///: BEGIN:ONLY_INCLUDE_IF(beta)
     supportUrl = 'https://intercom.help/internal-beta-testing/en/';

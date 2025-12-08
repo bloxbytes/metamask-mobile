@@ -19,6 +19,7 @@ import { MetricsEventBuilder } from '../../Analytics/MetricsEventBuilder';
 import { MetaMetrics } from '../../Analytics';
 import { Hex, Json } from '@metamask/utils';
 import Logger from '../../../util/Logger';
+import { RpcEndpointType } from '@metamask/network-controller';
 
 const NON_EMPTY = 'NON_EMPTY';
 
@@ -33,16 +34,54 @@ export function getInitialNetworkControllerState(persistedState: {
   let initialNetworkControllerState =
     persistedState.NetworkController as NetworkState;
 
+
+
+
   if (!initialNetworkControllerState) {
     initialNetworkControllerState = getDefaultNetworkControllerState(
       ADDITIONAL_DEFAULT_NETWORKS,
     );
+
+
+      // // --------------------------------------
+      // //  ADD CUSTOM NETWORK: OPN TESTNET
+      // // --------------------------------------
+      //   const OPN_CHAIN_ID = '0x3d8'; // 984 decimal
+
+      // // Only add if not already persisted
+      // if (
+      //   !initialNetworkControllerState.networkConfigurationsByChainId[
+      //     OPN_CHAIN_ID
+      //   ]
+      // ) {
+      //   initialNetworkControllerState.networkConfigurationsByChainId[
+      //     OPN_CHAIN_ID
+      //   ] = {
+      //     chainId: OPN_CHAIN_ID,
+      //     name: 'OPN Testnet',
+      //     nativeCurrency: 'OPN',
+      //     defaultRpcEndpointIndex: 0,
+      //     defaultBlockExplorerUrlIndex: 0,
+      //     rpcEndpoints: [
+      //       {
+      //         networkClientId: 'opn-testnet-client', // any unique string is fine
+      //         url: 'https://testnet-rpc.iopn.tech',
+      //         type: RpcEndpointType.Custom,
+      //         failoverUrls: [],
+      //       },
+      //     ],
+      //     blockExplorerUrls: ['https://testnet.iopn.tech'],
+      //   };
+      // }
+
 
     // Add failovers for default Infura RPC endpoints
     initialNetworkControllerState.networkConfigurationsByChainId[
       ChainId.mainnet
     ].rpcEndpoints[0].failoverUrls =
       getFailoverUrlsForInfuraNetwork('ethereum-mainnet');
+
+
     initialNetworkControllerState.networkConfigurationsByChainId[
       ChainId['linea-mainnet']
     ].rpcEndpoints[0].failoverUrls =

@@ -157,32 +157,32 @@ export default class AppInformation extends PureComponent {
   };
 
   onPrivacyPolicy = () => {
-    const url = AppConstants.URLS.PRIVACY_POLICY;
-    this.goTo(url, strings('app_information.privacy_policy'));
+    // const url = AppConstants.URLS.PRIVACY_POLICY;
+    // this.goTo(url, strings('app_information.privacy_policy'));
   };
 
   onTermsOfUse = () => {
-    const url = AppConstants.URLS.TERMS_AND_CONDITIONS;
-    this.goTo(url, strings('app_information.terms_of_use'));
+    // const url = AppConstants.URLS.TERMS_AND_CONDITIONS;
+    // this.goTo(url, strings('app_information.terms_of_use'));
   };
 
   onAttributions = () => {
-    const url = `https://raw.githubusercontent.com/MetaMask/metamask-mobile/v${this.state.appVersion}/attribution.txt`;
-    this.goTo(url, strings('app_information.attributions'));
+    // const url = `https://raw.githubusercontent.com/MetaMask/metamask-mobile/v${this.state.appVersion}/attribution.txt`;
+    // this.goTo(url, strings('app_information.attributions'));
   };
 
   onSupportCenter = () => {
-    const url = 'https://support.metamask.io';
+    const url = 'https://iopn.io/contact';
     this.goTo(url, strings('drawer.metamask_support'));
   };
 
   onWebSite = () => {
-    const url = 'https://metamask.io/';
-    this.goTo(url, 'metamask.io');
+    // const url = 'https://metamask.io/';
+    // this.goTo(url, 'metamask.io');
   };
 
   onContactUs = () => {
-    const url = 'https://support.metamask.io';
+    const url = 'https://iopn.io/contact';
     this.goTo(url, strings('drawer.metamask_support'));
   };
 

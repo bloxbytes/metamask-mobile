@@ -430,15 +430,15 @@ class AddCustomToken extends PureComponent {
           </Text>
           <Text
             suppressHighlighting
-            onPress={() => {
-              navigation.navigate('Webview', {
-                screen: 'SimpleWebview',
-                params: {
-                  url: AppConstants.URLS.SECURITY,
-                  title: strings('add_asset.banners.custom_security_tips'),
-                },
-              });
-            }}
+            // onPress={() => {
+            //   navigation.navigate('Webview', {
+            //     screen: 'SimpleWebview',
+            //     params: {
+            //       url: AppConstants.URLS.SECURITY,
+            //       title: strings('add_asset.banners.custom_security_tips'),
+            //     },
+            //   });
+            // }}
             style={styles.tokenDetectionLink}
           >
             {strings('add_asset.banners.custom_info_link')}

@@ -425,7 +425,7 @@ class ChoosePassword extends PureComponent {
     });
 
     try {
-      this.setState({ loading: true });
+      // this.setState({ loading: true });
       const previous_screen = this.props.route.params?.[PREVIOUS_SCREEN];
 
       // latest ux changes - we are forcing user to enable biometric by default
@@ -670,7 +670,7 @@ class ChoosePassword extends PureComponent {
 
   learnMore = () => {
     const learnMoreUrl =
-      'https://support.metamask.io/managing-my-wallet/resetting-deleting-and-restoring/how-can-i-reset-my-password/';
+      'https://support.iopn.io/managing-my-wallet/resetting-deleting-and-restoring/how-can-i-reset-my-password/';
 
     this.track(MetaMetricsEvents.EXTERNAL_LINK_CLICKED, {
       text: 'Learn More',
@@ -682,7 +682,7 @@ class ChoosePassword extends PureComponent {
       screen: 'SimpleWebview',
       params: {
         url: learnMoreUrl,
-        title: 'support.metamask.io',
+        title: 'support.iopn.io',
       },
     });
   };
@@ -906,7 +906,7 @@ class ChoosePassword extends PureComponent {
                             <Text
                               variant={TextVariant.BodySM}
                               color={TextColor.Primary}
-                              onPress={this.learnMore}
+                              // onPress={this.learnMore}
                               testID={
                                 ChoosePasswordSelectorsIDs.LEARN_MORE_LINK_ID
                               }

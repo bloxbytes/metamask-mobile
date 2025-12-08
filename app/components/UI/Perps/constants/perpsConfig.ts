@@ -437,7 +437,7 @@ export const LEARN_MORE_CONFIG = {
  * Contact support button configuration (matches Settings behavior)
  */
 export const SUPPORT_CONFIG = {
-  URL: 'https://support.metamask.io',
+  URL: 'https://iopn.io/contact',
   TITLE_KEY: 'perps.support.title',
   DESCRIPTION_KEY: 'perps.support.description',
 } as const;
@@ -448,5 +448,5 @@ export const SUPPORT_CONFIG = {
  */
 export const PERPS_SUPPORT_ARTICLES_URLS = {
   ADL_URL:
-    'https://support.metamask.io/manage-crypto/trade/perps/leverage-and-liquidation/#what-is-auto-deleveraging-adl',
+    'https://iopn.io/contact',
 } as const;

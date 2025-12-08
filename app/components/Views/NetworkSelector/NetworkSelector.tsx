@@ -519,8 +519,17 @@ const NetworkSelector = () => {
     );
   };
 
+  const sorted = Object.entries(networkConfigurations)
+  .sort(([chainIdA], [chainIdB]) => {
+    if (chainIdA === '0x3d8') return -1;   // Bring OPN Testnet to top
+    if (chainIdB === '0x3d8') return 1;
+    return 0;
+  })
+  .map(([_, config]) => config);
+
   const renderRpcNetworks = () =>
-    Object.values(networkConfigurations).map((networkConfiguration) => {
+    // Object.values(networkConfigurations).map((networkConfiguration) => {
+    sorted.map((networkConfiguration) => {
       if (isNonEvmChainId(networkConfiguration.chainId)) return null;
       const {
         name: nickname,
@@ -891,9 +900,10 @@ const NetworkSelector = () => {
       {isNetworkUiRedesignEnabled() &&
         searchString.length === 0 &&
         renderEnabledNetworksTitle()}
+      {renderRpcNetworks()}
       {renderMainnet()}
       {renderLineaMainnet()}
-      {renderRpcNetworks()}
+      {/* {renderRpcNetworks()} */}
       {
         ///: BEGIN:ONLY_INCLUDE_IF(keyring-snaps)
         !isSendFlow && renderNonEvmNetworks(false)

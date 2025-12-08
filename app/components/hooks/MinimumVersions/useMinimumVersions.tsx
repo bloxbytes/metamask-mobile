@@ -17,9 +17,9 @@ const useMinimumVersions = () => {
 
   useEffect(() => {
     if (shouldTriggerUpdateFlow) {
-      InteractionManager.runAfterInteractions(() => {
-        navigation.navigate(...createUpdateNeededNavDetails());
-      });
+      // InteractionManager.runAfterInteractions(() => {
+      //   navigation.navigate(...createUpdateNeededNavDetails());
+      // });
     }
   }, [navigation, shouldTriggerUpdateFlow]);
 };

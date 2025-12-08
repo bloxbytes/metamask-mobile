@@ -46,10 +46,10 @@ export const DAPP_SCANNING_MOCKS: MockEventsObject = {
       },
     },
     {
-      urlEndpoint: createDappScanningUrl('portfolio.metamask.io'),
+      urlEndpoint: createDappScanningUrl('portfolio.iopn.io'),
       responseCode: 200,
       response: {
-        domainName: 'portfolio.metamask.io',
+        domainName: 'portfolio.iopn.io',
         recommendedAction: 'NONE',
       },
     },

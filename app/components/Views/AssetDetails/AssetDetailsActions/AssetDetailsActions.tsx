@@ -95,43 +95,73 @@ export const AssetDetailsActions: React.FC<AssetDetailsActionsProps> = ({
     callback();
   }, []);
 
-  const handleBuyPress = useCallback(() => {
-    withNavigationLock(() => {
-      // Track the home screen Buy button click
-      trackActionButtonClick(trackEvent, createEventBuilder, {
-        action_name: ActionButtonType.BUY,
-        action_position: ActionPosition.FIRST_POSITION,
-        button_label: strings('asset_overview.buy_button'),
-        location: ActionLocation.HOME,
-      });
+  // const handleBuyPress = useCallback(() => {
+  //   withNavigationLock(() => {
+  //     // Track the home screen Buy button click
+  //     trackActionButtonClick(trackEvent, createEventBuilder, {
+  //       action_name: ActionButtonType.BUY,
+  //       action_position: ActionPosition.FIRST_POSITION,
+  //       button_label: strings('asset_overview.buy_button'),
+  //       location: ActionLocation.HOME,
+  //     });
 
-      // Navigate to FundActionMenu with both custom onBuy and asset context
-      // The menu will prioritize custom onBuy over standard funding options
-      // This allows custom funding flows even when deposit/ramp are unavailable
-      navigate(Routes.MODAL.ROOT_MODAL_FLOW, {
-        screen: Routes.MODAL.FUND_ACTION_MENU,
-        params: {
-          onBuy, // Custom buy function (takes priority if provided)
-          asset, // Asset context for standard funding flows
-        },
-      });
-    });
-  }, [
-    withNavigationLock,
-    trackEvent,
-    createEventBuilder,
-    navigate,
-    onBuy,
-    asset,
-  ]);
+  //     // Navigate to FundActionMenu with both custom onBuy and asset context
+  //     // The menu will prioritize custom onBuy over standard funding options
+  //     // This allows custom funding flows even when deposit/ramp are unavailable
+  //     navigate(Routes.MODAL.ROOT_MODAL_FLOW, {
+  //       screen: Routes.MODAL.FUND_ACTION_MENU,
+  //       params: {
+  //         onBuy, // Custom buy function (takes priority if provided)
+  //         asset, // Asset context for standard funding flows
+  //       },
+  //     });
+  //   });
+  // }, [
+  //   withNavigationLock,
+  //   trackEvent,
+  //   createEventBuilder,
+  //   navigate,
+  //   onBuy,
+  //   asset,
+  // ]);
 
-  const handleSwapPress = useCallback(() => {
-    withNavigationLock(goToSwaps);
-  }, [withNavigationLock, goToSwaps]);
+  const handleBuyPress = () => {
+    let supportUrl = 'https://buy.iopn.io';
+
+    goToBrowserUrl(supportUrl, strings('asset_overview.buy_button'));
+    // trackEvent(
+    //   createEventBuilder(MetaMetricsEvents.NAVIGATION_TAPS_GET_HELP).build(),
+    // );
+  };
+
+  // const handleSwapPress = useCallback(() => {
+  //   withNavigationLock(goToSwaps);
+  // }, [withNavigationLock, goToSwaps]);
 
   const handleSendPress = useCallback(() => {
     withNavigationLock(onSend);
   }, [withNavigationLock, onSend]);
+
+
+  const goToBrowserUrl = (url: string, title: string) => {
+    navigation.navigate('Webview', {
+      screen: 'SimpleWebview',
+      params: {
+        url,
+        title,
+      },
+    });
+  };
+
+
+  const handleSwapPress = () => {
+    let supportUrl = 'https://swap.iopn.io';
+
+    goToBrowserUrl(supportUrl, strings('asset_overview.swap'));
+    // trackEvent(
+    //   createEventBuilder(MetaMetricsEvents.NAVIGATION_TAPS_GET_HELP).build(),
+    // );
+  };
 
   const handleReceivePress = useCallback(() => {
     withNavigationLock(onReceive);
@@ -145,7 +175,8 @@ export const AssetDetailsActions: React.FC<AssetDetailsActionsProps> = ({
             iconName={IconName.AttachMoney}
             label={strings('asset_overview.buy_button')}
             onPress={handleBuyPress}
-            isDisabled={!isBuyingAvailable}
+            // isDisabled={!isBuyingAvailable}
+            isDisabled={true}
             testID={buyButtonActionID}
           />
         </View>

@@ -172,80 +172,80 @@ const DeleteMetaMetricsData = (props: DeleteMetaMetricsDataProps) => {
   const openPrivacyPolicy = () => Linking.openURL(CONSENSYS_PRIVACY_POLICY);
   const openMetametricsHowto = () => Linking.openURL(HOWTO_MANAGE_METAMETRICS);
 
-  return (
-    <SettingsButtonSection
-      testID="delete-metrics-button"
-      needsModal
-      sectionTitle={strings('app_settings.delete_metrics_title')}
-      sectionButtonText={strings('app_settings.delete_metrics_button')}
-      descriptionText={
-        dataDeletionAvailable ? (
-          <>
-            <Text variant={TextVariant.BodyMD} color={TextColor.Alternative}>
-              {strings('app_settings.delete_metrics_description_part_one')}
-            </Text>{' '}
-            <Button
-              variant={ButtonVariants.Link}
-              size={ButtonSize.Auto}
-              onPress={openMetametricsHowto}
-              label={strings(
-                'app_settings.delete_metrics_description_part_two',
-              )}
-            />{' '}
-            <Text variant={TextVariant.BodyMD} color={TextColor.Alternative}>
-              {strings('app_settings.delete_metrics_description_part_three')}
-            </Text>{' '}
-            <Text variant={TextVariant.BodyMD} color={TextColor.Alternative}>
-              {strings('app_settings.delete_metrics_description_before_delete')}
-            </Text>{' '}
-            <Button
-              variant={ButtonVariants.Link}
-              size={ButtonSize.Auto}
-              onPress={openPrivacyPolicy}
-              label={strings(
-                'app_settings.delete_metrics_description_privacy_policy',
-              )}
-            />
-          </>
-        ) : (
-          <>
-            <Text variant={TextVariant.BodyMD} color={TextColor.Alternative}>
-              {strings(
-                'app_settings.delete_metrics_description_after_delete_part_one',
-              )}
-            </Text>{' '}
-            <Text variant={TextVariant.BodyMD} color={TextColor.Alternative}>
-              {deletionTaskDate}
-            </Text>
-            <Text variant={TextVariant.BodyMD} color={TextColor.Alternative}>
-              {strings(
-                'app_settings.delete_metrics_description_after_delete_part_two',
-              )}
-            </Text>{' '}
-            <Button
-              variant={ButtonVariants.Link}
-              size={ButtonSize.Auto}
-              onPress={openPrivacyPolicy}
-              label={strings(
-                'app_settings.delete_metrics_description_privacy_policy',
-              )}
-            />
-          </>
-        )
-      }
-      buttonDisabled={!dataDeletionAvailable}
-      modalTitleText={strings(
-        'app_settings.delete_metrics_confirm_modal_title',
-      )}
-      modalDescriptionText={strings(
-        'app_settings.delete_metrics_confirm_modal_description',
-      )}
-      modalConfirmButtonText={strings('app_settings.clear')}
-      modalCancelButtonText={strings(
-        'app_settings.reset_account_cancel_button',
-      )}
-      modalOnConfirm={deleteMetaMetrics}
-    />
+  return (<></>
+    // <SettingsButtonSection
+    //   testID="delete-metrics-button"
+    //   needsModal
+    //   sectionTitle={strings('app_settings.delete_metrics_title')}
+    //   sectionButtonText={strings('app_settings.delete_metrics_button')}
+    //   descriptionText={
+    //     dataDeletionAvailable ? (
+    //       <>
+    //         <Text variant={TextVariant.BodyMD} color={TextColor.Alternative}>
+    //           {strings('app_settings.delete_metrics_description_part_one')}
+    //         </Text>{' '}
+    //         <Button
+    //           variant={ButtonVariants.Link}
+    //           size={ButtonSize.Auto}
+    //           onPress={openMetametricsHowto}
+    //           label={strings(
+    //             'app_settings.delete_metrics_description_part_two',
+    //           )}
+    //         />{' '}
+    //         <Text variant={TextVariant.BodyMD} color={TextColor.Alternative}>
+    //           {strings('app_settings.delete_metrics_description_part_three')}
+    //         </Text>{' '}
+    //         <Text variant={TextVariant.BodyMD} color={TextColor.Alternative}>
+    //           {strings('app_settings.delete_metrics_description_before_delete')}
+    //         </Text>{' '}
+    //         <Button
+    //           variant={ButtonVariants.Link}
+    //           size={ButtonSize.Auto}
+    //           onPress={openPrivacyPolicy}
+    //           label={strings(
+    //             'app_settings.delete_metrics_description_privacy_policy',
+    //           )}
+    //         />
+    //       </>
+    //     ) : (
+    //       <>
+    //         <Text variant={TextVariant.BodyMD} color={TextColor.Alternative}>
+    //           {strings(
+    //             'app_settings.delete_metrics_description_after_delete_part_one',
+    //           )}
+    //         </Text>{' '}
+    //         <Text variant={TextVariant.BodyMD} color={TextColor.Alternative}>
+    //           {deletionTaskDate}
+    //         </Text>
+    //         <Text variant={TextVariant.BodyMD} color={TextColor.Alternative}>
+    //           {strings(
+    //             'app_settings.delete_metrics_description_after_delete_part_two',
+    //           )}
+    //         </Text>{' '}
+    //         <Button
+    //           variant={ButtonVariants.Link}
+    //           size={ButtonSize.Auto}
+    //           onPress={openPrivacyPolicy}
+    //           label={strings(
+    //             'app_settings.delete_metrics_description_privacy_policy',
+    //           )}
+    //         />
+    //       </>
+    //     )
+    //   }
+    //   buttonDisabled={!dataDeletionAvailable}
+    //   modalTitleText={strings(
+    //     'app_settings.delete_metrics_confirm_modal_title',
+    //   )}
+    //   modalDescriptionText={strings(
+    //     'app_settings.delete_metrics_confirm_modal_description',
+    //   )}
+    //   modalConfirmButtonText={strings('app_settings.clear')}
+    //   modalCancelButtonText={strings(
+    //     'app_settings.reset_account_cancel_button',
+    //   )}
+    //   modalOnConfirm={deleteMetaMetrics}
+    // />
   );
 };
 

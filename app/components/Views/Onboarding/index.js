@@ -10,6 +10,7 @@ import {
   Animated,
   Easing,
   Platform,
+  Image,
 } from 'react-native';
 import { captureException } from '@sentry/react-native';
 import Text, {
@@ -543,18 +544,18 @@ class Onboarding extends PureComponent {
           });
           isIOS
             ? this.props.navigation.navigate(
-                Routes.ONBOARDING.SOCIAL_LOGIN_SUCCESS_EXISTING_USER,
-                {
-                  [PREVIOUS_SCREEN]: ONBOARDING,
-                  oauthLoginSuccess: true,
-                  onboardingTraceCtx: this.onboardingTraceCtx,
-                },
-              )
-            : this.props.navigation.navigate('Rehydrate', {
+              Routes.ONBOARDING.SOCIAL_LOGIN_SUCCESS_EXISTING_USER,
+              {
                 [PREVIOUS_SCREEN]: ONBOARDING,
                 oauthLoginSuccess: true,
                 onboardingTraceCtx: this.onboardingTraceCtx,
-              });
+              },
+            )
+            : this.props.navigation.navigate('Rehydrate', {
+              [PREVIOUS_SCREEN]: ONBOARDING,
+              oauthLoginSuccess: true,
+              onboardingTraceCtx: this.onboardingTraceCtx,
+            });
         } else {
           this.props.navigation.navigate('AccountNotFound', {
             accountName: result.accountName,
@@ -801,46 +802,54 @@ class Onboarding extends PureComponent {
     const styles = createStyles(colors);
 
     return (
-      <View style={styles.ctas}>
-        <OnboardingAnimation
+      <View style={[styles.ctas, { justifyContent: 'center' }]}>
+        {/* <OnboardingAnimation
           startOnboardingAnimation={this.state.startOnboardingAnimation}
           setStartFoxAnimation={this.setStartFoxAnimation}
-        >
-          <Button
-            variant={ButtonVariants.Primary}
-            onPress={() => this.handleCtaActions('create')}
-            testID={OnboardingSelectorIDs.NEW_WALLET_BUTTON}
-            label={
-              <Text
-                variant={TextVariant.BodyMDMedium}
-                color={importedColors.applePayBlack}
-              >
-                {strings('onboarding.start_exploring_now')}
-              </Text>
-            }
-            width={ButtonWidthTypes.Full}
-            size={Device.isMediumDevice() ? ButtonSize.Md : ButtonSize.Lg}
-            style={styles.blackButton}
-          />
-          <Button
-            variant={ButtonVariants.Secondary}
-            onPress={() => this.handleCtaActions('existing')}
-            testID={OnboardingSelectorIDs.EXISTING_WALLET_BUTTON}
-            width={ButtonWidthTypes.Full}
-            size={Device.isMediumDevice() ? ButtonSize.Md : ButtonSize.Lg}
-            label={
-              <Text
-                variant={TextVariant.BodyMDMedium}
-                color={importedColors.white}
-              >
-                {SEEDLESS_ONBOARDING_ENABLED
-                  ? strings('onboarding.import_using_srp_social_login')
-                  : strings('onboarding.import_using_srp')}
-              </Text>
-            }
-            style={styles.inverseBlackButton}
-          />
-        </OnboardingAnimation>
+        > */}
+        <Image
+          style={{
+            width: Device.isMediumDevice() ? 180 : 240,
+            height: Device.isMediumDevice() ? 180 : 240,
+          }}
+          resizeMode='contain'
+          source={require('../../../images/branding/metamask-name.png')}
+        />
+        <Button
+          variant={ButtonVariants.Primary}
+          onPress={() => this.handleCtaActions('create')}
+          testID={OnboardingSelectorIDs.NEW_WALLET_BUTTON}
+          label={
+            <Text
+              variant={TextVariant.BodyMDMedium}
+              color={importedColors.applePayBlack}
+            >
+              {strings('onboarding.start_exploring_now')}
+            </Text>
+          }
+          width={ButtonWidthTypes.Full}
+          size={Device.isMediumDevice() ? ButtonSize.Md : ButtonSize.Lg}
+          style={styles.blackButton}
+        />
+        <Button
+          variant={ButtonVariants.Secondary}
+          onPress={() => this.handleCtaActions('existing')}
+          testID={OnboardingSelectorIDs.EXISTING_WALLET_BUTTON}
+          width={ButtonWidthTypes.Full}
+          size={Device.isMediumDevice() ? ButtonSize.Md : ButtonSize.Lg}
+          label={
+            <Text
+              variant={TextVariant.BodyMDMedium}
+              color={importedColors.white}
+            >
+              {SEEDLESS_ONBOARDING_ENABLED
+                ? strings('onboarding.import_using_srp_social_login')
+                : strings('onboarding.import_using_srp')}
+            </Text>
+          }
+          style={styles.inverseBlackButton}
+        />
+        {/* </OnboardingAnimation> */}
       </View>
     );
   }
@@ -946,7 +955,7 @@ class Onboarding extends PureComponent {
 
           <FadeOutOverlay />
 
-          <FoxAnimation hasFooter={hasFooter} trigger={startFoxAnimation} />
+          {/* <FoxAnimation hasFooter={hasFooter} trigger={startFoxAnimation} /> */}
 
           <View>{this.handleSimpleNotification()}</View>
 

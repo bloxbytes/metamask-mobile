@@ -67,7 +67,7 @@ export default function ManageNetworksComponent() {
         <Text
           color={TextColor.Info}
           testID="privacy-policy-link"
-          onPress={openPrivacyPolicyLink}
+          // onPress={openPrivacyPolicyLink}
         >
           {strings('default_settings.privacy_policy')}
         </Text>
@@ -75,7 +75,7 @@ export default function ManageNetworksComponent() {
         <Text
           color={TextColor.Info}
           testID="solana-privacy-policy-link"
-          onPress={openAddSolanaAccountPrivacyPolicyLink}
+          // onPress={openAddSolanaAccountPrivacyPolicyLink}
         >
           {strings('default_settings.manage_networks_body3')}
         </Text>

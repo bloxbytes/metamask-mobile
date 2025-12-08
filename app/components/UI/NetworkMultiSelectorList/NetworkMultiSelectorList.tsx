@@ -118,9 +118,25 @@ const NetworkMultiSelectList = ({
 
   const combinedData: NetworkListItem[] = useMemo(() => {
     const data: NetworkListItem[] = [];
-    const filteredNetworks = processedNetworks.filter(
-      (network) => !network.isTestNetwork,
-    );
+    // const filteredNetworks = processedNetworks.filter(
+    //   (network) => !network.isTestNetwork,
+    // );
+    const filteredNetworks = processedNetworks
+      // Keep all networks (including testnets)
+      .filter(() => true)
+      .sort((a, b) => {
+        // Always put OPN on top
+        if (a.chainId === '0x3d8') return -1;
+        if (b.chainId === '0x3d8') return 1;
+
+        // Keep Ethereum next
+        if (a.chainId === '0x1') return -1;
+        if (b.chainId === '0x1') return 1;
+
+        // Default alphabetical sorting
+        return a.name.localeCompare(b.name);
+      });
+
 
     if (filteredNetworks.length > 0) {
       data.push(...filteredNetworks);

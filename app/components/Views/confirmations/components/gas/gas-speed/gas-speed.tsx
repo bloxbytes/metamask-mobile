@@ -12,6 +12,7 @@ import { useTransactionMetadataRequest } from '../../../hooks/transactions/useTr
 import { GasOptionIcon } from '../../../constants/gas';
 import { useGasFeeEstimates } from '../../../hooks/gas/useGasFeeEstimates';
 import { toHumanSeconds } from '../../../utils/time';
+import { Image, View } from 'react-native';
 
 const getEmoji = (userFeeLevel: UserFeeLevel | GasFeeEstimateLevel) => {
   switch (userFeeLevel) {
@@ -95,5 +96,11 @@ export const GasSpeed = () => {
   );
 
   // Intentionally no space between text and estimated time
-  return <Text>{`${emoji} ${text}${estimatedTime}`}</Text>;
+  // return <Text>{`${emoji} ${text}${estimatedTime}`}</Text>; // vaival
+  //Vaival
+  return <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+    <Image source={require('../../../../../../images/opn.png')} style={{ width: 14, height: 14, borderRadius: 8, marginRight: 8 }} />
+    <Text>{`${text}${estimatedTime}`}</Text>
+  </View>;
+  // end
 };

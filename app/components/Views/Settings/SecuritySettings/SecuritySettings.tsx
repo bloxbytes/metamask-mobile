@@ -464,16 +464,16 @@ const Settings: React.FC = () => {
             variant={ButtonVariants.Link}
             size={ButtonSize.Auto}
             onPress={() => {
-              Linking.openURL(SIMULATION_DETALS_ARTICLE_URL);
-              trackEvent(
-                createEventBuilder(MetaMetricsEvents.EXTERNAL_LINK_CLICKED)
-                  .addProperties({
-                    location: 'app_settings',
-                    text: strings('app_settings.simulation_details_learn_more'),
-                    url_domain: SIMULATION_DETALS_ARTICLE_URL,
-                  })
-                  .build(),
-              );
+              // Linking.openURL(SIMULATION_DETALS_ARTICLE_URL);
+              // trackEvent(
+              //   createEventBuilder(MetaMetricsEvents.EXTERNAL_LINK_CLICKED)
+              //     .addProperties({
+              //       location: 'app_settings',
+              //       text: strings('app_settings.simulation_details_learn_more'),
+              //       url_domain: SIMULATION_DETALS_ARTICLE_URL,
+              //     })
+              //     .build(),
+              // );
             }}
             label={strings('app_settings.simulation_details_learn_more')}
           />

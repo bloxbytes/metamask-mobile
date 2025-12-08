@@ -368,21 +368,21 @@ const ActivityView = () => {
             tabLabel={strings('fiat_on_ramp_aggregator.orders')}
           />
 
-          {isPerpsEnabled && (
+          {/* {isPerpsEnabled && (
             <PerpsConnectionProvider
               tabLabel={strings('perps.transactions.title')}
               isVisible={isPerpsTabActive}
             >
               <PerpsTransactionsView />
             </PerpsConnectionProvider>
-          )}
+          )} */}
 
-          {isPredictEnabled && (
+          {/* {isPredictEnabled && (
             <PredictTransactionsView
               tabLabel={strings('predict.transactions.title')}
               isVisible={isPredictTabActive}
             />
-          )}
+          )} */}
         </ScrollableTabView>
       </View>
     </ErrorBoundary>

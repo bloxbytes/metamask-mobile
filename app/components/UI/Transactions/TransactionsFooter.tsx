@@ -118,6 +118,7 @@ const TransactionsFooter = ({
             label={blockExplorerText}
             style={styles.viewMoreButton}
             onPress={onViewBlockExplorer}
+            disabled
           />
         </View>
       )}

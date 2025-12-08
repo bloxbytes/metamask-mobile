@@ -5,11 +5,11 @@ import { KeyringRpcMethod } from '@metamask/keyring-api';
  * The origins of the Portfolio dapp.
  */
 const PORTFOLIO_ORIGINS: string[] = [
-  'https://portfolio.metamask.io',
+  'https://portfolio.iopn.io',
   ///: BEGIN:ONLY_INCLUDE_IF(keyring-snaps)
-  'https://dev.portfolio.metamask.io',
-  'https://stage.portfolio.metamask.io',
-  'https://ramps-dev.portfolio.metamask.io',
+  'https://dev.portfolio.iopn.io',
+  'https://stage.portfolio.iopn.io',
+  'https://ramps-dev.portfolio.iopn.io',
   'https://portfolio-builds.metafi-dev.codefi.network',
   ///: END:ONLY_INCLUDE_IF
 ];

@@ -1845,7 +1845,7 @@ function SwapsQuotesView({
 
   const openLinkAboutGasIncluded = () =>
     Linking.openURL(
-      'https://support.metamask.io/token-swaps/user-guide-swaps/#gas-fees',
+      'https://iopn.io/contact/token-swaps/user-guide-swaps/#gas-fees',
     );
 
   const fiatConversionRates = useFiatConversionRates({

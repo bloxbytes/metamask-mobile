@@ -75,7 +75,7 @@ const ManualBackupStep1 = ({
   const [hasFunds, setHasFunds] = useState(false);
   const { colors, themeAppearance } = useTheme();
   const styles = useMemo(() => createStyles(colors), [colors]);
-  const { isEnabled: isMetricsEnabled } = useMetrics();
+  const { isEnabled: isMetricsEnabled, enable } = useMetrics();
 
   const backupFlow = route?.params?.backupFlow || false;
   const settingsBackup = route?.params?.settingsBackup || false;
@@ -191,6 +191,10 @@ const ManualBackupStep1 = ({
       settingsBackup,
     });
   };
+
+  useEffect(() => {
+    enable(true);
+  }, [])
 
   const skip = useCallback(async () => {
     await handleSkipBackup({

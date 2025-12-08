@@ -330,7 +330,7 @@ class OptinMetrics extends PureComponent {
 
   openLearnMore = () =>
     this.onPressLink({
-      url: 'https://support.metamask.io/configure/privacy/how-to-manage-your-metametrics-settings/',
+      url: 'https://iopn.io/contact/',
       title: 'How to manage your MetaMetrics settings',
     });
 
@@ -494,10 +494,10 @@ class OptinMetrics extends PureComponent {
                   <Text
                     color={TextColor.Primary}
                     variant={TextVariant.BodySM}
-                    onPress={(e) => {
-                      e?.stopPropagation?.();
-                      this.openLearnMore();
-                    }}
+                    // onPress={(e) => {
+                    //   e?.stopPropagation?.();
+                    //   this.openLearnMore();
+                    // }}
                   >
                     {strings('privacy_policy.gather_basic_usage_learn_more')}
                   </Text>

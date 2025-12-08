@@ -11,6 +11,7 @@ import {
   MEGAETH_TESTNET,
   MONAD_TESTNET,
   BASE_MAINNET,
+  // OPN_TESTNET,
 } from '../../../app/constants/network';
 import { NetworkSwitchErrorType } from '../../../app/constants/error';
 import {
@@ -43,6 +44,7 @@ import {
   SEPOLIA_BLOCK_EXPLORER,
   SEPOLIA_FAUCET,
   BASE_MAINNET_BLOCK_EXPLORER,
+  // OPN_TESTNET_BLOCK_EXPLORER,
 } from '../../constants/urls';
 import { isNonEvmChainId } from '../../core/Multichain/utils';
 import { SolScope } from '@metamask/keyring-api';
@@ -123,6 +125,18 @@ export const NetworkList = {
     blockExplorerUrl: SEPOLIA_BLOCK_EXPLORER,
     isTestNet: true,
   },
+  // [OPN_TESTNET]: {
+  //   name: 'OPN Testnet',
+  //   shortName: 'OPN Testnet',
+  //   networkId: 984,
+  //   chainId: toHex('984'),
+  //   ticker: 'OPN',
+  //   color: '#cfb5f0',
+  //   networkType: 'custom',
+  //   imageSource: networksWithImages.OPN,
+  //   blockExplorerUrl: OPN_TESTNET_BLOCK_EXPLORER,
+  //   isTestNet: true,
+  // },
   [LINEA_SEPOLIA]: {
     name: 'Linea Sepolia',
     shortName: 'Linea Sepolia',

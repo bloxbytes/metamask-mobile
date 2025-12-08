@@ -17,6 +17,7 @@ export const MONAD_TESTNET = 'monad-testnet';
 export const BITCOIN_TESTNET = 'bitcoin-testnet';
 export const BITCOIN_MUTINYNET = 'bitcoin-mutinynet';
 export const BSC_MAINNET = 'bsc-mainnet';
+// export const OPN_TESTNET = 'opn-testnet'; // vaival
 
 export const RPC = NetworkType.rpc;
 export const NO_RPC_BLOCK_EXPLORER = 'NO_BLOCK_EXPLORER';
@@ -65,6 +66,7 @@ export const NETWORKS_CHAIN_ID = {
   PLASMA: toHex('9745'),
   CRONOS: toHex('25'),
   NOMINA: toHex('166'),
+  // OPN_TESTNET: toHex('984'), // vaival
 };
 
 // To add a deprecation warning to a network, add it to the array
@@ -104,6 +106,7 @@ export const CHAINLIST_CURRENCY_SYMBOLS_MAP = {
   CRONOS: 'CRO',
   HYPE: 'HYPE',
   NOMINA: 'NOM',
+  // OPN_TESTNET: 'OPN', // vaival
 };
 
 export const CURRENCY_SYMBOL_BY_CHAIN_ID = {
@@ -139,6 +142,7 @@ export const CURRENCY_SYMBOL_BY_CHAIN_ID = {
   [NETWORKS_CHAIN_ID.CRONOS]: CHAINLIST_CURRENCY_SYMBOLS_MAP.CRONOS,
   [NETWORKS_CHAIN_ID.HYPER_EVM]: CHAINLIST_CURRENCY_SYMBOLS_MAP.HYPE,
   [NETWORKS_CHAIN_ID.NOMINA]: CHAINLIST_CURRENCY_SYMBOLS_MAP.NOMINA,
+  // [NETWORKS_CHAIN_ID.OPN_TESTNET]: CHAINLIST_CURRENCY_SYMBOLS_MAP.OPN_TESTNET, // vaival
 };
 
 export const TEST_NETWORK_IDS = [
@@ -148,6 +152,7 @@ export const TEST_NETWORK_IDS = [
   NETWORKS_CHAIN_ID.LINEA_SEPOLIA,
   NETWORKS_CHAIN_ID.MEGAETH_TESTNET,
   NETWORKS_CHAIN_ID.MONAD_TESTNET,
+  // NETWORKS_CHAIN_ID.OPN_TESTNET, // vaival
 ];
 
 export const TESTNET_CAIP_IDS = TEST_NETWORK_IDS.map((id) =>

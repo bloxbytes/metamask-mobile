@@ -110,7 +110,7 @@ const ProtectYourWallet = ({
           <Text
             variant={TextVariant.BodyMD}
             color={TextColor.Primary}
-            onPress={() => Linking.openURL(LEARN_MORE_URL)}
+            // onPress={() => Linking.openURL(LEARN_MORE_URL)}
           >
             {' '}
             {strings('app_settings.learn_more')}

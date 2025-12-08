@@ -1,4 +1,4 @@
 export const REWARDS_ONBOARD_OPTIN_LEGAL_LEARN_MORE_URL =
-  'https://support.metamask.io/manage-crypto/metamask-rewards';
+  'https://iopn.io/contact';
 
-export const REWARDS_ONBOARD_TERMS_URL = 'https://go.metamask.io/rewards-terms';
+export const REWARDS_ONBOARD_TERMS_URL = 'https://go.iopn.io/rewards-terms';

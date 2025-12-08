@@ -498,13 +498,13 @@ const ImportFromSecretRecoveryPhrase = ({
   };
 
   const learnMoreLink = () => {
-    navigation.push('Webview', {
-      screen: 'SimpleWebview',
-      params: {
-        url: 'https://support.metamask.io/managing-my-wallet/resetting-deleting-and-restoring/how-can-i-reset-my-password/',
-        title: 'support.metamask.io',
-      },
-    });
+    // navigation.push('Webview', {
+    //   screen: 'SimpleWebview',
+    //   params: {
+    //     url: 'https://support.iopn.io/managing-my-wallet/resetting-deleting-and-restoring/how-can-i-reset-my-password/',
+    //     title: 'support.iopn.io',
+    //   },
+    // });
   };
 
   const uniqueId = useMemo(() => uuidv4(), []);

@@ -55,6 +55,7 @@ import HYPE from './hyperevm.png';
 /// BEGIN:ONLY_INCLUDE_IF(tron)
 import TRON from './tron-logo.png';
 /// END:ONLY_INCLUDE_IF
+import OPN from './opn.png'
 
 export default {
   PALM,
@@ -118,4 +119,5 @@ export default {
   XPL: PLASMA,
   CRO: CRONOS,
   HYPE,
+  OPN
 };

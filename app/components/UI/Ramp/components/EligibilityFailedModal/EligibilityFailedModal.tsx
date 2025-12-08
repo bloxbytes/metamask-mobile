@@ -20,7 +20,7 @@ import { createNavigationDetails } from '../../../../../util/navigation/navUtils
 import Routes from '../../../../../constants/navigation/Routes';
 import { strings } from '../../../../../../locales/i18n';
 
-const SUPPORT_URL = 'https://support.metamask.io';
+const SUPPORT_URL = 'https://iopn.io/contact';
 
 export const createEligibilityFailedModalNavigationDetails =
   createNavigationDetails(

@@ -218,6 +218,26 @@ function TradeWalletActions() {
     [exitingAnimationWithCallback, navigation],
   );
 
+  const goToBrowserUrl = (url: string, title: string) => {
+    navigation.navigate('Webview', {
+      screen: 'SimpleWebview',
+      params: {
+        url,
+        title,
+      },
+    });
+  };
+
+
+  const handleSwapPress = () => {
+    let supportUrl = 'https://swap.iopn.io';
+
+    goToBrowserUrl(supportUrl, strings('asset_overview.swap'));
+    // trackEvent(
+    //   createEventBuilder(MetaMetricsEvents.NAVIGATION_TAPS_GET_HELP).build(),
+    // );
+  };
+
   return (
     <View style={tw.style('flex-1 justify-end')}>
       <MaskedView
@@ -278,12 +298,13 @@ function TradeWalletActions() {
                     label={strings('asset_overview.swap')}
                     description={strings('asset_overview.swap_description')}
                     iconName={IconName.SwapVertical}
-                    onPress={goToSwaps}
+                    // onPress={goToSwaps}
+                    onPress={handleSwapPress}
                     testID={WalletActionsBottomSheetSelectorsIDs.SWAP_BUTTON}
                     isDisabled={!isSwapsEnabled}
                   />
                 )}
-                {isPerpsEnabled && isEvmSelected && (
+                {/* {isPerpsEnabled && isEvmSelected && (
                   <ActionListItem
                     label={strings('asset_overview.perps_button')}
                     description={strings('asset_overview.perps_description')}
@@ -302,7 +323,7 @@ function TradeWalletActions() {
                     testID={WalletActionsBottomSheetSelectorsIDs.PREDICT_BUTTON}
                     isDisabled={!canSignTransactions}
                   />
-                )}
+                )} 
                 {isEarnWalletActionEnabled && (
                   <ActionListItem
                     label={strings('asset_overview.earn_button')}
@@ -312,7 +333,7 @@ function TradeWalletActions() {
                     testID={WalletActionsBottomSheetSelectorsIDs.EARN_BUTTON}
                     isDisabled={!canSignTransactions}
                   />
-                )}
+                )}*/}
               </Box>
             </Animated.View>
           </MaskedView>

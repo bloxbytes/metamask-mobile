@@ -31,7 +31,7 @@ import { selectIsEvmNetworkSelected } from '../../../../selectors/multichainNetw
 
 const getPortfolioStxLink = (chainId: Hex, uuid: string) => {
   const chainIdDec = hexToDecimal(chainId);
-  return `https://portfolio.metamask.io/networks/${chainIdDec}/smart-transactions/${uuid}?referrer=mobile`;
+  return `https://portfolio.iopn.io/networks/${chainIdDec}/smart-transactions/${uuid}?referrer=mobile`;
 };
 
 interface Props {

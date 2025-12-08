@@ -99,10 +99,17 @@ export const AddressList = () => {
     }
   }, [navigation, title]);
 
+  const sortedAccounts = [...internalAccountsSpreadByScopes].sort((a, b) => {
+    if (a.scope === 'eip155:984') return -1;  // a before b
+    if (b.scope === 'eip155:984') return 1;   // b after a
+    return 0;
+  });
+
   return (
     <View style={styles.safeArea}>
       <FlashList
-        data={internalAccountsSpreadByScopes}
+        // data={internalAccountsSpreadByScopes}
+        data={sortedAccounts}
         keyExtractor={(item) => item.scope}
         renderItem={renderAddressItem}
         onLoad={onLoad}

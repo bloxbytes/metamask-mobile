@@ -83,8 +83,8 @@ const ImportPrivateKey = () => {
       screen: 'SimpleWebview',
       params: {
         url: isSRP
-          ? 'https://support.metamask.io/start/use-an-existing-wallet/#importing-using-a-private-key'
-          : 'https://support.metamask.io/start/use-an-existing-wallet/#import-an-existing-wallet',
+          ? 'https://support.iopn.io/start/use-an-existing-wallet/#importing-using-a-private-key'
+          : 'https://support.iopn.io/start/use-an-existing-wallet/#import-an-existing-wallet',
         title: strings('drawer.metamask_support'),
       },
     });
