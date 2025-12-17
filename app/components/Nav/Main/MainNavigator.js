@@ -1,61 +1,59 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { Image, StyleSheet, Keyboard, Platform } from 'react-native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { useSelector } from 'react-redux';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Browser from '../../Views/Browser';
 import { ChainId } from '@metamask/controller-utils';
-import AddBookmark from '../../Views/AddBookmark';
-import SimpleWebview from '../../Views/SimpleWebview';
-import Settings from '../../Views/Settings';
-import GeneralSettings from '../../Views/Settings/GeneralSettings';
-import AdvancedSettings from '../../Views/Settings/AdvancedSettings';
-import BackupAndSyncSettings from '../../Views/Settings/Identity/BackupAndSyncSettings';
-import SecuritySettings from '../../Views/Settings/SecuritySettings';
-import ExperimentalSettings from '../../Views/Settings/ExperimentalSettings';
-import NotificationsSettings from '../../Views/Settings/NotificationsSettings';
-import NotificationsView from '../../Views/Notifications';
-import NotificationsDetails from '../../Views/Notifications/Details';
-import OptIn from '../../Views/Notifications/OptIn';
-import AppInformation from '../../Views/Settings/AppInformation';
-import DeveloperOptions from '../../Views/Settings/DeveloperOptions';
-import Contacts from '../../Views/Settings/Contacts';
-import FeatureFlagOverride from '../../Views/FeatureFlagOverride';
-import Wallet from '../../Views/Wallet';
-import Asset from '../../Views/Asset';
-import AssetDetails from '../../Views/AssetDetails';
-import AddAsset from '../../Views/AddAsset';
-import Collectible from '../../Views/Collectible';
-import NftFullView from '../../Views/NftFullView';
-import TokensFullView from '../../Views/TokensFullView';
-import TrendingTokensFullView from '../../Views/TrendingTokens/TrendingTokensFullView/TrendingTokensFullView';
-import SendLegacy from '../../Views/confirmations/legacy/Send';
-import SendTo from '../../Views/confirmations/legacy/SendFlow/SendTo';
-import { RevealPrivateCredential } from '../../Views/RevealPrivateCredential';
-import WalletConnectSessions from '../../Views/WalletConnectSessions';
-import OfflineMode from '../../Views/OfflineMode';
-import QRTabSwitcher from '../../Views/QRTabSwitcher';
-import EnterPasswordSimple from '../../Views/EnterPasswordSimple';
-import ChoosePassword from '../../Views/ChoosePassword';
-import ResetPassword from '../../Views/ResetPassword';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Image, Keyboard, Platform, StyleSheet, View } from 'react-native';
+import { useSelector } from 'react-redux';
+import CollectiblesDetails from '../../UI/CollectibleModal';
+import OptinMetrics from '../../UI/OptinMetrics';
+import PaymentRequest from '../../UI/PaymentRequest';
+import PaymentRequestSuccess from '../../UI/PaymentRequestSuccess';
+import RewardsNavigator from '../../UI/Rewards/RewardsNavigator';
 import AccountBackupStep1 from '../../Views/AccountBackupStep1';
 import AccountBackupStep1B from '../../Views/AccountBackupStep1B';
+import ActivityView from '../../Views/ActivityView';
+import AddAsset from '../../Views/AddAsset';
+import AddBookmark from '../../Views/AddBookmark';
+import Asset from '../../Views/Asset';
+import AssetDetails from '../../Views/AssetDetails';
+import Browser from '../../Views/Browser';
+import ChoosePassword from '../../Views/ChoosePassword';
+import Collectible from '../../Views/Collectible';
+import { Confirm as RedesignedConfirm } from '../../Views/confirmations/components/confirm';
+import SendLegacy from '../../Views/confirmations/legacy/Send';
+import Amount from '../../Views/confirmations/legacy/SendFlow/Amount';
+import Confirm from '../../Views/confirmations/legacy/SendFlow/Confirm';
+import SendTo from '../../Views/confirmations/legacy/SendFlow/SendTo';
+import EnterPasswordSimple from '../../Views/EnterPasswordSimple';
+import FeatureFlagOverride from '../../Views/FeatureFlagOverride';
 import ManualBackupStep1 from '../../Views/ManualBackupStep1';
 import ManualBackupStep2 from '../../Views/ManualBackupStep2';
 import ManualBackupStep3 from '../../Views/ManualBackupStep3';
-import PaymentRequest from '../../UI/PaymentRequest';
-import PaymentRequestSuccess from '../../UI/PaymentRequestSuccess';
-import Amount from '../../Views/confirmations/legacy/SendFlow/Amount';
-import Confirm from '../../Views/confirmations/legacy/SendFlow/Confirm';
-import { Confirm as RedesignedConfirm } from '../../Views/confirmations/components/confirm';
+import NftFullView from '../../Views/NftFullView';
+import NotificationsView from '../../Views/Notifications';
+import NotificationsDetails from '../../Views/Notifications/Details';
+import OptIn from '../../Views/Notifications/OptIn';
+import OfflineMode from '../../Views/OfflineMode';
+import QRTabSwitcher from '../../Views/QRTabSwitcher';
+import ResetPassword from '../../Views/ResetPassword';
+import { RevealPrivateCredential } from '../../Views/RevealPrivateCredential';
+import Settings from '../../Views/Settings';
+import AdvancedSettings from '../../Views/Settings/AdvancedSettings';
+import AppInformation from '../../Views/Settings/AppInformation';
+import Contacts from '../../Views/Settings/Contacts';
 import ContactForm from '../../Views/Settings/Contacts/ContactForm';
-import ActivityView from '../../Views/ActivityView';
-import RewardsNavigator from '../../UI/Rewards/RewardsNavigator';
+import DeveloperOptions from '../../Views/Settings/DeveloperOptions';
+import ExperimentalSettings from '../../Views/Settings/ExperimentalSettings';
+import GeneralSettings from '../../Views/Settings/GeneralSettings';
+import BackupAndSyncSettings from '../../Views/Settings/Identity/BackupAndSyncSettings';
+import NotificationsSettings from '../../Views/Settings/NotificationsSettings';
+import SecuritySettings from '../../Views/Settings/SecuritySettings';
+import SimpleWebview from '../../Views/SimpleWebview';
+import TokensFullView from '../../Views/TokensFullView';
+import TrendingTokensFullView from '../../Views/TrendingTokens/TrendingTokensFullView/TrendingTokensFullView';
 import TrendingView from '../../Views/TrendingView/TrendingView';
-import SwapsAmountView from '../../UI/Swaps';
-import SwapsQuotesView from '../../UI/Swaps/QuotesView';
-import CollectiblesDetails from '../../UI/CollectibleModal';
-import OptinMetrics from '../../UI/OptinMetrics';
+import Wallet from '../../Views/Wallet';
+import WalletConnectSessions from '../../Views/WalletConnectSessions';
 
 import RampRoutes from '../../UI/Ramp/Aggregator/routes';
 import { RampType } from '../../UI/Ramp/Aggregator/types';
@@ -63,78 +61,77 @@ import RampSettings from '../../UI/Ramp/Aggregator/Views/Settings';
 import RampActivationKeyForm from '../../UI/Ramp/Aggregator/Views/Settings/ActivationKeyForm';
 import TokenListRoutes from '../../UI/Ramp/routes';
 
-import DepositOrderDetails from '../../UI/Ramp/Deposit/Views/DepositOrderDetails/DepositOrderDetails';
 import DepositRoutes from '../../UI/Ramp/Deposit/routes';
+import DepositOrderDetails from '../../UI/Ramp/Deposit/Views/DepositOrderDetails/DepositOrderDetails';
 
+import TabBar from '../../../component-library/components/Navigation/TabBar';
 import { colors as importedColors } from '../../../styles/common';
+import FloatingThemeToggle from '../../UI/FloatingThemeToggle';
 import OrderDetails from '../../UI/Ramp/Aggregator/Views/OrderDetails';
 import SendTransaction from '../../UI/Ramp/Aggregator/Views/SendTransaction';
-import TabBar from '../../../component-library/components/Navigation/TabBar';
 ///: BEGIN:ONLY_INCLUDE_IF(external-snaps)
-import { SnapsSettingsList } from '../../Views/Snaps/SnapsSettingsList';
 import { SnapSettings } from '../../Views/Snaps/SnapSettings';
+import { SnapsSettingsList } from '../../Views/Snaps/SnapsSettingsList';
 ///: END:ONLY_INCLUDE_IF
-import Routes from '../../../constants/navigation/Routes';
-import { MetaMetricsEvents } from '../../../core/Analytics';
 import { TabBarIconKey } from '../../../component-library/components/Navigation/TabBar/TabBar.types';
-import { selectProviderConfig } from '../../../selectors/networkController';
-import { selectAccountsLength } from '../../../selectors/accountTrackerController';
-import { selectBrowserFullscreen } from '../../../selectors/browser';
-import SDKSessionsManager from '../../Views/SDK/SDKSessionsManager/SDKSessionsManager';
-import PermissionsManager from '../../Views/Settings/PermissionsSettings/PermissionsManager';
-import { getDecimalChainId } from '../../../util/networks';
 import { useMetrics } from '../../../components/hooks/useMetrics';
-import DeprecatedNetworkDetails from '../../UI/DeprecatedNetworkModal';
-import ConfirmAddAsset from '../../UI/ConfirmAddAsset';
-import { AesCryptoTestForm } from '../../Views/AesCryptoTestForm';
-import { isTest } from '../../../util/test/utils';
-import NftDetails from '../../Views/NftDetails';
-import NftDetailsFullImage from '../../Views/NftDetails/NFtDetailsFullImage';
 import AccountPermissions from '../../../components/Views/AccountPermissions';
 import { AccountPermissionsScreens } from '../../../components/Views/AccountPermissions/AccountPermissions.types';
-import { StakeModalStack, StakeScreenStack } from '../../UI/Stake/routes';
-import { AssetLoader } from '../../Views/AssetLoader';
-import { EarnScreenStack, EarnModalStack } from '../../UI/Earn/routes';
+import Routes from '../../../constants/navigation/Routes';
+import { MetaMetricsEvents } from '../../../core/Analytics';
+import { selectAccountsLength } from '../../../selectors/accountTrackerController';
+import { selectBrowserFullscreen } from '../../../selectors/browser';
+import { selectAssetsTrendingTokensEnabled } from '../../../selectors/featureFlagController/assetsTrendingTokens';
+import { selectProviderConfig } from '../../../selectors/networkController';
+import { getDecimalChainId } from '../../../util/networks';
+import { isTest } from '../../../util/test/utils';
+import { FeatureFlagNames, useFeatureFlag } from '../../hooks/useFeatureFlag';
 import { BridgeTransactionDetails } from '../../UI/Bridge/components/TransactionDetails/TransactionDetails';
 import { BridgeModalStack, BridgeScreenStack } from '../../UI/Bridge/routes';
+import ConfirmAddAsset from '../../UI/ConfirmAddAsset';
+import DeFiProtocolPositionDetails from '../../UI/DeFiPositions/DeFiProtocolPositionDetails';
+import DeprecatedNetworkDetails from '../../UI/DeprecatedNetworkModal';
+import { EarnModalStack, EarnScreenStack } from '../../UI/Earn/routes';
 import {
-  PerpsScreenStack,
   PerpsModalStack,
+  PerpsScreenStack,
   PerpsTutorialCarousel,
 } from '../../UI/Perps';
-import { PredictScreenStack, PredictModalStack } from '../../UI/Predict';
-import { useFeatureFlag, FeatureFlagNames } from '../../hooks/useFeatureFlag';
-import { selectAssetsTrendingTokensEnabled } from '../../../selectors/featureFlagController/assetsTrendingTokens';
-import PerpsPositionTransactionView from '../../UI/Perps/Views/PerpsTransactionsView/PerpsPositionTransactionView';
-import PerpsOrderTransactionView from '../../UI/Perps/Views/PerpsTransactionsView/PerpsOrderTransactionView';
 import PerpsFundingTransactionView from '../../UI/Perps/Views/PerpsTransactionsView/PerpsFundingTransactionView';
+import PerpsOrderTransactionView from '../../UI/Perps/Views/PerpsTransactionsView/PerpsOrderTransactionView';
+import PerpsPositionTransactionView from '../../UI/Perps/Views/PerpsTransactionsView/PerpsPositionTransactionView';
+import { PredictModalStack, PredictScreenStack } from '../../UI/Predict';
+import { StakeModalStack, StakeScreenStack } from '../../UI/Stake/routes';
+import { AesCryptoTestForm } from '../../Views/AesCryptoTestForm';
+import { AssetLoader } from '../../Views/AssetLoader';
 import TurnOnBackupAndSync from '../../Views/Identity/TurnOnBackupAndSync/TurnOnBackupAndSync';
-import DeFiProtocolPositionDetails from '../../UI/DeFiPositions/DeFiProtocolPositionDetails';
+import NftDetails from '../../Views/NftDetails';
+import NftDetailsFullImage from '../../Views/NftDetails/NFtDetailsFullImage';
+import SDKSessionsManager from '../../Views/SDK/SDKSessionsManager/SDKSessionsManager';
+import PermissionsManager from '../../Views/Settings/PermissionsSettings/PermissionsManager';
 import UnmountOnBlur from '../../Views/UnmountOnBlur';
 ///: BEGIN:ONLY_INCLUDE_IF(sample-feature)
 import SampleFeature from '../../../features/SampleFeature/components/views/SampleFeature';
 ///: END:ONLY_INCLUDE_IF
-import WalletRecovery from '../../Views/WalletRecovery';
-import CardRoutes from '../../UI/Card/routes';
-import { Send } from '../../Views/confirmations/components/send';
+import { strings } from '../../../../locales/i18n';
 import { selectSendRedesignFlags } from '../../../selectors/featureFlagController/confirmations';
-import { selectIsEvmNetworkSelected } from '../../../selectors/multichainNetworkController';
-import { TransactionDetails } from '../../Views/confirmations/components/activity/transaction-details/transaction-details';
-import RewardsBottomSheetModal from '../../UI/Rewards/components/RewardsBottomSheetModal';
-import RewardsClaimBottomSheetModal from '../../UI/Rewards/components/Tabs/LevelsTab/RewardsClaimBottomSheetModal';
-import RewardOptInAccountGroupModal from '../../UI/Rewards/components/Settings/RewardOptInAccountGroupModal';
-import ReferralBottomSheetModal from '../../UI/Rewards/components/ReferralBottomSheetModal';
 import { selectRewardsSubscriptionId } from '../../../selectors/rewards';
+import CardRoutes from '../../UI/Card/routes';
 import { getImportTokenNavbarOptions } from '../../UI/Navbar';
+import ReferralBottomSheetModal from '../../UI/Rewards/components/ReferralBottomSheetModal';
+import RewardsBottomSheetModal from '../../UI/Rewards/components/RewardsBottomSheetModal';
+import RewardOptInAccountGroupModal from '../../UI/Rewards/components/Settings/RewardOptInAccountGroupModal';
+import RewardsClaimBottomSheetModal from '../../UI/Rewards/components/Tabs/LevelsTab/RewardsClaimBottomSheetModal';
 import {
-  TOKEN_TITLE,
   NFT_TITLE,
   TOKEN,
+  TOKEN_TITLE,
 } from '../../Views/AddAsset/AddAsset.constants';
-import { strings } from '../../../../locales/i18n';
+import { TransactionDetails } from '../../Views/confirmations/components/activity/transaction-details/transaction-details';
+import { Send } from '../../Views/confirmations/components/send';
 import SitesFullView from '../../Views/SitesFullView/SitesFullView';
 import BrowserWrapper from '../../Views/TrendingView/components/BrowserWrapper/BrowserWrapper';
-import BridgeView from '../../UI/Bridge/Views/BridgeView';
+import WalletRecovery from '../../Views/WalletRecovery';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -143,6 +140,9 @@ const styles = StyleSheet.create({
   headerLogo: {
     width: 125,
     height: 50,
+  },
+  flexContainer: {
+    flex: 1,
   },
 });
 
@@ -662,50 +662,42 @@ const HomeTabs = () => {
   };
 
   return (
-    <Tab.Navigator initialRouteName={Routes.WALLET.HOME} tabBar={renderTabBar}>
-      <Tab.Screen
-        name={Routes.WALLET.HOME}
-        options={options.home}
-        component={WalletTabModalFlow}
-      />
-      {isAssetsTrendingTokensEnabled ? (
+    <View style={styles.flexContainer}>
+      <Tab.Navigator
+        initialRouteName={Routes.WALLET.HOME}
+        tabBar={renderTabBar}
+      >
         <Tab.Screen
-          name={Routes.TRENDING_VIEW}
-          options={options.trending}
-          component={TrendingHome}
-          layout={({ children }) => UnmountOnBlurComponent(children)}
+          name={Routes.WALLET.HOME}
+          options={options.home}
+          component={WalletTabModalFlow}
         />
-      ) : (
+        {/* NFTs tab (uses trending icon by default) */}
         <Tab.Screen
-          name={Routes.BROWSER.HOME}
+          name={Routes.WALLET.NFTS_FULL_VIEW}
           options={{
-            ...options.browser,
-            tabBarButton: isAssetsTrendingTokensEnabled
-              ? () => null
-              : undefined,
+            ...options.trending,
+            rootScreenName: Routes.WALLET.NFTS_FULL_VIEW,
+            headerShown: false,
           }}
-          component={BrowserFlow}
+          component={NftFullView}
           layout={({ children }) => <UnmountOnBlur>{children}</UnmountOnBlur>}
         />
-      )}
-      <Tab.Screen
-        name={Routes.MODAL.TRADE_WALLET_ACTIONS}
-        options={options.trade}
-        component={WalletTabModalFlow}
-      />
-      <Tab.Screen
-        name={Routes.TRANSACTIONS_VIEW}
-        options={options.activity}
-        component={TransactionsHome}
-        layout={({ children }) => <UnmountOnBlur>{children}</UnmountOnBlur>}
-      />
-      <Tab.Screen
-        name={Routes.REWARDS_VIEW}
-        options={options.rewards}
-        component={RewardsHome}
-        layout={({ children }) => UnmountOnBlurComponent(children)}
-      />
-    </Tab.Navigator>
+        <Tab.Screen
+          name={Routes.TRANSACTIONS_VIEW}
+          options={options.activity}
+          component={TransactionsHome}
+          layout={({ children }) => <UnmountOnBlur>{children}</UnmountOnBlur>}
+        />
+        <Tab.Screen
+          name={Routes.SETTINGS_VIEW}
+          options={options.settings}
+          component={Settings}
+          layout={({ children }) => <UnmountOnBlur>{children}</UnmountOnBlur>}
+        />
+      </Tab.Navigator>
+      <FloatingThemeToggle />
+    </View>
   );
 };
 

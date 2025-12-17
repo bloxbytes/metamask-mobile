@@ -1,48 +1,48 @@
+import { Box } from '@metamask/design-system-react-native';
+import { useTailwind } from '@metamask/design-system-twrnc-preset';
+import { SolScope } from '@metamask/keyring-api';
+import ActionSheet from '@metamask/react-native-actionsheet';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import React, {
-  useRef,
-  useState,
   LegacyRef,
   memo,
   useCallback,
   useEffect,
   useMemo,
+  useRef,
+  useState,
 } from 'react';
 import { InteractionManager } from 'react-native';
-import ActionSheet from '@metamask/react-native-actionsheet';
 import { useSelector } from 'react-redux';
+import { WalletViewSelectorsIDs } from '../../../../e2e/selectors/wallet/WalletView.selectors';
+import { strings } from '../../../../locales/i18n';
 import { useMetrics } from '../../../components/hooks/useMetrics';
+import { isNonEvmChainId } from '../../../core/Multichain/utils';
+import { selectSelectedInternalAccountId } from '../../../selectors/accountsController';
+import { selectSortedAssetsBySelectedAccountGroup } from '../../../selectors/assets/assets-list';
+import { selectHomepageRedesignV1Enabled } from '../../../selectors/featureFlagController/homepage';
+import { selectMultichainAccountsState2Enabled } from '../../../selectors/featureFlagController/multichainAccounts';
+import { selectSelectedInternalAccountByScope } from '../../../selectors/multichainAccounts/accounts';
 import {
   selectChainId,
   selectEvmNetworkConfigurationsByChainId,
   selectNativeNetworkCurrencies,
 } from '../../../selectors/networkController';
+import { selectSortedTokenKeys } from '../../../selectors/tokenList';
 import { getDecimalChainId } from '../../../util/networks';
+import { TokensEmptyState } from '../TokensEmptyState';
 import { TokenList } from './TokenList';
+import { ScamWarningModal } from './TokenList/ScamWarningModal';
+import TokenListSkeleton from './TokenList/TokenListSkeleton';
+import { TokenListControlBar } from './TokenListControlBar';
 import { TokenI } from './types';
-import { WalletViewSelectorsIDs } from '../../../../e2e/selectors/wallet/WalletView.selectors';
-import { strings } from '../../../../locales/i18n';
 import {
+  goToAddEvmToken,
   refreshTokens,
   removeEvmToken,
   removeNonEvmToken,
-  goToAddEvmToken,
 } from './util';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { Box } from '@metamask/design-system-react-native';
-import { TokenListControlBar } from './TokenListControlBar';
-import { selectSelectedInternalAccountId } from '../../../selectors/accountsController';
-import { ScamWarningModal } from './TokenList/ScamWarningModal';
-import TokenListSkeleton from './TokenList/TokenListSkeleton';
-import { selectSortedTokenKeys } from '../../../selectors/tokenList';
-import { selectMultichainAccountsState2Enabled } from '../../../selectors/featureFlagController/multichainAccounts';
-import { selectSortedAssetsBySelectedAccountGroup } from '../../../selectors/assets/assets-list';
-import { selectSelectedInternalAccountByScope } from '../../../selectors/multichainAccounts/accounts';
-import { SolScope } from '@metamask/keyring-api';
-import { useTailwind } from '@metamask/design-system-twrnc-preset';
-import { isNonEvmChainId } from '../../../core/Multichain/utils';
-import { selectHomepageRedesignV1Enabled } from '../../../selectors/featureFlagController/homepage';
-import { TokensEmptyState } from '../TokensEmptyState';
 
 interface TokenListNavigationParamList {
   AddAsset: { assetType: string };

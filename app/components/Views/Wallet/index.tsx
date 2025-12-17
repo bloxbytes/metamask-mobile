@@ -11,8 +11,11 @@ import React, {
 
 import {
   ActivityIndicator,
+  Image,
   Linking,
   StyleSheet as RNStyleSheet,
+  ScrollView,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import { connect, useDispatch, useSelector } from 'react-redux';
@@ -21,6 +24,10 @@ import {
   TabsList,
   TabsListRef,
 } from '../../../component-library/components-temp/Tabs';
+import {
+  PERPS_GTM_MODAL_SHOWN,
+  PREDICT_GTM_MODAL_SHOWN,
+} from '../../../constants/storage';
 import { CONSENSYS_PRIVACY_POLICY } from '../../../constants/urls';
 import {
   isPastPrivacyPolicyDate,
@@ -30,11 +37,6 @@ import {
 } from '../../../reducers/legalNotices';
 import StorageWrapper from '../../../store/storage-wrapper';
 import { baseStyles } from '../../../styles/common';
-import {
-  PERPS_GTM_MODAL_SHOWN,
-  PREDICT_GTM_MODAL_SHOWN,
-} from '../../../constants/storage';
-import { getWalletNavbarOptions } from '../../UI/Navbar';
 import Tokens from '../../UI/Tokens';
 
 import {
@@ -46,13 +48,14 @@ import {
   useRoute,
 } from '@react-navigation/native';
 import { WalletViewSelectorsIDs } from '../../../../e2e/selectors/wallet/WalletView.selectors';
+import ConditionalScrollView from '../../../component-library/components-temp/ConditionalScrollView';
 import { BannerAlertSeverity } from '../../../component-library/components/Banners/Banner';
 import BannerAlert from '../../../component-library/components/Banners/Banner/variants/BannerAlert/BannerAlert';
 import { ButtonVariants } from '../../../component-library/components/Buttons/Button';
 import CustomText, {
   TextColor,
+  TextVariant,
 } from '../../../component-library/components/Texts/Text';
-import ConditionalScrollView from '../../../component-library/components-temp/ConditionalScrollView';
 import {
   ToastContext,
   ToastVariants,
@@ -60,12 +63,6 @@ import {
 import { useMetrics } from '../../../components/hooks/useMetrics';
 import Routes from '../../../constants/navigation/Routes';
 import { MetaMetricsEvents } from '../../../core/Analytics';
-import {
-  trackActionButtonClick,
-  ActionButtonType,
-  ActionLocation,
-  ActionPosition,
-} from '../../../util/analytics/actionButtonTracking';
 import Engine from '../../../core/Engine';
 import { RootState } from '../../../reducers';
 import {
@@ -78,6 +75,7 @@ import {
 } from '../../../selectors/accountsController';
 import { selectAccountBalanceByChainId } from '../../../selectors/accountTrackerController';
 import { selectIsBackupAndSyncEnabled } from '../../../selectors/identity';
+import { selectSelectedAccountGroupId } from '../../../selectors/multichainAccounts/accountTreeController';
 import {
   selectChainId,
   selectEvmNetworkConfigurationsByChainId,
@@ -101,7 +99,12 @@ import {
   selectAllDetectedTokensFlat,
   selectDetectedTokens,
 } from '../../../selectors/tokensController';
-import { selectSelectedAccountGroupId } from '../../../selectors/multichainAccounts/accountTreeController';
+import {
+  ActionButtonType,
+  ActionLocation,
+  ActionPosition,
+  trackActionButtonClick,
+} from '../../../util/analytics/actionButtonTracking';
 import {
   getDecimalChainId,
   getIsNetworkOnboarded,
@@ -117,29 +120,28 @@ import ErrorBoundary from '../ErrorBoundary';
 
 import { Nft, Token } from '@metamask/assets-controllers';
 import { Hex, KnownCaipNamespace } from '@metamask/utils';
-import { selectIsEvmNetworkSelected } from '../../../selectors/multichainNetworkController';
-import { PortfolioBalance } from '../../UI/Tokens/TokenList/PortfolioBalance';
-import { selectMultichainAccountsState2Enabled } from '../../../selectors/featureFlagController/multichainAccounts/enabledMultichainAccounts';
 import { selectHomepageRedesignV1Enabled } from '../../../selectors/featureFlagController/homepage';
-import AccountGroupBalance from '../../UI/Assets/components/Balance/AccountGroupBalance';
-import useCheckNftAutoDetectionModal from '../../hooks/useCheckNftAutoDetectionModal';
-import useCheckMultiRpcModal from '../../hooks/useCheckMultiRpcModal';
-import { useMultichainAccountsIntroModal } from '../../hooks/useMultichainAccountsIntroModal';
-import { useAccountsWithNetworkActivitySync } from '../../hooks/useAccountsWithNetworkActivitySync';
+import { selectMultichainAccountsState2Enabled } from '../../../selectors/featureFlagController/multichainAccounts/enabledMultichainAccounts';
+import { selectIsEvmNetworkSelected } from '../../../selectors/multichainNetworkController';
 import {
-  selectUseTokenDetection,
   selectTokenNetworkFilter,
+  selectUseTokenDetection,
 } from '../../../selectors/preferencesController';
 import Logger from '../../../util/Logger';
+import { useAccountsWithNetworkActivitySync } from '../../hooks/useAccountsWithNetworkActivitySync';
+import useCheckMultiRpcModal from '../../hooks/useCheckMultiRpcModal';
+import useCheckNftAutoDetectionModal from '../../hooks/useCheckNftAutoDetectionModal';
+import { useMultichainAccountsIntroModal } from '../../hooks/useMultichainAccountsIntroModal';
 import { useNftDetectionChainIds } from '../../hooks/useNftDetectionChainIds';
 import { Carousel } from '../../UI/Carousel';
-import { TokenI } from '../../UI/Tokens/types';
 import NetworkConnectionBanner from '../../UI/NetworkConnectionBanner';
+import { PortfolioBalance } from '../../UI/Tokens/TokenList/PortfolioBalance';
+import { TokenI } from '../../UI/Tokens/types';
 
 import { cloneDeep } from 'lodash';
 import { selectAssetsDefiPositionsEnabled } from '../../../selectors/featureFlagController/assetsDefiPositions';
 import { selectHDKeyrings } from '../../../selectors/keyringController';
-import { toFormattedAddress } from '../../../util/address';
+import { formatAddress, toFormattedAddress } from '../../../util/address';
 import { prepareNftDetectionEvents } from '../../../util/assets';
 import { UserProfileProperty } from '../../../util/metrics/UserSettingsAnalyticsMetaData/UserProfileAnalyticsMetaData.types';
 import { endTrace, trace, TraceName } from '../../../util/trace';
@@ -156,37 +158,57 @@ import { getEther } from '../../../util/transactions';
 ///: BEGIN:ONLY_INCLUDE_IF(keyring-snaps)
 import { useSendNonEvmAsset } from '../../hooks/useSendNonEvmAsset';
 ///: END:ONLY_INCLUDE_IF
+import { useTailwind } from '@metamask/design-system-twrnc-preset';
+import { SolScope } from '@metamask/keyring-api';
+import { RpcEndpointType } from '@metamask/network-controller';
+import Clipboard from '@react-native-clipboard/clipboard';
 import { setIsConnectionRemoved } from '../../../actions/user';
-import {
+import Avatar, {
+  AvatarSize,
+  AvatarVariant,
+} from '../../../component-library/components/Avatars/Avatar';
+import AvatarAccount from '../../../component-library/components/Avatars/Avatar/variants/AvatarAccount';
+import ButtonIcon, {
+  ButtonIconSizes,
+} from '../../../component-library/components/Buttons/ButtonIcon';
+import Icon, {
   IconColor,
   IconName,
+  IconSize,
 } from '../../../component-library/components/Icons/Icon';
+import SensitiveText, {
+  SensitiveTextLength,
+} from '../../../component-library/components/Texts/SensitiveText';
+import { selectDisplayCardButton } from '../../../core/redux/slices/card';
 import { selectIsConnectionRemoved } from '../../../reducers/user';
+import { selectSortedAssetsBySelectedAccountGroup } from '../../../selectors/assets/assets-list';
+import { selectBalanceBySelectedAccountGroup } from '../../../selectors/assets/balances';
+import { selectSelectedInternalAccountByScope } from '../../../selectors/multichainAccounts/accounts';
 import { selectEVMEnabledNetworks } from '../../../selectors/networkEnablementController';
 import { selectSeedlessOnboardingLoginFlow } from '../../../selectors/seedlessOnboardingController';
+import { selectAvatarAccountType } from '../../../selectors/settings';
+import { selectSortedTokenKeys } from '../../../selectors/tokenList';
+import { AssetPollingProvider } from '../../hooks/AssetPolling/AssetPollingProvider';
+import { useCurrentNetworkInfo } from '../../hooks/useCurrentNetworkInfo';
+import { FeatureFlagNames, useFeatureFlag } from '../../hooks/useFeatureFlag';
+import { useFormatters } from '../../hooks/useFormatters';
 import {
   NetworkType,
   useNetworksByCustomNamespace,
   useNetworksByNamespace,
 } from '../../hooks/useNetworksByNamespace/useNetworksByNamespace';
 import { useNetworkSelection } from '../../hooks/useNetworkSelection/useNetworkSelection';
+import { EVM_SCOPE } from '../../UI/Earn/constants/networks';
+import { createNetworkManagerNavDetails } from '../../UI/NetworkManager';
+import NftGrid from '../../UI/NftGrid/NftGrid';
 import { selectPerpsGtmOnboardingModalEnabledFlag } from '../../UI/Perps';
-import PerpsTabView from '../../UI/Perps/Views/PerpsTabView';
 import { selectPredictGtmOnboardingModalEnabledFlag } from '../../UI/Predict/selectors/featureFlags';
-import PredictTabView from '../../UI/Predict/views/PredictTabView';
+import { useRewardsIntroModal } from '../../UI/Rewards/hooks/useRewardsIntroModal';
+import { TokenList } from '../../UI/Tokens/TokenList';
+import { createAddressListNavigationDetails } from '../../Views/MultichainAccounts/AddressList';
+import { createAccountSelectorNavDetails } from '../AccountSelector';
 import { InitSendLocation } from '../confirmations/constants/send';
 import { useSendNavigation } from '../confirmations/hooks/useSendNavigation';
-import { useFeatureFlag, FeatureFlagNames } from '../../hooks/useFeatureFlag';
-import { SolScope } from '@metamask/keyring-api';
-import { selectSelectedInternalAccountByScope } from '../../../selectors/multichainAccounts/accounts';
-import { EVM_SCOPE } from '../../UI/Earn/constants/networks';
-import { useCurrentNetworkInfo } from '../../hooks/useCurrentNetworkInfo';
-import { createAddressListNavigationDetails } from '../../Views/MultichainAccounts/AddressList';
-import { useRewardsIntroModal } from '../../UI/Rewards/hooks/useRewardsIntroModal';
-import NftGrid from '../../UI/NftGrid/NftGrid';
-import { AssetPollingProvider } from '../../hooks/AssetPolling/AssetPollingProvider';
-import { selectDisplayCardButton } from '../../../core/redux/slices/card';
-import { RpcEndpointType } from '@metamask/network-controller';
 
 const createStyles = ({ colors }: Theme) =>
   RNStyleSheet.create({
@@ -1101,23 +1123,40 @@ const Wallet = ({
 
   useEffect(() => {
     if (!selectedInternalAccount) return;
-    navigation.setOptions(
-      getWalletNavbarOptions(
-        walletRef,
-        selectedInternalAccount,
-        displayName,
-        networkName,
-        networkImageSource,
-        onTitlePress,
-        navigation,
-        colors,
-        isNotificationEnabled,
-        isBackupAndSyncEnabled,
-        unreadNotificationCount,
-        readNotificationCount,
-        shouldDisplayCardButton,
+    navigation.setOptions({
+      // getWalletNavbarOptions(
+      //   walletRef,
+      //   selectedInternalAccount,
+      //   displayName,
+      //   networkName,
+      //   networkImageSource,
+      //   onTitlePress,
+      //   navigation,
+      //   colors,
+      //   isNotificationEnabled,
+      //   isBackupAndSyncEnabled,
+      //   unreadNotificationCount,
+      //   readNotificationCount,
+      //   shouldDisplayCardButton,
+      // ),
+      headerShown: true,
+      headerTitle: () => (
+        <Image
+          source={require('../../../../logo.png')}
+          style={{
+            width: 80,
+            height: 80,
+            borderColor: '#b0efff',
+            borderRadius: 40,
+            borderWidth: 1,
+            marginTop: 40,
+          }}
+        />
       ),
-    );
+      headerTitleAlign: 'center',
+      headerLeft: () => null,
+      headerRight: () => null,
+    });
   }, [
     selectedInternalAccount,
     displayName,
@@ -1232,11 +1271,10 @@ const Wallet = ({
     async function setupOPN() {
       try {
         // Wait for engine to be initialized
-        const { NetworkController, MultichainNetworkController } = Engine.context;
-
+        const { NetworkController, MultichainNetworkController } =
+          Engine.context;
 
         // await NetworkController.removeNetwork('0x3d8')
-
 
         if (!NetworkController || !MultichainNetworkController) {
           console.log('Engine not ready yet');
@@ -1244,12 +1282,13 @@ const Wallet = ({
         }
 
         const chainId = '0x3d8'; // 984 OPN Testnet
-        const existing = NetworkController.state.networkConfigurationsByChainId[chainId];
+        const existing =
+          NetworkController.state.networkConfigurationsByChainId[chainId];
 
         let networkClientId;
 
         if (!existing) {
-          console.log("Adding OPN testnet...");
+          console.log('Adding OPN testnet...');
 
           const added = await NetworkController.addNetwork({
             chainId,
@@ -1270,24 +1309,23 @@ const Wallet = ({
 
           networkClientId =
             added.rpcEndpoints[added.defaultRpcEndpointIndex].networkClientId;
-
         } else {
-          console.log("OPN testnet already exists");
+          console.log('OPN testnet already exists');
           networkClientId =
-            existing.rpcEndpoints[existing.defaultRpcEndpointIndex]?.networkClientId;
+            existing.rpcEndpoints[existing.defaultRpcEndpointIndex]
+              ?.networkClientId;
         }
 
         if (networkClientId) {
-          console.log("Setting OPN testnet as ACTIVE");
+          console.log('Setting OPN testnet as ACTIVE');
           await MultichainNetworkController.setActiveNetwork(networkClientId);
         }
       } catch (err) {
-        console.log("Failed to setup OPN network:", err);
+        console.log('Failed to setup OPN network:', err);
       }
     }
 
     setTimeout(setupOPN, 600);
-
   }, []);
 
   useEffect(() => {
@@ -1297,16 +1335,17 @@ const Wallet = ({
         if (!NetworkController) {
           return;
         }
-  
+
         const chainId = '0x3d8';
-  
-        const existing = NetworkController.state.networkConfigurationsByChainId[chainId];
-  
+
+        const existing =
+          NetworkController.state.networkConfigurationsByChainId[chainId];
+
         let networkClientId;
-  
+
         if (!existing) {
-          console.log("Adding OPN Testnet...");
-  
+          console.log('Adding OPN Testnet...');
+
           const networkConfig = {
             name: 'IOPN Testnet',
             chainId: chainId,
@@ -1320,38 +1359,35 @@ const Wallet = ({
                 failoverUrls: [],
               },
             ],
-  
+
             blockExplorerUrls: ['https://testnet.iopn.tech'],
-  
+
             defaultRpcEndpointIndex: 0,
             defaultBlockExplorerUrlIndex: 0,
           };
-  
-          const addedNetwork = await NetworkController.addNetwork(networkConfig);
-  
+
+          const addedNetwork =
+            await NetworkController.addNetwork(networkConfig);
+
           networkClientId =
             addedNetwork.rpcEndpoints[addedNetwork.defaultRpcEndpointIndex]
               .networkClientId;
-  
+
           await NetworkController.setActiveNetwork(chainId);
-  
         } else {
-          console.log("OPN testnet already exists");
-  
+          console.log('OPN testnet already exists');
+
           networkClientId =
             existing.rpcEndpoints[existing.defaultRpcEndpointIndex]
               ?.networkClientId;
         }
-  
       } catch (err) {
-        console.log("Failed to setup OPN network:", err);
+        console.log('Failed to setup OPN network:', err);
       }
     }
-  
+
     // setTimeout(setupOPNTestnet, 600);
-  
   }, []);
-  
 
   const getNftDetectionAnalyticsParams = useCallback((nft: Nft) => {
     try {
@@ -1453,6 +1489,94 @@ const Wallet = ({
     [styles.wrapper, isHomepageRedesignV1Enabled],
   );
 
+  // const content = (
+  //   <>
+  //     <AssetPollingProvider />
+  //     <View style={styles.banner}>
+  //       {!basicFunctionalityEnabled ? (
+  //         <BannerAlert
+  //           severity={BannerAlertSeverity.Error}
+  //           title={strings('wallet.banner.title')}
+  //           description={
+  //             <CustomText
+  //               color={TextColor.Info}
+  //               onPress={turnOnBasicFunctionality}
+  //             >
+  //               {strings('wallet.banner.link')}
+  //             </CustomText>
+  //           }
+  //         />
+  //       ) : null}
+  //       <NetworkConnectionBanner />
+  //     </View>
+  //     <>
+  //       {isMultichainAccountsState2Enabled ? (
+  //         <AccountGroupBalance />
+  //       ) : (
+  //         <PortfolioBalance />
+  //       )}
+
+  //       <AssetDetailsActions
+  //         displayBuyButton={displayBuyButton}
+  //         displaySwapsButton={displaySwapsButton}
+  //         goToSwaps={goToSwaps}
+  //         onReceive={onReceive}
+  //         onSend={onSend}
+  //         buyButtonActionID={WalletViewSelectorsIDs.WALLET_BUY_BUTTON}
+  //         swapButtonActionID={WalletViewSelectorsIDs.WALLET_SWAP_BUTTON}
+  //         sendButtonActionID={WalletViewSelectorsIDs.WALLET_SEND_BUTTON}
+  //         receiveButtonActionID={WalletViewSelectorsIDs.WALLET_RECEIVE_BUTTON}
+  //       />
+
+  //       {isCarouselBannersEnabled && <Carousel style={styles.carousel} />}
+
+  //       <WalletTokensTabView
+  //         navigation={navigation}
+  //         onChangeTab={onChangeTab}
+  //         defiEnabled={defiEnabled}
+  //         collectiblesEnabled={collectiblesEnabled}
+  //         navigationParams={route.params}
+  //       />
+  //     </>
+  //   </>
+  // );
+
+  const avatarAccountType = useSelector(selectAvatarAccountType);
+  const tw = useTailwind();
+  const { formatCurrency } = useFormatters();
+  const groupBalance = useSelector(selectBalanceBySelectedAccountGroup);
+  const totalBalance = groupBalance?.totalBalanceInUserCurrency ?? 0;
+  const userCurrency = groupBalance?.userCurrency ?? '';
+  const displayBalance = formatCurrency(totalBalance, userCurrency);
+  const [privacyMode, setPrivacyMode] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const sortedTokenKeys = useSelector(
+    useMemo(
+      () =>
+        isMultichainAccountsState2Enabled
+          ? selectSortedAssetsBySelectedAccountGroup
+          : selectSortedTokenKeys,
+      [isMultichainAccountsState2Enabled],
+    ),
+  );
+
+  const handleCopy = () => {
+    Clipboard.setString(selectedInternalAccount?.address || '');
+
+    currentToast?.showToast({
+      variant: ToastVariants.Plain,
+      labelOptions: [
+        {
+          label: 'Copied',
+          isBold: true,
+        },
+      ],
+    });
+
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  };
+
   const content = (
     <>
       <AssetPollingProvider />
@@ -1474,13 +1598,168 @@ const Wallet = ({
         <NetworkConnectionBanner />
       </View>
       <>
-        {isMultichainAccountsState2Enabled ? (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate(...createAccountSelectorNavDetails({}));
+          }}
+          style={{
+            padding: 16,
+            marginTop: 32,
+          }}
+        >
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              borderRadius: 12,
+              borderWidth: 1,
+              borderColor: colors.border.default,
+              padding: 12,
+            }}
+          >
+            <AvatarAccount
+              accountAddress={selectedInternalAccount?.address || ''}
+              type={avatarAccountType}
+              size={AvatarSize.Md}
+              // testID={AccountCellIds.AVATAR}
+            />
+            <View style={{ marginLeft: 12 }}>
+              <CustomText>{accountName}</CustomText>
+              <CustomText>
+                {formatAddress(selectedInternalAccount?.address || '', 'short')}
+              </CustomText>
+            </View>
+            <View style={{ flex: 1 }} />
+            <Icon
+              size={IconSize.Sm}
+              color={colors.icon.default}
+              name={IconName.ArrowDown}
+              // style={styles.dropdownIcon}
+            />
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate(...createNetworkManagerNavDetails({}));
+            // navigation.navigate(Routes.MODAL.ROOT_MODAL_FLOW, {
+            //   screen: Routes.SHEET.NETWORK_SELECTOR,
+            // });
+          }}
+          style={{ padding: 16, marginTop: -32 }}
+        >
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              borderRadius: 12,
+              borderWidth: 1,
+              borderColor: colors.border.default,
+              padding: 12,
+            }}
+          >
+            <Avatar
+              variant={AvatarVariant.Network}
+              size={AvatarSize.Xs}
+              name={networkName}
+              imageSource={networkImageSource}
+            />
+            <View style={{ marginLeft: 12 }}>
+              <CustomText>{selectedNetworkName}</CustomText>
+            </View>
+            <View style={{ flex: 1 }} />
+            <Icon
+              size={IconSize.Sm}
+              color={colors.icon.default}
+              name={IconName.ArrowDown}
+            />
+          </View>
+        </TouchableOpacity>
+
+        {/* Orginal code */}
+        {/* {isMultichainAccountsState2Enabled ? (
           <AccountGroupBalance />
         ) : (
           <PortfolioBalance />
-        )}
+        )} */}
 
-        <AssetDetailsActions
+        <View
+          style={{
+            borderRadius: 12,
+            borderWidth: 1,
+            borderColor: colors.border.default,
+            padding: 12,
+            marginHorizontal: 16,
+            // backgroundColor: '#fafbff',
+            backgroundColor: colors.background.default,
+
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 6 }, // pushes shadow down
+            shadowOpacity: 0.1,
+            shadowRadius: 10,
+            elevation: 8, // Android
+          }}
+        >
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <CustomText style={{}}>Total Balance</CustomText>
+            <View style={{ flex: 1 }} />
+            <TouchableOpacity onPress={() => setPrivacyMode(!privacyMode)}>
+              <Icon
+                name={privacyMode ? IconName.EyeSlash : IconName.Eye}
+                size={IconSize.Sm}
+                style={{ marginLeft: 8 }}
+              />
+            </TouchableOpacity>
+          </View>
+          {isMultichainAccountsState2Enabled ? (
+            <>
+              <SensitiveText
+                isHidden={privacyMode}
+                length={SensitiveTextLength.Long}
+                testID={WalletViewSelectorsIDs.TOTAL_BALANCE_TEXT}
+                variant={TextVariant.DisplayLG}
+                style={{
+                  fontWeight: '400',
+                  marginVertical: 8,
+                }}
+              >
+                {displayBalance}
+              </SensitiveText>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  borderColor: '#3d00b51c',
+                  borderWidth: 1,
+                  borderRadius: 12,
+                  paddingHorizontal: 12,
+                  paddingVertical: 4,
+                  alignSelf: 'flex-start',
+                }}
+              >
+                <CustomText>
+                  {formatAddress(
+                    selectedInternalAccount?.address || '',
+                    'short',
+                  )}
+                </CustomText>
+                <ButtonIcon
+                  iconName={IconName.Copy}
+                  size={ButtonIconSizes.Md}
+                  onPress={handleCopy}
+                  iconProps={{
+                    color: copied ? IconColor.Success : IconColor.Default,
+                  }}
+                  // testID={MULTICHAIN_ADDRESS_ROW_COPY_BUTTON_TEST_ID}
+                />
+              </View>
+            </>
+          ) : (
+            <PortfolioBalance />
+          )}
+        </View>
+
+        {/* <AssetDetailsActions
           displayBuyButton={displayBuyButton}
           displaySwapsButton={displaySwapsButton}
           goToSwaps={goToSwaps}
@@ -1490,17 +1769,43 @@ const Wallet = ({
           swapButtonActionID={WalletViewSelectorsIDs.WALLET_SWAP_BUTTON}
           sendButtonActionID={WalletViewSelectorsIDs.WALLET_SEND_BUTTON}
           receiveButtonActionID={WalletViewSelectorsIDs.WALLET_RECEIVE_BUTTON}
+        /> */}
+
+        <AssetDetailsActions
+          displayBuyButton={false}
+          displaySwapsButton={displaySwapsButton}
+          goToSwaps={goToSwaps}
+          onReceive={onReceive}
+          onSend={onSend}
+          opnWallet={true}
+          buyButtonActionID={WalletViewSelectorsIDs.WALLET_BUY_BUTTON}
+          swapButtonActionID={WalletViewSelectorsIDs.WALLET_SWAP_BUTTON}
+          sendButtonActionID={WalletViewSelectorsIDs.WALLET_SEND_BUTTON}
+          receiveButtonActionID={WalletViewSelectorsIDs.WALLET_RECEIVE_BUTTON}
         />
 
         {isCarouselBannersEnabled && <Carousel style={styles.carousel} />}
 
-        <WalletTokensTabView
+        <View style={{ flexDirection: 'row', paddingHorizontal: 16 }}>
+          <CustomText>Assets</CustomText>
+        </View>
+        <TokenList
+          tokenKeys={sortedTokenKeys}
+          refreshing={false}
+          onRefresh={() => {}}
+          // showRemoveMenu={showRemoveMenu}
+          // setShowScamWarningModal={handleScamWarningModal}
+          maxItems={undefined}
+          isFullView={true}
+        />
+
+        {/* <WalletTokensTabView
           navigation={navigation}
           onChangeTab={onChangeTab}
           defiEnabled={defiEnabled}
           collectiblesEnabled={collectiblesEnabled}
           navigationParams={route.params}
-        />
+        /> */}
       </>
     </>
   );
@@ -1515,26 +1820,28 @@ const Wallet = ({
 
   return (
     <ErrorBoundary navigation={navigation} view="Wallet">
-      <View style={baseStyles.flexGrow}>
-        {selectedInternalAccount ? (
-          <View
-            style={styles.wrapper}
-            testID={WalletViewSelectorsIDs.WALLET_CONTAINER}
-          >
-            <ConditionalScrollView
-              isScrollEnabled={isHomepageRedesignV1Enabled}
-              scrollViewProps={{
-                contentContainerStyle: scrollViewContentStyle,
-                showsVerticalScrollIndicator: false,
-              }}
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={baseStyles.flexGrow}>
+          {selectedInternalAccount ? (
+            <View
+              style={styles.wrapper}
+              testID={WalletViewSelectorsIDs.WALLET_CONTAINER}
             >
-              {content}
-            </ConditionalScrollView>
-          </View>
-        ) : (
-          renderLoader()
-        )}
-      </View>
+              <ConditionalScrollView
+                isScrollEnabled={isHomepageRedesignV1Enabled}
+                scrollViewProps={{
+                  contentContainerStyle: scrollViewContentStyle,
+                  showsVerticalScrollIndicator: false,
+                }}
+              >
+                {content}
+              </ConditionalScrollView>
+            </View>
+          ) : (
+            renderLoader()
+          )}
+        </View>
+      </ScrollView>
     </ErrorBoundary>
   );
 };

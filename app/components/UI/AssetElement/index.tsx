@@ -1,18 +1,19 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
-import { TouchableOpacity, StyleSheet, Platform, View } from 'react-native';
-import {
-  TextVariant,
-  TextColor,
-} from '../../../component-library/components/Texts/Text';
-import SkeletonText from '../Ramp/Aggregator/components/SkeletonText';
-import { TokenI } from '../Tokens/types';
-import generateTestId from '../../../../wdio/utils/generateTestId';
+import { Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { getAssetTestId } from '../../../../wdio/screen-objects/testIDs/Screens/WalletView.testIds';
+import generateTestId from '../../../../wdio/utils/generateTestId';
 import SensitiveText, {
   SensitiveTextLength,
 } from '../../../component-library/components/Texts/SensitiveText';
+import {
+  TextColor,
+  TextVariant,
+} from '../../../component-library/components/Texts/Text';
+import SkeletonText from '../Ramp/Aggregator/components/SkeletonText';
+import { TokenI } from '../Tokens/types';
 
+import { fontStyles } from '../../../styles/common';
 import { useTheme } from '../../../util/theme';
 import { Colors } from '../../../util/theme/models';
 import {
@@ -89,58 +90,89 @@ const AssetElement: React.FC<AssetElementProps> = ({
   // TODO: Use the SensitiveText component when it's available
   // when privacyMode is true, we should hide the balance and the fiat
   return (
-    <TouchableOpacity
-      disabled={disabled}
-      onPress={handleOnPress}
-      onLongPress={handleOnLongPress}
-      style={styles.itemWrapper}
-      {...generateTestId(Platform, getAssetTestId(asset.symbol))}
+    <View
+      style={{
+        borderRadius: 12,
+        borderWidth: 1,
+        borderColor: colors.border.default,
+        paddingHorizontal: 12,
+        // marginHorizontal: 16,
+        // backgroundColor: '#fafbff',
+        backgroundColor: colors.background.default,
+
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 6 }, // pushes shadow down
+        shadowOpacity: 0.1,
+        shadowRadius: 10,
+        elevation: 8, // Android
+      }}
     >
-      {children}
-      <View style={styles.arrow}>
-        {balance && (
-          <SensitiveText
-            variant={
-              asset?.hasBalanceError ||
-              asset.balanceFiat === TOKEN_RATE_UNDEFINED
-                ? TextVariant.BodySM
-                : TextVariant.BodyMDMedium
-            }
-            isHidden={privacyMode}
-            length={SensitiveTextLength.Medium}
-            testID={BALANCE_TEST_ID}
-          >
-            {balance === TOKEN_BALANCE_LOADING ||
-            balance === TOKEN_BALANCE_LOADING_UPPERCASE ? (
-              <SkeletonText thin style={styles.skeleton} />
-            ) : (
-              balance
-            )}
-          </SensitiveText>
-        )}
-        {secondaryBalance ? (
-          <SensitiveText
-            variant={TextVariant.BodySMMedium}
-            style={
-              secondaryBalanceColor
-                ? styles.secondaryBalanceCustomColor
-                : styles.secondaryBalance
-            }
-            color={secondaryBalanceColor}
-            isHidden={privacyMode && hideSecondaryBalanceInPrivacyMode}
-            length={SensitiveTextLength.Short}
-            testID={SECONDARY_BALANCE_TEST_ID}
-          >
-            {secondaryBalance === TOKEN_BALANCE_LOADING ||
-            secondaryBalance === TOKEN_BALANCE_LOADING_UPPERCASE ? (
-              <SkeletonText thin style={styles.skeleton} />
-            ) : (
-              secondaryBalance
-            )}
-          </SensitiveText>
-        ) : null}
-      </View>
-    </TouchableOpacity>
+      <TouchableOpacity
+        disabled={disabled}
+        onPress={handleOnPress}
+        onLongPress={handleOnLongPress}
+        style={styles.itemWrapper}
+        {...generateTestId(Platform, getAssetTestId(asset.symbol))}
+      >
+        {children}
+        <View style={styles.arrow}>
+          {balance && (
+            <SensitiveText
+              variant={
+                asset?.hasBalanceError ||
+                asset.balanceFiat === TOKEN_RATE_UNDEFINED
+                  ? TextVariant.BodySM
+                  : TextVariant.BodyMDMedium
+              }
+              isHidden={privacyMode}
+              length={SensitiveTextLength.Medium}
+              testID={BALANCE_TEST_ID}
+            >
+              {balance === TOKEN_BALANCE_LOADING ||
+              balance === TOKEN_BALANCE_LOADING_UPPERCASE ? (
+                <SkeletonText thin style={styles.skeleton} />
+              ) : (
+                balance
+              )}
+            </SensitiveText>
+          )}
+          {secondaryBalance ? (
+            <SensitiveText
+              variant={TextVariant.BodySMMedium}
+              style={
+                secondaryBalanceColor
+                  ? styles.secondaryBalanceCustomColor
+                  : styles.secondaryBalance
+              }
+              color={secondaryBalanceColor}
+              isHidden={privacyMode && hideSecondaryBalanceInPrivacyMode}
+              length={SensitiveTextLength.Short}
+              testID={SECONDARY_BALANCE_TEST_ID}
+            >
+              {secondaryBalance === TOKEN_BALANCE_LOADING ||
+              secondaryBalance === TOKEN_BALANCE_LOADING_UPPERCASE ? (
+                <SkeletonText thin style={styles.skeleton} />
+              ) : (
+                secondaryBalance
+              )}
+            </SensitiveText>
+          ) : null}
+        </View>
+      </TouchableOpacity>
+      <SensitiveText
+        variant={TextVariant.BodySMMedium}
+        style={{
+          color: colors.text.alternative,
+          ...fontStyles.normal,
+          textTransform: 'uppercase',
+          marginBottom: 8,
+        }}
+        isHidden={privacyMode}
+        length={SensitiveTextLength.Short}
+      >
+        {asset.balance} {asset.symbol}
+      </SensitiveText>
+    </View>
   );
 };
 export default AssetElement;

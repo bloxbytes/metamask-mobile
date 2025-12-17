@@ -5,7 +5,8 @@
 ///////////////////////////////////////////////////////
 import { AssetByIconName, IconName } from './Icon.types';
 import accessibilitySVG from './assets/accessibility.svg';
-import activitySVG from './assets/activity.svg';
+// import activitySVG from './assets/activity.svg';
+import activitySVG from './assets/activity-custom.svg';
 import addcardSVG from './assets/add-card.svg';
 import addcircleSVG from './assets/add-circle.svg';
 import addsquareSVG from './assets/add-square.svg';
@@ -163,6 +164,7 @@ import morehorizontalSVG from './assets/more-horizontal.svg';
 import moreverticalSVG from './assets/more-vertical.svg';
 import mountainflagSVG from './assets/mountain-flag.svg';
 import musicnoteSVG from './assets/music-note.svg';
+import nftsSVG from './assets/nfts.svg';
 import notificationSVG from './assets/notification.svg';
 import pageinfoSVG from './assets/page-info.svg';
 import paletteSVG from './assets/palette.svg';
@@ -234,6 +236,7 @@ import starSVG from './assets/star.svg';
 import startSVG from './assets/start.svg';
 import storefrontSVG from './assets/storefront.svg';
 import studentSVG from './assets/student.svg';
+import swapcustomSVG from './assets/swap-custom.svg';
 import swaphorizontalSVG from './assets/swap-horizontal.svg';
 import swapverticalSVG from './assets/swap-vertical.svg';
 import tabcloseSVG from './assets/tab-close.svg';
@@ -393,6 +396,7 @@ export const assetByIconName: AssetByIconName = {
   [IconName.Folder]: folderSVG,
   [IconName.Forest]: forestSVG,
   [IconName.FullCircle]: fullcircleSVG,
+  [IconName.Nfts]: nftsSVG,
   [IconName.Gas]: gasSVG,
   [IconName.Gift]: giftSVG,
   [IconName.GlobalSearch]: globalsearchSVG,
@@ -514,6 +518,7 @@ export const assetByIconName: AssetByIconName = {
   [IconName.Student]: studentSVG,
   [IconName.SwapHorizontal]: swaphorizontalSVG,
   [IconName.SwapVertical]: swapverticalSVG,
+  [IconName.SwapCustom]: swapcustomSVG,
   [IconName.TabClose]: tabcloseSVG,
   [IconName.TableRow]: tablerowSVG,
   [IconName.Tablet]: tabletSVG,

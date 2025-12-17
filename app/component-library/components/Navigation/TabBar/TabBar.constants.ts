@@ -13,13 +13,16 @@ export const ICON_BY_TAB_BAR_ICON_KEY: IconByTabBarIconKey = {
   [TabBarIconKey.Activity]: IconName.Activity,
   [TabBarIconKey.Setting]: IconName.Setting,
   [TabBarIconKey.Rewards]: IconName.MetamaskFoxOutline,
-  [TabBarIconKey.Trending]: IconName.Search,
+  [TabBarIconKey.Trending]: IconName.Nfts,
+  [TabBarIconKey.NFTs]: IconName.Nfts,
 };
 
 export const LABEL_BY_TAB_BAR_ICON_KEY = {
   [TabBarIconKey.Wallet]: 'bottom_nav.home',
   [TabBarIconKey.Browser]: 'bottom_nav.browser',
-  [TabBarIconKey.Trending]: 'bottom_nav.trending',
+  // Reuse the Trending icon key for NFTs label in the current tab layout
+  [TabBarIconKey.Trending]: 'wallet.collectibles',
+  [TabBarIconKey.NFTs]: 'wallet.collectibles',
   [TabBarIconKey.Actions]: 'bottom_nav.trade',
   [TabBarIconKey.Trade]: 'bottom_nav.trade',
   [TabBarIconKey.Activity]: 'bottom_nav.activity',

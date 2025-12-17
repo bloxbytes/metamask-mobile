@@ -1,28 +1,27 @@
-import React, { useCallback, useLayoutEffect, useRef, useMemo } from 'react';
-import { RefreshControl } from 'react-native';
 import { FlashList, FlashListRef } from '@shopify/flash-list';
+import React, { useCallback, useLayoutEffect, useMemo, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import { useTheme } from '../../../../util/theme';
 import {
   selectIsTokenNetworkFilterEqualCurrentNetwork,
   selectPrivacyMode,
 } from '../../../../selectors/preferencesController';
+import { useTheme } from '../../../../util/theme';
 
-import { TokenI } from '../types';
-import { strings } from '../../../../../locales/i18n';
-import { TokenListItem, TokenListItemBip44 } from './TokenListItem';
-import { WalletViewSelectorsIDs } from '../../../../../e2e/selectors/wallet/WalletView.selectors';
-import { useNavigation } from '@react-navigation/native';
-import Routes from '../../../../constants/navigation/Routes';
-import { selectMultichainAccountsState2Enabled } from '../../../../selectors/featureFlagController/multichainAccounts';
-import { selectHomepageRedesignV1Enabled } from '../../../../selectors/featureFlagController/homepage';
 import {
   Box,
   Button,
   ButtonVariant,
 } from '@metamask/design-system-react-native';
 import { useTailwind } from '@metamask/design-system-twrnc-preset';
+import { useNavigation } from '@react-navigation/native';
+import { WalletViewSelectorsIDs } from '../../../../../e2e/selectors/wallet/WalletView.selectors';
+import { strings } from '../../../../../locales/i18n';
+import Routes from '../../../../constants/navigation/Routes';
+import { selectHomepageRedesignV1Enabled } from '../../../../selectors/featureFlagController/homepage';
+import { selectMultichainAccountsState2Enabled } from '../../../../selectors/featureFlagController/multichainAccounts';
 import { MetaMetricsEvents, useMetrics } from '../../../hooks/useMetrics';
+import { TokenI } from '../types';
+import { TokenListItem, TokenListItemBip44 } from './TokenListItem';
 
 export interface FlashListAssetKey {
   address: string;
@@ -166,16 +165,17 @@ const TokenListComponent = ({
             return `${item.address}-${item.chainId}-${staked}-${idx}`;
           }}
           decelerationRate="fast"
-          refreshControl={
-            <RefreshControl
-              colors={[colors.primary.default]}
-              tintColor={colors.icon.default}
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-            />
-          }
+          // refreshControl={
+          //   <RefreshControl
+          //     colors={[colors.primary.default]}
+          //     tintColor={colors.icon.default}
+          //     refreshing={refreshing}
+          //     onRefresh={onRefresh}
+          //   />
+          // }
           extraData={{ isTokenNetworkFilterEqualCurrentNetwork }}
           contentContainerStyle={!isFullView ? undefined : tw`px-4`}
+          scrollEnabled={false}
         />
       </Box>
     );

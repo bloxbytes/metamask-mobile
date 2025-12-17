@@ -20,13 +20,13 @@ import Badge, {
 import BadgeWrapper, {
   BadgePosition,
 } from '../../../../../component-library/components/Badges/BadgeWrapper';
+import SensitiveText, {
+  SensitiveTextLength,
+} from '../../../../../component-library/components/Texts/SensitiveText';
 import TextComponent, {
   TextColor,
   TextVariant,
 } from '../../../../../component-library/components/Texts/Text';
-import SensitiveText, {
-  SensitiveTextLength,
-} from '../../../../../component-library/components/Texts/SensitiveText';
 import { RootState } from '../../../../../reducers';
 import {
   ///: BEGIN:ONLY_INCLUDE_IF(keyring-snaps)
@@ -69,6 +69,7 @@ import { CustomNetworkNativeImgMapping } from './CustomNetworkNativeImgMapping';
 ///: BEGIN:ONLY_INCLUDE_IF(keyring-snaps)
 import { makeSelectNonEvmAssetById } from '../../../../../selectors/multichain/multichain';
 ///: END:ONLY_INCLUDE_IF(keyring-snaps)
+import { MULTICHAIN_NETWORK_DECIMAL_PLACES } from '@metamask/multichain-network-controller';
 import { FlashListAssetKey } from '..';
 import { makeSelectAssetByAddressAndChainId } from '../../../../../selectors/multichain';
 import useEarnTokens from '../../../Earn/hooks/useEarnTokens';
@@ -78,10 +79,9 @@ import {
   selectStablecoinLendingEnabledFlag,
 } from '../../../Earn/selectors/featureFlags';
 import { useTokenPricePercentageChange } from '../../hooks/useTokenPricePercentageChange';
-import { MULTICHAIN_NETWORK_DECIMAL_PLACES } from '@metamask/multichain-network-controller';
 
-import { selectIsStakeableToken } from '../../../Stake/selectors/stakeableTokens';
 import { isMusdConversionPaymentToken } from '../../../Earn/utils/musd';
+import { selectIsStakeableToken } from '../../../Stake/selectors/stakeableTokens';
 
 interface TokenListItemProps {
   assetKey: FlashListAssetKey;

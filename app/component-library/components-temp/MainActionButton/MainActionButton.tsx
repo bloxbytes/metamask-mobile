@@ -3,21 +3,27 @@
 // Third party dependencies.
 import React, { useRef } from 'react';
 import {
+  Animated,
+  Easing,
+  GestureResponderEvent,
   Pressable,
   View,
-  Animated,
-  GestureResponderEvent,
-  Easing,
 } from 'react-native';
 
 // External dependencies.
-import Icon, { IconSize, IconColor } from '../../components/Icons/Icon';
-import Text, { TextVariant, TextColor } from '../../components/Texts/Text';
+import Icon, {
+  IconColor,
+  IconName,
+  IconSize,
+} from '../../components/Icons/Icon';
+import Text, { TextColor, TextVariant } from '../../components/Texts/Text';
 import { useStyles } from '../../hooks';
 
 // Internal dependencies.
-import { MainActionButtonProps } from './MainActionButton.types';
+import LinearGradient from 'react-native-linear-gradient';
+import { useTheme } from '../../../util/theme';
 import styleSheet from './MainActionButton.styles';
+import { MainActionButtonProps } from './MainActionButton.types';
 
 const MainActionButton = ({
   iconName,
@@ -27,6 +33,7 @@ const MainActionButton = ({
   onPressOut,
   style,
   isDisabled = false,
+  opnWallet = false,
   ...props
 }: MainActionButtonProps) => {
   const { styles } = useStyles(styleSheet, {
@@ -56,10 +63,30 @@ const MainActionButton = ({
     onPressOut?.(pressEvent);
   };
 
+  const { colors } = useTheme();
+
   return (
     <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
       <Pressable
-        style={({ pressed }) => [styles.base, pressed && styles.pressed]}
+        style={({ pressed }) => [
+          styles.base,
+          pressed && styles.pressed,
+          {
+            // backgroundColor: '#fafbff',
+            backgroundColor: colors.background.default,
+            borderWidth: 1,
+            borderColor: '#3d00b51c',
+
+            // // Shadow-lg equivalent
+            // shadowColor: '#000',
+            // shadowOffset: { width: 0, height: 6 },
+            // shadowOpacity: 0.12,
+            // shadowRadius: 12,
+
+            // // Required for Android shadow
+            // elevation: 12,
+          },
+        ]}
         onPress={!isDisabled ? onPress : undefined}
         onPressIn={!isDisabled ? handlePressIn : undefined}
         onPressOut={!isDisabled ? handlePressOut : undefined}
@@ -68,11 +95,43 @@ const MainActionButton = ({
         {...props}
       >
         <View style={styles.container}>
-          <Icon
-            name={iconName}
-            size={IconSize.Lg}
-            color={IconColor.Alternative}
-          />
+          {opnWallet ? (
+            <LinearGradient
+              colors={
+                iconName == IconName.Received
+                  ? ['rgb(34, 128, 205)', 'rgba(34, 128, 205, 0.867)']
+                  : ['rgb(65, 5, 182)', 'rgba(65, 5, 182, 0.867)']
+              }
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={{
+                width: 48,
+                height: 48,
+                borderRadius: 24,
+                alignItems: 'center',
+                justifyContent: 'center',
+
+                // Shadow equivalent of your CSS
+                shadowColor: 'rgba(65, 5, 182, 0.2)',
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.2,
+                shadowRadius: 8,
+                elevation: 6,
+              }}
+            >
+              <Icon
+                name={iconName}
+                size={IconSize.Lg}
+                color={'white'} // recommended for this gradient
+              />
+            </LinearGradient>
+          ) : (
+            <Icon
+              name={iconName}
+              size={IconSize.Lg}
+              color={IconColor.Alternative}
+            />
+          )}
           <Text
             variant={TextVariant.BodySMMedium}
             color={TextColor.Default}

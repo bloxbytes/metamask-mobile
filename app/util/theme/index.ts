@@ -1,16 +1,17 @@
+import { throttle } from 'lodash';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import {
-  useColorScheme,
-  StatusBar,
-  ColorSchemeName,
   Appearance,
+  ColorSchemeName,
   Platform,
+  StatusBar,
+  useColorScheme,
 } from 'react-native';
-import { throttle } from 'lodash';
-import { AppThemeKey, Theme } from './models';
 import { useSelector } from 'react-redux';
-import { lightTheme, darkTheme, brandColor } from '@metamask/design-tokens';
 import Device from '../device';
+// import { lightTheme, darkTheme, brandColor } from '@metamask/design-tokens';
+import { brandColor, darkTheme, lightTheme } from './customThemes';
+import { AppThemeKey, Theme } from './models';
 
 /**
  * This is needed to make our unit tests pass since Enzyme doesn't support contextType

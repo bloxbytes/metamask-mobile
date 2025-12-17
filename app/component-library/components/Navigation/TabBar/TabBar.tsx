@@ -6,28 +6,28 @@ import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
 // External dependencies.
-import TabBarItem from '../TabBarItem';
-import { useTailwind } from '@metamask/design-system-twrnc-preset';
 import {
   Box,
-  BoxFlexDirection,
   BoxAlignItems,
+  BoxFlexDirection,
 } from '@metamask/design-system-react-native';
+import { useTailwind } from '@metamask/design-system-twrnc-preset';
 import Routes from '../../../../constants/navigation/Routes';
+import TabBarItem from '../TabBarItem';
 
+import { strings } from '../../../../../locales/i18n';
+import { useMetrics } from '../../../../components/hooks/useMetrics';
 import { MetaMetricsEvents } from '../../../../core/Analytics';
 import { getDecimalChainId } from '../../../../util/networks';
-import { useMetrics } from '../../../../components/hooks/useMetrics';
-import { strings } from '../../../../../locales/i18n';
 
 // Internal dependencies.
-import { TabBarProps } from './TabBar.types';
+import { selectAssetsTrendingTokensEnabled } from '../../../../selectors/featureFlagController/assetsTrendingTokens';
+import { selectChainId } from '../../../../selectors/networkController';
 import {
   ICON_BY_TAB_BAR_ICON_KEY,
   LABEL_BY_TAB_BAR_ICON_KEY,
 } from './TabBar.constants';
-import { selectChainId } from '../../../../selectors/networkController';
-import { selectAssetsTrendingTokensEnabled } from '../../../../selectors/featureFlagController/assetsTrendingTokens';
+import { TabBarProps } from './TabBar.types';
 
 const TabBar = ({ state, descriptors, navigation }: TabBarProps) => {
   const { trackEvent, createEventBuilder } = useMetrics();
@@ -53,7 +53,9 @@ const TabBar = ({ state, descriptors, navigation }: TabBarProps) => {
       const labelText = labelKey ? strings(labelKey) : '';
       const onPress = () => {
         callback?.();
-        switch (rootScreenName) {
+        // prefer explicit rootScreenName set in descriptor; fall back to the route name
+        const targetScreen = rootScreenName || route.name;
+        switch (targetScreen) {
           case Routes.WALLET_VIEW:
             navigation.navigate(Routes.WALLET.HOME, {
               screen: Routes.WALLET.TAB_STACK_FLOW,
@@ -61,6 +63,10 @@ const TabBar = ({ state, descriptors, navigation }: TabBarProps) => {
                 screen: Routes.WALLET_VIEW,
               },
             });
+            break;
+          // Navigate directly to the NFTs full view tab
+          case Routes.WALLET.NFTS_FULL_VIEW:
+            navigation.navigate(Routes.WALLET.NFTS_FULL_VIEW);
             break;
           case Routes.MODAL.WALLET_ACTIONS:
             navigation.navigate(Routes.MODAL.ROOT_MODAL_FLOW, {
@@ -80,6 +86,7 @@ const TabBar = ({ state, descriptors, navigation }: TabBarProps) => {
               screen: Routes.BROWSER.VIEW,
             });
             break;
+          // duplicate NFT case handled above; fallthrough
           case Routes.TRANSACTIONS_VIEW:
             navigation.navigate(Routes.TRANSACTIONS_VIEW);
             break;

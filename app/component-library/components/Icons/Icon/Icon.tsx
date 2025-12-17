@@ -11,10 +11,10 @@ import React from 'react';
 import { useStyles } from '../../../hooks/useStyles';
 
 // Internal dependencies.
-import { IconProps, IconColor } from './Icon.types';
-import styleSheet from './Icon.styles';
 import { assetByIconName } from './Icon.assets';
-import { DEFAULT_ICON_SIZE, DEFAULT_ICON_COLOR } from './Icon.constants';
+import { DEFAULT_ICON_COLOR, DEFAULT_ICON_SIZE } from './Icon.constants';
+import styleSheet from './Icon.styles';
+import { IconColor, IconProps } from './Icon.types';
 
 const Icon = ({
   size = DEFAULT_ICON_SIZE,
@@ -68,20 +68,22 @@ const Icon = ({
     default:
       iconColor = color;
   }
-  return (
-    <SVG
-      fill="currentColor"
-      color={iconColor}
-      // @ts-expect-error - React Native style type mismatch due to outdated @types/react-native
-      // See: https://github.com/MetaMask/metamask-mobile/pull/18956#discussion_r2316407382
-      style={styles.icon}
-      width={sizeAsNum}
-      height={sizeAsNum}
-      // This prop it's for testing purposes
-      name={name}
-      {...props}
-    />
-  );
+  const svgProps: any = {
+    // @ts-expect-error - React Native style type mismatch due to outdated @types/react-native
+    // See: https://github.com/MetaMask/metamask-mobile/pull/18956#discussion_r2316407382
+    style: styles.icon,
+    width: sizeAsNum,
+    height: sizeAsNum,
+    name,
+    color: iconColor,
+    ...props,
+  };
+
+  if (!props.suppressFill) {
+    svgProps.fill = 'currentColor';
+  }
+
+  return <SVG {...svgProps} />;
 };
 
 export default Icon;

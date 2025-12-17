@@ -1,8 +1,5 @@
 /* eslint-disable react/display-name */
 import React from 'react';
-import NavbarTitle from '../NavbarTitle';
-import ModalNavbarTitle from '../ModalNavbarTitle';
-import AccountRightButton from '../AccountRightButton';
 import {
   Alert,
   Image,
@@ -12,65 +9,67 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { colors as importedColors, fontStyles } from '../../../styles/common';
-import IonicIcon from 'react-native-vector-icons/Ionicons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import IonicIcon from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { scale } from 'react-native-size-matters';
 import { strings } from '../../../../locales/i18n';
+import { BACK_BUTTON_SIMPLE_WEBVIEW } from '../../../../wdio/screen-objects/testIDs/Components/SimpleWebView.testIds';
+import { NAV_ANDROID_BACK_BUTTON } from '../../../../wdio/screen-objects/testIDs/Screens/NetworksScreen.testids';
+import generateTestId from '../../../../wdio/utils/generateTestId';
+import Routes from '../../../constants/navigation/Routes';
+import { MetaMetrics, MetaMetricsEvents } from '../../../core/Analytics';
 import AppConstants from '../../../core/AppConstants';
 import SharedDeeplinkManager from '../../../core/DeeplinkManager/SharedDeeplinkManager';
-import { MetaMetrics, MetaMetricsEvents } from '../../../core/Analytics';
+import { fontStyles, colors as importedColors } from '../../../styles/common';
+import Device from '../../../util/device';
 import { importAccountFromPrivateKey } from '../../../util/importAccountFromPrivateKey';
 import { isNotificationsFeatureEnabled } from '../../../util/notifications';
-import Device from '../../../util/device';
-import generateTestId from '../../../../wdio/utils/generateTestId';
-import { NAV_ANDROID_BACK_BUTTON } from '../../../../wdio/screen-objects/testIDs/Screens/NetworksScreen.testids';
-import { BACK_BUTTON_SIMPLE_WEBVIEW } from '../../../../wdio/screen-objects/testIDs/Components/SimpleWebView.testIds';
-import Routes from '../../../constants/navigation/Routes';
+import AccountRightButton from '../AccountRightButton';
+import ModalNavbarTitle from '../ModalNavbarTitle';
+import NavbarTitle from '../NavbarTitle';
 
-import {
-  default as MorphText,
-  TextVariant,
-  TextColor,
-} from '../../../component-library/components/Texts/Text';
 import { CommonSelectorsIDs } from '../../../../e2e/selectors/Common.selectors';
-import { WalletViewSelectorsIDs } from '../../../../e2e/selectors/wallet/WalletView.selectors';
-import { NetworksViewSelectorsIDs } from '../../../../e2e/selectors/Settings/NetworksView.selectors';
+import { RequestPaymentViewSelectors } from '../../../../e2e/selectors/Receive/RequestPaymentView.selectors';
 import { SendLinkViewSelectorsIDs } from '../../../../e2e/selectors/Receive/SendLinkView.selectors';
 import { SendViewSelectorsIDs } from '../../../../e2e/selectors/SendFlow/SendView.selectors';
-import { getBlockaidTransactionMetricsParams } from '../../../util/blockaid';
-import Icon, {
-  IconName,
-  IconSize,
-  IconColor,
-} from '../../../component-library/components/Icons/Icon';
 import { AddContactViewSelectorsIDs } from '../../../../e2e/selectors/Settings/Contacts/AddContactView.selectors';
+import { NetworksViewSelectorsIDs } from '../../../../e2e/selectors/Settings/NetworksView.selectors';
 import { SettingsViewSelectorsIDs } from '../../../../e2e/selectors/Settings/SettingsView.selectors';
+import { WalletViewSelectorsIDs } from '../../../../e2e/selectors/wallet/WalletView.selectors';
+import BottomSheetHeader from '../../../component-library/components/BottomSheets/BottomSheetHeader';
 import HeaderBase, {
   HeaderBaseVariant,
 } from '../../../component-library/components/HeaderBase';
-import BottomSheetHeader from '../../../component-library/components/BottomSheets/BottomSheetHeader';
-import AddressCopy from '../AddressCopy';
+import Icon, {
+  IconColor,
+  IconName,
+  IconSize,
+} from '../../../component-library/components/Icons/Icon';
 import PickerAccount from '../../../component-library/components/Pickers/PickerAccount';
+import {
+  default as MorphText,
+  TextColor,
+  TextVariant,
+} from '../../../component-library/components/Texts/Text';
 import { createAccountSelectorNavDetails } from '../../../components/Views/AccountSelector';
-import { RequestPaymentViewSelectors } from '../../../../e2e/selectors/Receive/RequestPaymentView.selectors';
 import { MetricsEventBuilder } from '../../../core/Analytics/MetricsEventBuilder';
+import { getBlockaidTransactionMetricsParams } from '../../../util/blockaid';
+import AddressCopy from '../AddressCopy';
 
 import {
   BadgeStatus,
   BadgeStatusStatus,
+  BadgeWrapper,
   BadgeWrapperPosition,
   BadgeWrapperPositionAnchorShape,
-  BadgeWrapper,
   ButtonIcon,
   ButtonIconSize,
   IconColor as MMDSIconColor,
 } from '@metamask/design-system-react-native';
 
-import { withMetaMetrics } from '../Stake/utils/metaMetrics/withMetaMetrics';
 import { BridgeViewMode } from '../Bridge/types';
 import CardButton from '../Card/components/CardButton';
+import { withMetaMetrics } from '../Stake/utils/metaMetrics/withMetaMetrics';
 
 const trackEvent = (event, params = {}) => {
   MetaMetrics.getInstance().trackEvent(event);

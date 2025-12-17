@@ -20,6 +20,8 @@ export interface MainActionButtonProps extends PressableProps {
    * Optional param to disable the button.
    */
   isDisabled?: boolean;
+
+  opnWallet?: boolean;
 }
 
 /**

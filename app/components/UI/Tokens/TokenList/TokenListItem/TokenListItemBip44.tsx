@@ -3,45 +3,45 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useCallback, useMemo } from 'react';
 import { View } from 'react-native';
 import { useSelector } from 'react-redux';
+import { FlashListAssetKey } from '..';
 import Badge, {
   BadgeVariant,
 } from '../../../../../component-library/components/Badges/Badge';
 import BadgeWrapper, {
   BadgePosition,
 } from '../../../../../component-library/components/Badges/BadgeWrapper';
+import Tag from '../../../../../component-library/components/Tags/Tag';
+import SensitiveText, {
+  SensitiveTextLength,
+} from '../../../../../component-library/components/Texts/SensitiveText';
 import Text, {
   TextColor,
   TextVariant,
 } from '../../../../../component-library/components/Texts/Text';
+import { ACCOUNT_TYPE_LABELS } from '../../../../../constants/account-type-labels';
 import { RootState } from '../../../../../reducers';
+import { selectAsset } from '../../../../../selectors/assets/assets-list';
 import { isTestNet } from '../../../../../util/networks';
 import { useTheme } from '../../../../../util/theme';
 import { TraceName, trace } from '../../../../../util/trace';
 import { MetaMetricsEvents, useMetrics } from '../../../../hooks/useMetrics';
 import AssetElement from '../../../AssetElement';
+import { NetworkBadgeSource } from '../../../AssetOverview/Balance/Balance';
+import AssetLogo from '../../../Assets/components/AssetLogo/AssetLogo';
+import useEarnTokens from '../../../Earn/hooks/useEarnTokens';
+import {
+  selectIsMusdConversionFlowEnabledFlag,
+  selectMusdConversionPaymentTokensAllowlist,
+  selectStablecoinLendingEnabledFlag,
+} from '../../../Earn/selectors/featureFlags';
 import { StakeButton } from '../../../Stake/components/StakeButton';
+import { useTokenPricePercentageChange } from '../../hooks/useTokenPricePercentageChange';
 import createStyles from '../../styles';
 import { TokenI } from '../../types';
 import { ScamWarningIcon } from '../ScamWarningIcon';
-import { FlashListAssetKey } from '..';
-import useEarnTokens from '../../../Earn/hooks/useEarnTokens';
-import {
-  selectMusdConversionPaymentTokensAllowlist,
-  selectIsMusdConversionFlowEnabledFlag,
-  selectStablecoinLendingEnabledFlag,
-} from '../../../Earn/selectors/featureFlags';
-import { useTokenPricePercentageChange } from '../../hooks/useTokenPricePercentageChange';
-import { selectAsset } from '../../../../../selectors/assets/assets-list';
-import Tag from '../../../../../component-library/components/Tags/Tag';
-import SensitiveText, {
-  SensitiveTextLength,
-} from '../../../../../component-library/components/Texts/SensitiveText';
-import { NetworkBadgeSource } from '../../../AssetOverview/Balance/Balance';
-import AssetLogo from '../../../Assets/components/AssetLogo/AssetLogo';
-import { ACCOUNT_TYPE_LABELS } from '../../../../../constants/account-type-labels';
 
-import { selectIsStakeableToken } from '../../../Stake/selectors/stakeableTokens';
 import { isMusdConversionPaymentToken } from '../../../Earn/utils/musd';
+import { selectIsStakeableToken } from '../../../Stake/selectors/stakeableTokens';
 
 export const ACCOUNT_TYPE_LABEL_TEST_ID = 'account-type-label';
 
@@ -202,6 +202,9 @@ export const TokenListItemBip44 = React.memo(
       ? ACCOUNT_TYPE_LABELS[asset.accountType]
       : undefined;
 
+    const capitalizeFirst = (str = '') =>
+      `${str[0]?.toUpperCase() || ''}${str.slice(1)}`;
+
     return (
       <AssetElement
         onPress={onItemPress}
@@ -235,7 +238,8 @@ export const TokenListItemBip44 = React.memo(
            */}
           <View style={styles.assetName}>
             <Text variant={TextVariant.BodyMDMedium} numberOfLines={1}>
-              {asset.name || asset.symbol}
+              {/* {asset.name || asset.symbol} */}
+              {asset.symbol || asset.name}
             </Text>
             {label && <Tag label={label} testID={ACCOUNT_TYPE_LABEL_TEST_ID} />}
           </View>
@@ -247,7 +251,8 @@ export const TokenListItemBip44 = React.memo(
                 isHidden={privacyMode}
                 length={SensitiveTextLength.Short}
               >
-                {asset.balance} {asset.symbol}
+                {/* {asset.balance} {asset.symbol} */}
+                {capitalizeFirst(asset.name) || asset.symbol}
               </SensitiveText>
             }
             {renderEarnCta()}

@@ -1,20 +1,20 @@
 import React, {
-  useState,
-  useEffect,
-  useImperativeHandle,
   forwardRef,
   useCallback,
+  useEffect,
+  useImperativeHandle,
   useMemo,
   useRef,
+  useState,
 } from 'react';
 
 import { Box } from '@metamask/design-system-react-native';
-import { GestureDetector, Gesture } from 'react-native-gesture-handler';
-import { runOnJS } from 'react-native-reanimated';
 import { InteractionManager } from 'react-native';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import { runOnJS } from 'react-native-reanimated';
 
 import TabsBar from '../TabsBar';
-import { TabsListProps, TabsListRef, TabItem } from './TabsList.types';
+import { TabItem, TabsListProps, TabsListRef } from './TabsList.types';
 
 const TabsList = forwardRef<TabsListRef, TabsListProps>(
   (

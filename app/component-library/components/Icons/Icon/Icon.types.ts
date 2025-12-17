@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 // Third party dependencies.
 import React from 'react';
-import { ViewProps, Insets } from 'react-native';
+import { Insets, ViewProps } from 'react-native';
 import { SvgProps } from 'react-native-svg';
 
 /**
@@ -19,6 +19,7 @@ export enum IconColor {
   ErrorAlternative = 'ErrorAlternative',
   Warning = 'Warning',
   Info = 'Info',
+  White = 'White',
 }
 
 /**
@@ -52,6 +53,11 @@ export interface IconProps extends ViewProps {
    * Color of the icon.
    */
   color?: string | IconColor;
+  /**
+   * When true, the Icon component will NOT inject a `fill="currentColor"` on
+   * the SVG root. Use this for stroke-based SVGs that rely on `stroke="currentColor"`.
+   */
+  suppressFill?: boolean;
   /**
    * Optional hitSlop prop.
    */
@@ -187,6 +193,7 @@ export enum IconName {
   FullCircle = 'FullCircle',
   Gas = 'Gas',
   Gift = 'Gift',
+  Nfts = 'Nfts',
   GlobalSearch = 'GlobalSearch',
   Global = 'Global',
   Graph = 'Graph',
@@ -306,6 +313,7 @@ export enum IconName {
   Student = 'Student',
   SwapHorizontal = 'SwapHorizontal',
   SwapVertical = 'SwapVertical',
+  SwapCustom = 'SwapCustom',
   TabClose = 'TabClose',
   TableRow = 'TableRow',
   Tablet = 'Tablet',

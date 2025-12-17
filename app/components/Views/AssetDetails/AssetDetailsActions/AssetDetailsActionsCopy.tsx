@@ -27,7 +27,6 @@ export interface AssetDetailsActionsProps {
     address?: string;
     chainId?: string;
   };
-  opnWallet?: boolean;
   // Optional custom action IDs to avoid test ID conflicts
   buyButtonActionID?: string;
   swapButtonActionID?: string;
@@ -43,7 +42,6 @@ export const AssetDetailsActions: React.FC<AssetDetailsActionsProps> = ({
   onSend,
   onReceive,
   asset,
-  opnWallet = false,
   buyButtonActionID = TokenOverviewSelectorsIDs.BUY_BUTTON,
   swapButtonActionID = TokenOverviewSelectorsIDs.SWAP_BUTTON,
   sendButtonActionID = TokenOverviewSelectorsIDs.SEND_BUTTON,
@@ -162,103 +160,47 @@ export const AssetDetailsActions: React.FC<AssetDetailsActionsProps> = ({
 
   return (
     <View style={styles.activitiesButton}>
-      {opnWallet ? (
-        <>
-          {displayBuyButton && (
-            <View style={styles.buttonContainer}>
-              <MainActionButton
-                iconName={IconName.AttachMoney}
-                label={strings('asset_overview.buy_button')}
-                onPress={handleBuyPress}
-                // isDisabled={!isBuyingAvailable}
-                isDisabled={true}
-                testID={buyButtonActionID}
-                opnWallet={opnWallet}
-              />
-            </View>
-          )}
-          <View style={styles.buttonContainer}>
-            <MainActionButton
-              iconName={IconName.Arrow2UpRight}
-              label={strings('asset_overview.send_button')}
-              onPress={handleSendPress}
-              isDisabled={!canSignTransactions}
-              testID={sendButtonActionID}
-              opnWallet={opnWallet}
-            />
-          </View>
-          <View style={styles.buttonContainer}>
-            <MainActionButton
-              iconName={IconName.Received}
-              label={strings('asset_overview.receive_button')}
-              onPress={handleReceivePress}
-              isDisabled={false}
-              testID={receiveButtonActionID}
-              opnWallet={opnWallet}
-            />
-          </View>
-          {displaySwapsButton && (
-            <View style={styles.buttonContainer}>
-              <MainActionButton
-                iconName={IconName.SwapCustom}
-                label={strings('asset_overview.swap')}
-                onPress={handleSwapPress}
-                isDisabled={!isSwapsEnabled}
-                testID={swapButtonActionID}
-                opnWallet={opnWallet}
-              />
-            </View>
-          )}
-        </>
-      ) : (
-        <>
-          {displayBuyButton && (
-            <View style={styles.buttonContainer}>
-              <MainActionButton
-                iconName={IconName.AttachMoney}
-                label={strings('asset_overview.buy_button')}
-                onPress={handleBuyPress}
-                // isDisabled={!isBuyingAvailable}
-                isDisabled={true}
-                testID={buyButtonActionID}
-                opnWallet={opnWallet}
-              />
-            </View>
-          )}
-          {displaySwapsButton && (
-            <View style={styles.buttonContainer}>
-              <MainActionButton
-                iconName={IconName.SwapVertical}
-                label={strings('asset_overview.swap')}
-                onPress={handleSwapPress}
-                isDisabled={!isSwapsEnabled}
-                testID={swapButtonActionID}
-                opnWallet={opnWallet}
-              />
-            </View>
-          )}
-          <View style={styles.buttonContainer}>
-            <MainActionButton
-              iconName={IconName.Send}
-              label={strings('asset_overview.send_button')}
-              onPress={handleSendPress}
-              isDisabled={!canSignTransactions}
-              testID={sendButtonActionID}
-              opnWallet={opnWallet}
-            />
-          </View>
-          <View style={styles.buttonContainer}>
-            <MainActionButton
-              iconName={IconName.Received}
-              label={strings('asset_overview.receive_button')}
-              onPress={handleReceivePress}
-              isDisabled={false}
-              testID={receiveButtonActionID}
-              opnWallet={opnWallet}
-            />
-          </View>
-        </>
+      {displayBuyButton && (
+        <View style={styles.buttonContainer}>
+          <MainActionButton
+            iconName={IconName.AttachMoney}
+            label={strings('asset_overview.buy_button')}
+            onPress={handleBuyPress}
+            // isDisabled={!isBuyingAvailable}
+            isDisabled={true}
+            testID={buyButtonActionID}
+          />
+        </View>
       )}
+      {displaySwapsButton && (
+        <View style={styles.buttonContainer}>
+          <MainActionButton
+            iconName={IconName.SwapVertical}
+            label={strings('asset_overview.swap')}
+            onPress={handleSwapPress}
+            isDisabled={!isSwapsEnabled}
+            testID={swapButtonActionID}
+          />
+        </View>
+      )}
+      <View style={styles.buttonContainer}>
+        <MainActionButton
+          iconName={IconName.Send}
+          label={strings('asset_overview.send_button')}
+          onPress={handleSendPress}
+          isDisabled={!canSignTransactions}
+          testID={sendButtonActionID}
+        />
+      </View>
+      <View style={styles.buttonContainer}>
+        <MainActionButton
+          iconName={IconName.Received}
+          label={strings('asset_overview.receive_button')}
+          onPress={handleReceivePress}
+          isDisabled={false}
+          testID={receiveButtonActionID}
+        />
+      </View>
     </View>
   );
 };
