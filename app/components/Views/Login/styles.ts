@@ -60,7 +60,7 @@ const styleSheet = (params: { theme: Theme }) => {
       flexDirection: 'column',
       width: '100%',
       rowGap: 8,
-      marginTop: 80,
+      marginTop: 24,
       justifyContent: 'flex-start',
       marginBottom: 8,
     },
@@ -76,14 +76,29 @@ const styleSheet = (params: { theme: Theme }) => {
     },
     unlockButton: {
       marginTop: 16,
+      backgroundColor: '#4105b6',
+      borderColor: '#4105b6',
+      borderWidth: 1,
     },
-    metamaskName: {
-      width: 160,
-      height: 80,
-      alignSelf: 'center',
-      marginBottom: 80,
-      marginTop: 40,
-      tintColor: colors.icon.default,
+    // OPN Logo styles
+    logoContainer: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: 24,
+    },
+    logo: {
+      width: 120,
+      height: 120,
+      borderRadius: 60,
+    },
+    logoWithRing: {
+      borderWidth: 2,
+      borderColor: 'rgba(61, 0, 181, 0.11)',
+    },
+    // Header with title/subtitle
+    headerContainer: {
+      alignItems: 'center',
+      marginBottom: 24,
     },
     goBack: {
       marginVertical: 0,

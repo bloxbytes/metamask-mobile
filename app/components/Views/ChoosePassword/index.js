@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Platform,
   Keyboard,
+  Image,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -15,6 +16,7 @@ import Text, {
   TextColor,
   TextVariant,
 } from '../../../component-library/components/Texts/Text';
+import { colors as importedColors } from '../../../styles/common';
 import StorageWrapper from '../../../store/storage-wrapper';
 import { connect } from 'react-redux';
 import { saveOnboardingEvent as saveEvent } from '../../../actions/onboarding';
@@ -79,7 +81,7 @@ import { uint8ArrayToMnemonic } from '../../../util/mnemonic';
 import { wordlist } from '@metamask/scure-bip39/dist/wordlists/english';
 import { setDataCollectionForMarketing } from '../../../actions/security';
 
-const createStyles = (colors) =>
+const createStyles = (colors, themeAppearance) =>
   StyleSheet.create({
     mainWrapper: {
       backgroundColor: colors.background.default,
@@ -172,6 +174,98 @@ const createStyles = (colors) =>
     passwordContainerTitle: {
       flexDirection: 'column',
       rowGap: 4,
+      alignItems: 'center',
+    },
+    // OPN Logo at top
+    logoContainer: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: 16,
+    },
+    logoImage: {
+      width: Device.isMediumDevice() ? 64 : 80,
+      height: Device.isMediumDevice() ? 64 : 80,
+      borderRadius: Device.isMediumDevice() ? 32 : 40,
+    },
+    logoWithRing: {
+      borderWidth: 2,
+      borderColor: themeAppearance === 'light' ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.1)',
+    },
+    // Password requirements card
+    requirementsContainer: {
+      borderRadius: 12,
+      padding: 16,
+      marginTop: 8,
+      borderWidth: 2,
+      borderColor: themeAppearance === 'light' ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.1)',
+      backgroundColor: themeAppearance === 'light' ? 'transparent' : colors.background.section,
+    },
+    requirementsTitle: {
+      marginBottom: 12,
+    },
+    requirementRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 10,
+      marginBottom: 8,
+    },
+    requirementIcon: {
+      width: 18,
+      height: 18,
+      borderRadius: 9,
+      borderWidth: 1.5,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    requirementIconMet: {
+      backgroundColor: '#2280cd',
+      borderColor: '#2280cd',
+    },
+    requirementIconUnmet: {
+      backgroundColor: 'transparent',
+      borderColor: themeAppearance === 'light' ? '#d0d0d0' : '#4f5262',
+    },
+    requirementTextMet: {
+      color: '#2280cd',
+    },
+    requirementTextUnmet: {
+      color: themeAppearance === 'light' ? importedColors.opnMutedGrey : 'rgba(176, 239, 255, 0.6)',
+    },
+    // Button row (Back + Continue)
+    buttonRow: {
+      flexDirection: 'row',
+      gap: 12,
+    },
+    backButton: {
+      flex: 1,
+      backgroundColor: themeAppearance === 'light' ? 'transparent' : 'rgba(26, 29, 58, 0.6)',
+      borderWidth: 2,
+      borderColor: themeAppearance === 'light' ? 'rgba(0, 0, 0, 0.1)' : 'rgba(65, 5, 178, 0.2)',
+      borderRadius: 12,
+      height: 54,
+    },
+    backButtonLabel: {
+      color: themeAppearance === 'light' ? '#000000' : '#b0efff',
+    },
+    continueButton: {
+      flex: 1,
+      backgroundColor: '#4105b6',
+      borderRadius: 12,
+      height: 54,
+      shadowColor: '#4105b2',
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: themeAppearance === 'dark' ? 0.5 : 0.3,
+      shadowRadius: 8,
+      elevation: 6,
+    },
+    continueButtonDisabled: {
+      backgroundColor: themeAppearance === 'dark' ? '#1d2449' : '#e0e0e0',
+    },
+    continueButtonLabel: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 8,
     },
   });
 
@@ -389,12 +483,8 @@ class ChoosePassword extends PureComponent {
   onPressCreate = async () => {
     const { loading, isSelected, password, confirmPassword } = this.state;
     const passwordsMatch = password !== '' && password === confirmPassword;
-    let canSubmit;
-    if (this.getOauth2LoginSuccess()) {
-      canSubmit = passwordsMatch;
-    } else {
-      canSubmit = passwordsMatch && isSelected;
-    }
+    // Removed isSelected check since checkbox was removed from UI
+    const canSubmit = passwordsMatch;
     if (loading) return;
     if (!canSubmit) {
       if (
@@ -708,16 +798,12 @@ class ChoosePassword extends PureComponent {
   renderContent = () => {
     const { isSelected, password, confirmPassword, loading } = this.state;
     const passwordsMatch = password !== '' && password === confirmPassword;
-    let canSubmit;
-    if (this.getOauth2LoginSuccess()) {
-      canSubmit = passwordsMatch && password.length >= MIN_PASSWORD_LENGTH;
-    } else {
-      canSubmit =
-        passwordsMatch && isSelected && password.length >= MIN_PASSWORD_LENGTH;
-    }
+    
+    // Only require minimum length and matching passwords for submit
+    const canSubmit = passwordsMatch && password.length >= MIN_PASSWORD_LENGTH;
     const colors = this.context.colors || mockTheme.colors;
     const themeAppearance = this.context.themeAppearance || 'light';
-    const styles = createStyles(colors);
+    const styles = createStyles(colors, themeAppearance);
 
     return (
       <SafeAreaView edges={{ bottom: 'additive' }} style={styles.mainWrapper}>
@@ -736,19 +822,31 @@ class ChoosePassword extends PureComponent {
                 testID={ChoosePasswordSelectorsIDs.CONTAINER_ID}
               >
                 <View style={styles.passwordContainerTitle}>
+                  {/* OPN Logo */}
+                  <View style={styles.logoContainer}>
+                    <Image
+                      style={[
+                        styles.logoImage,
+                        themeAppearance === 'light' && styles.logoWithRing,
+                      ]}
+                      resizeMode='cover'
+                      source={require('../../../images/opn.png')}
+                    />
+                  </View>
                   <Text
-                    variant={TextVariant.DisplayMD}
+                    variant={TextVariant.HeadingLG}
                     color={TextColor.Default}
                   >
                     {strings('choose_password.title')}
                   </Text>
                   <Text
-                    variant={TextVariant.BodyMD}
+                    variant={TextVariant.BodySM}
                     color={TextColor.Alternative}
+                    style={{ textAlign: 'center' }}
                   >
                     {this.getOauth2LoginSuccess() ? (
                       <Text
-                        variant={TextVariant.BodyMD}
+                        variant={TextVariant.BodySM}
                         color={TextColor.Alternative}
                       >
                         {Platform.OS === 'ios' && this.getOauth2LoginSuccess()
@@ -871,67 +969,178 @@ class ChoosePassword extends PureComponent {
                   )}
                 </View>
 
-                <View style={styles.learnMoreContainer}>
-                  <Checkbox
-                    onPress={this.setSelection}
-                    isChecked={isSelected}
-                    testID={ChoosePasswordSelectorsIDs.I_UNDERSTAND_CHECKBOX_ID}
-                    accessibilityLabel={
-                      ChoosePasswordSelectorsIDs.I_UNDERSTAND_CHECKBOX_ID
-                    }
-                    style={styles.checkbox}
-                  />
-                  <Button
-                    variant={ButtonVariants.Link}
-                    onPress={this.setSelection}
-                    style={styles.learnMoreTextContainer}
-                    testID={ChoosePasswordSelectorsIDs.CHECKBOX_TEXT_ID}
-                    label={
-                      <Text
-                        variant={TextVariant.BodySM}
-                        color={TextColor.Default}
-                      >
-                        {this.getOauth2LoginSuccess() ? (
-                          strings(
-                            'choose_password.marketing_opt_in_description',
-                          )
-                        ) : (
-                          <Text
-                            variant={TextVariant.BodySM}
-                            color={TextColor.Alternative}
-                          >
-                            {strings(
-                              'choose_password.loose_password_description',
-                            )}
-                            <Text
-                              variant={TextVariant.BodySM}
-                              color={TextColor.Primary}
-                              // onPress={this.learnMore}
-                              testID={
-                                ChoosePasswordSelectorsIDs.LEARN_MORE_LINK_ID
-                              }
-                            >
-                              {' '}
-                              {strings('reset_password.learn_more')}
-                            </Text>
-                          </Text>
-                        )}
-                      </Text>
-                    }
-                  />
+                {/* Password Requirements Checklist */}
+                <View style={styles.requirementsContainer}>
+                  <Text
+                    variant={TextVariant.BodyMD}
+                    color={TextColor.Alternative}
+                    style={styles.requirementsTitle}
+                  >
+                    {strings('choose_password.password_must_contain')}
+                  </Text>
+                  {/* At least 8 characters */}
+                  <View style={styles.requirementRow}>
+                    <View style={[
+                      styles.requirementIcon,
+                      password.length >= 8 ? styles.requirementIconMet : styles.requirementIconUnmet
+                    ]}>
+                      {password.length >= 8 && (
+                        <Icon name={IconName.Check} size={IconSize.Xs} color="#FFFFFF" />
+                      )}
+                    </View>
+                    <Text
+                      variant={TextVariant.BodySM}
+                      style={
+                        password.length >= 8
+                          ? styles.requirementTextMet
+                          : styles.requirementTextUnmet
+                      }
+                    >
+                      {strings('choose_password.at_least_8_chars')}
+                    </Text>
+                  </View>
+                  {/* Contains uppercase */}
+                  <View style={styles.requirementRow}>
+                    <View style={[
+                      styles.requirementIcon,
+                      /[A-Z]/.test(password) ? styles.requirementIconMet : styles.requirementIconUnmet
+                    ]}>
+                      {/[A-Z]/.test(password) && (
+                        <Icon name={IconName.Check} size={IconSize.Xs} color="#FFFFFF" />
+                      )}
+                    </View>
+                    <Text
+                      variant={TextVariant.BodySM}
+                      style={
+                        /[A-Z]/.test(password)
+                          ? styles.requirementTextMet
+                          : styles.requirementTextUnmet
+                      }
+                    >
+                      {strings('choose_password.contains_uppercase')}
+                    </Text>
+                  </View>
+                  {/* Contains lowercase */}
+                  <View style={styles.requirementRow}>
+                    <View style={[
+                      styles.requirementIcon,
+                      /[a-z]/.test(password) ? styles.requirementIconMet : styles.requirementIconUnmet
+                    ]}>
+                      {/[a-z]/.test(password) && (
+                        <Icon name={IconName.Check} size={IconSize.Xs} color="#FFFFFF" />
+                      )}
+                    </View>
+                    <Text
+                      variant={TextVariant.BodySM}
+                      style={
+                        /[a-z]/.test(password)
+                          ? styles.requirementTextMet
+                          : styles.requirementTextUnmet
+                      }
+                    >
+                      {strings('choose_password.contains_lowercase')}
+                    </Text>
+                  </View>
+                  {/* Contains number */}
+                  <View style={styles.requirementRow}>
+                    <View style={[
+                      styles.requirementIcon,
+                      /[0-9]/.test(password) ? styles.requirementIconMet : styles.requirementIconUnmet
+                    ]}>
+                      {/[0-9]/.test(password) && (
+                        <Icon name={IconName.Check} size={IconSize.Xs} color="#FFFFFF" />
+                      )}
+                    </View>
+                    <Text
+                      variant={TextVariant.BodySM}
+                      style={
+                        /[0-9]/.test(password)
+                          ? styles.requirementTextMet
+                          : styles.requirementTextUnmet
+                      }
+                    >
+                      {strings('choose_password.contains_number')}
+                    </Text>
+                  </View>
+                  {/* Contains special character */}
+                  <View style={styles.requirementRow}>
+                    <View style={[
+                      styles.requirementIcon,
+                      /[^A-Za-z0-9]/.test(password) ? styles.requirementIconMet : styles.requirementIconUnmet
+                    ]}>
+                      {/[^A-Za-z0-9]/.test(password) && (
+                        <Icon name={IconName.Check} size={IconSize.Xs} color="#FFFFFF" />
+                      )}
+                    </View>
+                    <Text
+                      variant={TextVariant.BodySM}
+                      style={
+                        /[^A-Za-z0-9]/.test(password)
+                          ? styles.requirementTextMet
+                          : styles.requirementTextUnmet
+                      }
+                    >
+                      {strings('choose_password.contains_special')}
+                    </Text>
+                  </View>
                 </View>
 
+                {/* Back and Continue Buttons */}
                 <View style={styles.ctaWrapper}>
-                  <Button
-                    variant={ButtonVariants.Primary}
-                    onPress={this.onPressCreate}
-                    label={strings('choose_password.create_password_cta')}
-                    disabled={!canSubmit}
-                    width={ButtonWidthTypes.Full}
-                    size={ButtonSize.Lg}
-                    isDisabled={!canSubmit}
-                    testID={ChoosePasswordSelectorsIDs.SUBMIT_BUTTON_ID}
-                  />
+                  <View style={styles.buttonRow}>
+                    {/* Back Button */}
+                    <Button
+                      variant={ButtonVariants.Secondary}
+                      onPress={() => this.props.navigation.goBack()}
+                      label={
+                        <Text
+                          variant={TextVariant.BodyMDMedium}
+                          style={styles.backButtonLabel}
+                        >
+                          {strings('choose_password.back')}
+                        </Text>
+                      }
+                      size={ButtonSize.Lg}
+                      style={styles.backButton}
+                    />
+                    {/* Continue Button */}
+                    <Button
+                      variant={ButtonVariants.Primary}
+                      onPress={this.onPressCreate}
+                      label={
+                        <View style={styles.continueButtonLabel}>
+                          <Text
+                            variant={TextVariant.BodyMDMedium}
+                            color={
+                              canSubmit
+                                ? '#FFFFFF'
+                                : themeAppearance === 'light'
+                                ? '#9fa3a7'
+                                : '#4f5262'
+                            }
+                          >
+                            {strings('choose_password.continue')}
+                          </Text>
+                          <Icon
+                            name={IconName.ArrowRight}
+                            size={IconSize.Sm}
+                            color={
+                              canSubmit
+                                ? '#FFFFFF'
+                                : themeAppearance === 'light'
+                                ? '#9fa3a7'
+                                : '#4f5262'
+                            }
+                          />
+                        </View>
+                      }
+                      disabled={!canSubmit}
+                      size={ButtonSize.Lg}
+                      isDisabled={!canSubmit}
+                      style={[styles.continueButton, !canSubmit && styles.continueButtonDisabled]}
+                      testID={ChoosePasswordSelectorsIDs.SUBMIT_BUTTON_ID}
+                    />
+                  </View>
                 </View>
               </View>
             </View>

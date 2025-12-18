@@ -7,7 +7,7 @@ import React, {
   useMemo,
 } from 'react';
 import PropTypes from 'prop-types';
-import { Alert, View, Keyboard, TouchableOpacity } from 'react-native';
+import { Alert, View, Keyboard, TouchableOpacity, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { connect } from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -97,7 +97,10 @@ const ImportFromSecretRecoveryPhrase = ({
   route,
 }) => {
   const { colors, themeAppearance } = useTheme();
-  const styles = createStyles(colors);
+  const styles = useMemo(
+    () => createStyles(colors, themeAppearance),
+    [colors, themeAppearance],
+  );
 
   const confirmPasswordInput = useRef();
 
@@ -530,34 +533,38 @@ const ImportFromSecretRecoveryPhrase = ({
 
         {currentStep === 0 && (
           <>
-            <Text
-              variant={TextVariant.DisplayMD}
-              color={TextColor.Default}
-              testID={ImportFromSeedSelectorsIDs.SCREEN_TITLE_ID}
-            >
-              {strings('import_from_seed.title')}
-            </Text>
+            {/* OPN Logo */}
+            <View style={styles.logoContainer}>
+              <Image
+                style={[
+                  styles.logoImage,
+                  themeAppearance === 'light' && styles.logoWithRing,
+                ]}
+                resizeMode='cover'
+                source={require('../../../images/opn.png')}
+              />
+            </View>
+
+            {/* Title and Subtitle - centered */}
+            <View style={styles.headerContainer}>
+              <Text
+                variant={TextVariant.HeadingLG}
+                color={TextColor.Default}
+                testID={ImportFromSeedSelectorsIDs.SCREEN_TITLE_ID}
+                style={{ textAlign: 'center' }}
+              >
+                {strings('import_from_seed.title')}
+              </Text>
+              <Text
+                variant={TextVariant.BodySM}
+                color={TextColor.Alternative}
+                style={{ textAlign: 'center', marginTop: 4 }}
+              >
+                {strings('import_from_seed.enter_your_secret_recovery_phrase')}
+              </Text>
+            </View>
+
             <View style={styles.importSrpContainer}>
-              <View style={styles.description}>
-                <Text
-                  variant={TextVariant.BodyMD}
-                  color={TextColor.Alternative}
-                >
-                  {strings(
-                    'import_from_seed.enter_your_secret_recovery_phrase',
-                  )}
-                </Text>
-                <TouchableOpacity
-                  onPress={showWhatIsSeedPhrase}
-                  testID={ImportFromSeedSelectorsIDs.WHAT_IS_SEEDPHRASE_LINK_ID}
-                >
-                  <Icon
-                    name={IconName.Info}
-                    size={IconSize.Md}
-                    color={colors.icon.alternative}
-                  />
-                </TouchableOpacity>
-              </View>
               <SrpInputGrid
                 ref={srpInputGridRef}
                 seedPhrase={seedPhrase}
@@ -568,16 +575,71 @@ const ImportFromSecretRecoveryPhrase = ({
                 placeholderText={strings('import_from_seed.srp_placeholder')}
                 uniqueId={uniqueId}
               />
+
+              {/* Tip Card */}
+              <View style={styles.tipCard}>
+                <Text
+                  variant={TextVariant.BodySM}
+                  color={TextColor.Info}
+                  style={styles.tipText}
+                >
+                  💡 {strings('import_from_seed.tip_paste_all_words')}
+                </Text>
+              </View>
+
+              {/* Import Button */}
               <View style={styles.seedPhraseCtaContainer}>
                 <Button
                   variant={ButtonVariants.Primary}
-                  label={strings('import_from_seed.continue')}
+                  style={[
+                    styles.importButton,
+                    (isSRPContinueButtonDisabled || Boolean(error)) &&
+                      styles.importButtonDisabled,
+                  ]}
+                  label={
+                    <View style={styles.importButtonLabel}>
+                      <Text
+                        variant={TextVariant.BodyMDMedium}
+                        color={
+                          !(isSRPContinueButtonDisabled || Boolean(error))
+                            ? '#FFFFFF'
+                            : themeAppearance === 'light'
+                            ? '#9fa3a7'
+                            : '#4f5262'
+                        }
+                      >
+                        {strings('import_from_seed.import_wallet_button')}
+                      </Text>
+                      <Icon
+                        name={IconName.ArrowRight}
+                        size={IconSize.Sm}
+                        color={
+                          !(isSRPContinueButtonDisabled || Boolean(error))
+                            ? '#FFFFFF'
+                            : themeAppearance === 'light'
+                            ? '#9fa3a7'
+                            : '#4f5262'
+                        }
+                      />
+                    </View>
+                  }
                   onPress={handleContinueImportFlow}
                   width={ButtonWidthTypes.Full}
                   size={ButtonSize.Lg}
                   isDisabled={isSRPContinueButtonDisabled || Boolean(error)}
                   testID={ImportFromSeedSelectorsIDs.CONTINUE_BUTTON_ID}
                 />
+              </View>
+
+              {/* Warning Card */}
+              <View style={styles.warningCard}>
+                <Text
+                  variant={TextVariant.BodySM}
+                  color={TextColor.Warning}
+                  style={styles.warningText}
+                >
+                  ⚠️ {strings('import_from_seed.never_share_warning')}
+                </Text>
               </View>
             </View>
           </>
@@ -586,17 +648,29 @@ const ImportFromSecretRecoveryPhrase = ({
         {currentStep === 1 && (
           <View style={styles.passwordContainer}>
             <View style={styles.passwordContainerTitle}>
+              {/* OPN Logo */}
+              <View style={styles.logoContainer}>
+                <Image
+                  style={[
+                    styles.logoImage,
+                    themeAppearance === 'light' && styles.logoWithRing,
+                  ]}
+                  resizeMode="cover"
+                  source={require('../../../images/opn.png')}
+                />
+              </View>
               <Text
-                variant={TextVariant.DisplayMD}
+                variant={TextVariant.HeadingLG}
                 color={TextColor.Default}
                 testID={ChoosePasswordSelectorsIDs.TITLE_ID}
               >
-                {strings('import_from_seed.metamask_password')}
+                {strings('choose_password.title')}
               </Text>
               <Text
-                variant={TextVariant.BodyMD}
+                variant={TextVariant.BodySM}
                 color={TextColor.Alternative}
                 testID={ChoosePasswordSelectorsIDs.DESCRIPTION_ID}
+                style={{ textAlign: 'center' }}
               >
                 {strings('import_from_seed.metamask_password_description')}
               </Text>
@@ -638,16 +712,6 @@ const ImportFromSecretRecoveryPhrase = ({
                 }
                 testID={ChoosePasswordSelectorsIDs.NEW_PASSWORD_INPUT_ID}
               />
-              {(!password || password.length < MIN_PASSWORD_LENGTH) && (
-                <Text
-                  variant={TextVariant.BodySM}
-                  color={TextColor.Alternative}
-                >
-                  {strings('choose_password.must_be_at_least', {
-                    number: MIN_PASSWORD_LENGTH,
-                  })}
-                </Text>
-              )}
             </View>
 
             <View style={styles.field}>
@@ -695,6 +759,162 @@ const ImportFromSecretRecoveryPhrase = ({
               )}
             </View>
 
+            {/* Password Requirements Checklist */}
+            <View style={styles.requirementsContainer}>
+              <Text
+                variant={TextVariant.BodyMD}
+                color={TextColor.Alternative}
+                style={styles.requirementsTitle}
+              >
+                {strings('choose_password.password_must_contain')}
+              </Text>
+              {/* At least 8 characters */}
+              <View style={styles.requirementRow}>
+                <View
+                  style={[
+                    styles.requirementIcon,
+                    password.length >= 8
+                      ? styles.requirementIconMet
+                      : styles.requirementIconUnmet,
+                  ]}
+                >
+                  {password.length >= 8 && (
+                    <Icon
+                      name={IconName.Check}
+                      size={IconSize.Xs}
+                      color="#FFFFFF"
+                    />
+                  )}
+                </View>
+                <Text
+                  variant={TextVariant.BodySM}
+                  style={
+                    password.length >= 8
+                      ? styles.requirementTextMet
+                      : styles.requirementTextUnmet
+                  }
+                >
+                  {strings('choose_password.at_least_8_chars')}
+                </Text>
+              </View>
+              {/* Contains uppercase */}
+              <View style={styles.requirementRow}>
+                <View
+                  style={[
+                    styles.requirementIcon,
+                    /[A-Z]/.test(password)
+                      ? styles.requirementIconMet
+                      : styles.requirementIconUnmet,
+                  ]}
+                >
+                  {/[A-Z]/.test(password) && (
+                    <Icon
+                      name={IconName.Check}
+                      size={IconSize.Xs}
+                      color="#FFFFFF"
+                    />
+                  )}
+                </View>
+                <Text
+                  variant={TextVariant.BodySM}
+                  style={
+                    /[A-Z]/.test(password)
+                      ? styles.requirementTextMet
+                      : styles.requirementTextUnmet
+                  }
+                >
+                  {strings('choose_password.contains_uppercase')}
+                </Text>
+              </View>
+              {/* Contains lowercase */}
+              <View style={styles.requirementRow}>
+                <View
+                  style={[
+                    styles.requirementIcon,
+                    /[a-z]/.test(password)
+                      ? styles.requirementIconMet
+                      : styles.requirementIconUnmet,
+                  ]}
+                >
+                  {/[a-z]/.test(password) && (
+                    <Icon
+                      name={IconName.Check}
+                      size={IconSize.Xs}
+                      color="#FFFFFF"
+                    />
+                  )}
+                </View>
+                <Text
+                  variant={TextVariant.BodySM}
+                  style={
+                    /[a-z]/.test(password)
+                      ? styles.requirementTextMet
+                      : styles.requirementTextUnmet
+                  }
+                >
+                  {strings('choose_password.contains_lowercase')}
+                </Text>
+              </View>
+              {/* Contains number */}
+              <View style={styles.requirementRow}>
+                <View
+                  style={[
+                    styles.requirementIcon,
+                    /[0-9]/.test(password)
+                      ? styles.requirementIconMet
+                      : styles.requirementIconUnmet,
+                  ]}
+                >
+                  {/[0-9]/.test(password) && (
+                    <Icon
+                      name={IconName.Check}
+                      size={IconSize.Xs}
+                      color="#FFFFFF"
+                    />
+                  )}
+                </View>
+                <Text
+                  variant={TextVariant.BodySM}
+                  style={
+                    /[0-9]/.test(password)
+                      ? styles.requirementTextMet
+                      : styles.requirementTextUnmet
+                  }
+                >
+                  {strings('choose_password.contains_number')}
+                </Text>
+              </View>
+              {/* Contains special character */}
+              <View style={styles.requirementRow}>
+                <View
+                  style={[
+                    styles.requirementIcon,
+                    /[^A-Za-z0-9]/.test(password)
+                      ? styles.requirementIconMet
+                      : styles.requirementIconUnmet,
+                  ]}
+                >
+                  {/[^A-Za-z0-9]/.test(password) && (
+                    <Icon
+                      name={IconName.Check}
+                      size={IconSize.Xs}
+                      color="#FFFFFF"
+                    />
+                  )}
+                </View>
+                <Text
+                  variant={TextVariant.BodySM}
+                  style={
+                    /[^A-Za-z0-9]/.test(password)
+                      ? styles.requirementTextMet
+                      : styles.requirementTextUnmet
+                  }
+                >
+                  {strings('choose_password.contains_special')}
+                </Text>
+              </View>
+            </View>
+
             <View style={styles.learnMoreContainer}>
               <Checkbox
                 onPress={() => setLearnMore(!learnMore)}
@@ -724,17 +944,64 @@ const ImportFromSecretRecoveryPhrase = ({
             </View>
 
             <View style={styles.createPasswordCtaContainer}>
-              <Button
-                loading={loading}
-                width={ButtonWidthTypes.Full}
-                variant={ButtonVariants.Primary}
-                label={strings('import_from_seed.import_create_password_cta')}
-                onPress={onPressImport}
-                disabled={isContinueButtonDisabled}
-                size={ButtonSize.Lg}
-                isDisabled={isContinueButtonDisabled}
-                testID={ChoosePasswordSelectorsIDs.SUBMIT_BUTTON_ID}
-              />
+              <View style={styles.buttonRow}>
+                {/* Back Button */}
+                <Button
+                  variant={ButtonVariants.Secondary}
+                  onPress={() => setCurrentStep(0)}
+                  label={
+                    <Text
+                      variant={TextVariant.BodyMDMedium}
+                      style={styles.backButtonLabel}
+                    >
+                      {strings('choose_password.back')}
+                    </Text>
+                  }
+                  size={ButtonSize.Lg}
+                  style={styles.backButton}
+                />
+                {/* Import Button */}
+                <Button
+                  loading={loading}
+                  style={[
+                    styles.importButton,
+                    isContinueButtonDisabled && styles.importButtonDisabled,
+                  ]}
+                  variant={ButtonVariants.Primary}
+                  label={
+                    <View style={styles.importButtonLabel}>
+                      <Text
+                        variant={TextVariant.BodyMDMedium}
+                        color={
+                          !isContinueButtonDisabled
+                            ? '#FFFFFF'
+                            : themeAppearance === 'light'
+                            ? '#9fa3a7'
+                            : '#4f5262'
+                        }
+                      >
+                        {strings('import_from_seed.import_create_password_cta')}
+                      </Text>
+                      <Icon
+                        name={IconName.ArrowRight}
+                        size={IconSize.Sm}
+                        color={
+                          !isContinueButtonDisabled
+                            ? '#FFFFFF'
+                            : themeAppearance === 'light'
+                            ? '#9fa3a7'
+                            : '#4f5262'
+                        }
+                      />
+                    </View>
+                  }
+                  onPress={onPressImport}
+                  disabled={isContinueButtonDisabled}
+                  size={ButtonSize.Lg}
+                  isDisabled={isContinueButtonDisabled}
+                  testID={ChoosePasswordSelectorsIDs.SUBMIT_BUTTON_ID}
+                />
+              </View>
             </View>
           </View>
         )}

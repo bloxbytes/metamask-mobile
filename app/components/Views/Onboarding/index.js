@@ -58,6 +58,12 @@ import Button, {
   ButtonWidthTypes,
   ButtonSize,
 } from '../../../component-library/components/Buttons/Button';
+import TermsModal from '../../UI/TermsModal';
+import PrivacyModal from '../../UI/PrivacyModal';
+import Icon, {
+  IconName,
+  IconSize,
+} from '../../../component-library/components/Icons/Icon';
 import OAuthLoginService from '../../../core/OAuthService/OAuthService';
 import { OAuthError, OAuthErrorType } from '../../../core/OAuthService/error';
 import { createLoginHandler } from '../../../core/OAuthService/OAuthLoginHandlers';
@@ -71,7 +77,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import FoxAnimation from '../../UI/FoxAnimation/FoxAnimation';
 import OnboardingAnimation from '../../UI/OnboardingAnimation/OnboardingAnimation';
 
-const createStyles = (colors) =>
+const createStyles = (colors, themeAppearance) =>
   StyleSheet.create({
     scroll: {
       flex: 1,
@@ -130,7 +136,7 @@ const createStyles = (colors) =>
       paddingHorizontal: Device.isMediumDevice() ? 40 : 60,
       fontFamily:
         Platform.OS === 'android' ? 'MM Sans Regular' : 'MMSans-Regular',
-      color: importedColors.gettingStartedTextColor,
+      color: colors.text.default,
       width: '100%',
       marginVertical: 16,
     },
@@ -200,10 +206,118 @@ const createStyles = (colors) =>
       alignItems: 'flex-end',
     },
     blackButton: {
-      backgroundColor: importedColors.white,
+      backgroundColor: importedColors.opnPrimaryPurple,
+      minHeight: 60,
+      paddingVertical: 16,
     },
     inverseBlackButton: {
-      backgroundColor: importedColors.applePayBlack,
+      backgroundColor: importedColors.transparent,
+      borderColor: importedColors.opnPrimaryPurple,
+      borderWidth: 2,
+      minHeight: 60,
+      paddingVertical: 16,
+    },
+    welcomeTitle: {
+      fontSize: Device.isMediumDevice() ? 24 : 28,
+      lineHeight: Device.isMediumDevice() ? 32 : 36,
+      textAlign: 'center',
+      fontFamily: Platform.OS === 'android' ? 'Geist Bold' : 'Geist-Bold',
+      color: colors.text.default,
+      marginBottom: Device.isMediumDevice() ? 32 : 48,
+    },
+    termsContainer: {
+      marginTop: Device.isMediumDevice() ? 16 : 24,
+      alignItems: 'center',
+    },
+    termsText: {
+      fontSize: 12,
+      textAlign: 'center',
+      color: colors.text.muted,
+      paddingHorizontal: 20,
+    },
+    termsLink: {
+      color: importedColors.opnAccentBlue,
+      textDecorationLine: 'underline',
+    },
+    // Decorative Background Elements
+    decorativeBackground: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      opacity: 0.2,
+      overflow: 'hidden',
+    },
+    decorativeCircle1: {
+      position: 'absolute',
+      top: '15%',
+      left: -80,
+      width: 200,
+      height: 200,
+      borderRadius: 100,
+      backgroundColor: importedColors.opnPrimaryGradientStart,
+      transform: [{ scale: 1.5 }],
+    },
+    decorativeCircle2: {
+      position: 'absolute',
+      bottom: '20%',
+      right: -80,
+      width: 200,
+      height: 200,
+      borderRadius: 100,
+      backgroundColor: importedColors.opnAccentBlue,
+      transform: [{ scale: 1.5 }],
+    },
+    // Logo Container
+    logoContainer: {
+      position: 'relative',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: Device.isMediumDevice() ? 24 : 48,
+    },
+    // Logo Image with border ring
+    logoImage: {
+      width: Device.isMediumDevice() ? 180 : 240,
+      height: Device.isMediumDevice() ? 180 : 240,
+      borderRadius: Device.isMediumDevice() ? 90 : 120,
+    },
+    // Logo border ring for light mode
+    logoWithRing: {
+      borderWidth: 3,
+      borderColor: themeAppearance === 'light' ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.1)',
+    },
+    // Button Label Row (for icon + text)
+    buttonLabelRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 8,
+    },
+    // Enhanced Button Shadow
+    primaryButtonShadow: {
+      backgroundColor: importedColors.opnPrimaryPurple,
+      shadowColor: importedColors.opnPrimaryGradientStart,
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.5,
+      shadowRadius: 12,
+      elevation: 8,
+    },
+    // Theme-driven colors
+    dynamicTitle: {
+      color: themeAppearance === 'dark' ? importedColors.white : importedColors.opnTitleDark,
+    },
+    dynamicSecondaryButtonBorder: {
+      borderColor: themeAppearance === 'dark' ? importedColors.opnPrimaryPurple : importedColors.opnSecondaryBorderLight,
+    },
+    dynamicSecondaryButtonBackground: {
+      backgroundColor: themeAppearance === 'dark' ? importedColors.transparent : importedColors.white,
+    },
+    dynamicTermsText: {
+      color: themeAppearance === 'dark' ? importedColors.whiteTransparent : importedColors.opnTermsTextLight,
+    },
+    dynamicTermsLink: {
+      color: themeAppearance === 'dark' ? importedColors.opnAccentBlue : importedColors.opnPrimaryPurple,
     },
   });
 
@@ -281,6 +395,8 @@ class Onboarding extends PureComponent {
     errorToThrow: null,
     startOnboardingAnimation: false,
     startFoxAnimation: false,
+    termsModalVisible: false,
+    privacyModalVisible: false,
   };
 
   seedwords = null;
@@ -785,7 +901,7 @@ class Onboarding extends PureComponent {
 
   renderLoader = () => {
     const colors = this.context.colors || mockTheme.colors;
-    const styles = createStyles(colors);
+    const styles = createStyles(colors, this.context.themeAppearance);
 
     return (
       <View style={styles.loaderWrapper}>
@@ -797,40 +913,86 @@ class Onboarding extends PureComponent {
     );
   };
 
+  toggleTermsModal = () => {
+    this.setState((state) => ({ termsModalVisible: !state.termsModalVisible }));
+  };
+
+  togglePrivacyModal = () => {
+    this.setState((state) => ({
+      privacyModalVisible: !state.privacyModalVisible,
+    }));
+  };
+
+  onTermsPress = () => {
+    this.toggleTermsModal();
+  };
+
+  onPrivacyPress = () => {
+    this.togglePrivacyModal();
+  };
+
   renderContent() {
     const colors = this.context.colors || mockTheme.colors;
-    const styles = createStyles(colors);
+    const styles = createStyles(colors, this.context.themeAppearance);
+    const themeAppearance = this.context.themeAppearance;
+    const isDarkMode = themeAppearance === 'dark';
 
     return (
       <View style={[styles.ctas, { justifyContent: 'center' }]}>
-        {/* <OnboardingAnimation
-          startOnboardingAnimation={this.state.startOnboardingAnimation}
-          setStartFoxAnimation={this.setStartFoxAnimation}
-        > */}
-        <Image
-          style={{
-            width: Device.isMediumDevice() ? 180 : 240,
-            height: Device.isMediumDevice() ? 180 : 240,
-          }}
-          resizeMode='contain'
-          source={require('../../../images/branding/metamask-name.png')}
-        />
+        {/* Decorative Background Elements (dark mode only) */}
+        {isDarkMode && (
+          <View style={styles.decorativeBackground} pointerEvents="none">
+            <View style={styles.decorativeCircle1} />
+            <View style={styles.decorativeCircle2} />
+          </View>
+        )}
+
+        {/* Welcome Title */}
+        <Text
+          variant={TextVariant.HeadingLG}
+          style={[styles.welcomeTitle, styles.dynamicTitle]}
+        >
+          {strings('onboarding.welcome_to_opn_wallet')}
+        </Text>
+
+        {/* Logo with Border Ring */}
+        <View style={styles.logoContainer}>
+          <Image
+            style={[
+              styles.logoImage,
+              !isDarkMode && styles.logoWithRing,
+            ]}
+            resizeMode='cover'
+            source={require('../../../images/opn.png')}
+          />
+        </View>
+
+        {/* Create New Wallet Button */}
         <Button
           variant={ButtonVariants.Primary}
           onPress={() => this.handleCtaActions('create')}
           testID={OnboardingSelectorIDs.NEW_WALLET_BUTTON}
           label={
-            <Text
-              variant={TextVariant.BodyMDMedium}
-              color={importedColors.applePayBlack}
-            >
-              {strings('onboarding.start_exploring_now')}
-            </Text>
+            <View style={styles.buttonLabelRow}>
+              <Text
+                variant={TextVariant.BodyMDMedium}
+                color={importedColors.white}
+              >
+                {strings('onboarding.start_exploring_now')}
+              </Text>
+              <Icon
+                name={IconName.ArrowRight}
+                size={IconSize.Sm}
+                color={importedColors.white}
+              />
+            </View>
           }
           width={ButtonWidthTypes.Full}
           size={Device.isMediumDevice() ? ButtonSize.Md : ButtonSize.Lg}
-          style={styles.blackButton}
+          style={[styles.blackButton, styles.primaryButtonShadow]}
         />
+
+        {/* I have an existing wallet Button */}
         <Button
           variant={ButtonVariants.Secondary}
           onPress={() => this.handleCtaActions('existing')}
@@ -840,23 +1002,47 @@ class Onboarding extends PureComponent {
           label={
             <Text
               variant={TextVariant.BodyMDMedium}
-              color={importedColors.white}
+              color={isDarkMode ? importedColors.opnTextSecondary : '#000000'}
             >
               {SEEDLESS_ONBOARDING_ENABLED
                 ? strings('onboarding.import_using_srp_social_login')
-                : strings('onboarding.import_using_srp')}
+                : strings('onboarding.have_existing_wallet')}
             </Text>
           }
-          style={styles.inverseBlackButton}
+          style={[styles.inverseBlackButton, styles.dynamicSecondaryButtonBorder, styles.dynamicSecondaryButtonBackground]}
         />
-        {/* </OnboardingAnimation> */}
+
+        {/* Terms of Use */}
+        <View style={styles.termsContainer}>
+          <Text
+            variant={TextVariant.BodyXS}
+            style={[styles.dynamicTermsText, { textAlign: 'center', paddingHorizontal: 20 }]}
+          >
+            {strings('onboarding.by_continuing_agree')}{' '}
+            <Text
+              variant={TextVariant.BodyXS}
+              style={[styles.dynamicTermsLink, { textDecorationLine: 'underline' }]}
+              onPress={this.onTermsPress}
+            >
+              {strings('onboarding.terms_of_use')}
+            </Text>
+            {' '}{strings('onboarding.and')}{' '}
+            <Text
+              variant={TextVariant.BodyXS}
+              style={[styles.dynamicTermsLink, { textDecorationLine: 'underline' }]}
+              onPress={this.onPrivacyPress}
+            >
+              {strings('onboarding.privacy_notice')}
+            </Text>.
+          </Text>
+        </View>
       </View>
     );
   }
 
   handleSimpleNotification = () => {
     const colors = this.context.colors || mockTheme.colors;
-    const styles = createStyles(colors);
+    const styles = createStyles(colors, this.context.themeAppearance);
 
     if (!this.props.route.params?.delete) return;
     return (
@@ -884,7 +1070,7 @@ class Onboarding extends PureComponent {
     const { loading } = this.props;
     const { existingUser, errorToThrow, startFoxAnimation } = this.state;
     const colors = this.context.colors || mockTheme.colors;
-    const styles = createStyles(colors);
+    const styles = createStyles(colors, this.context.themeAppearance);
     const hasFooter = existingUser && !loading;
 
     // Component that throws error if needed (to be caught by ErrorBoundary)
@@ -908,14 +1094,12 @@ class Onboarding extends PureComponent {
           style={[
             baseStyles.flexGrow,
             {
-              backgroundColor:
-                this.context.themeAppearance === 'dark'
-                  ? importedColors.gettingStartedTextColor
-                  : importedColors.gettingStartedPageBackgroundColorLightMode,
+              backgroundColor: colors.background.default,
             },
           ]}
           testID={OnboardingSelectorIDs.CONTAINER_ID}
         >
+
           <ScrollView
             style={baseStyles.flexGrow}
             contentContainerStyle={styles.scroll}
@@ -958,6 +1142,15 @@ class Onboarding extends PureComponent {
           {/* <FoxAnimation hasFooter={hasFooter} trigger={startFoxAnimation} /> */}
 
           <View>{this.handleSimpleNotification()}</View>
+
+          <TermsModal
+            isVisible={this.state.termsModalVisible}
+            onClose={this.toggleTermsModal}
+          />
+          <PrivacyModal
+            isVisible={this.state.privacyModalVisible}
+            onClose={this.togglePrivacyModal}
+          />
 
           <FastOnboarding
             onPressContinueWithGoogle={this.onPressContinueWithGoogle}

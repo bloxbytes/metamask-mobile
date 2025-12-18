@@ -9,8 +9,8 @@ import {
   Platform,
   Image,
 } from 'react-native';
-import METAMASK_NAME from '../../../images/branding/metamask-name.png';
-import { TextVariant } from '../../../component-library/components/Texts/Text';
+import OPN_LOGO from '../../../images/opn.png';
+import Text, { TextVariant, TextColor } from '../../../component-library/components/Texts/Text';
 import StorageWrapper from '../../../store/storage-wrapper';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Button, {
@@ -518,12 +518,27 @@ const Login: React.FC<LoginProps> = ({ saveOnboardingEvent }) => {
           enableResetScrollToCoords={false}
         >
           <View testID={LoginViewSelectors.CONTAINER} style={styles.container}>
-            <Image
-              source={METAMASK_NAME}
-              style={styles.metamaskName}
-              resizeMode="contain"
-              resizeMethod={'auto'}
-            />
+            {/* OPN Logo */}
+            <View style={styles.logoContainer}>
+              <Image
+                source={OPN_LOGO}
+                style={[
+                  styles.logo,
+                  themeAppearance === 'light' && styles.logoWithRing,
+                ]}
+                resizeMode="cover"
+              />
+            </View>
+
+            {/* Title and Subtitle */}
+            <View style={styles.headerContainer}>
+              <Text variant={TextVariant.HeadingLG} color={TextColor.Default} style={styles.title}>
+                {strings('login.welcome_title')}
+              </Text>
+              <Text variant={TextVariant.BodySM} color={TextColor.Alternative}>
+                {strings('login.unlock_subtitle')}
+              </Text>
+            </View>
 
             <View style={styles.field}>
               <TextField

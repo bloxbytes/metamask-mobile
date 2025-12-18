@@ -13,7 +13,7 @@ const lightTheme: Theme = {
     ...baseLight.colors,
     primary: {
       ...baseLight.colors.primary,
-      //   default: '#FF6A00',
+      default: '#4105b6',
       inverse: baseLight.colors.primary.inverse,
     },
     background: {
@@ -35,12 +35,19 @@ const darkTheme: Theme = {
     ...baseDark.colors,
     primary: {
       ...baseDark.colors.primary,
-      default: '#FF6A00',
+      default: '#4105b6',
       inverse: baseDark.colors.primary.inverse,
     },
     background: {
       ...baseDark.colors.background,
-      default: '#1d2449',
+      default: '#0f112a',
+      section: '#1a1d3a',
+    },
+    text: {
+      ...baseDark.colors.text,
+      default: '#f8fdf1',
+      alternative: '#b0efff',
+      muted: '#4f5262',
     },
   },
 };

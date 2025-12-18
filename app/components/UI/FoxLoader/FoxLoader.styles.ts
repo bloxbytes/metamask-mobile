@@ -22,8 +22,11 @@ const styleSheet = (params: { theme: Theme }) => {
       alignItems: 'center',
     },
     image: {
-      width: 72,
-      height: 72,
+      width: 120,
+      height: 120,
+      borderRadius: 60,
+      borderWidth: theme.themeAppearance === 'light' ? 2 : 0,
+      borderColor: 'rgba(61, 0, 181, 0.11)',
     },
     spacer: {
       marginVertical: 16,

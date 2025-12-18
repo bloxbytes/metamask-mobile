@@ -6,6 +6,9 @@ import {
   FlatList,
   TouchableOpacity,
   ImageBackground,
+  Image,
+  ScrollView,
+  Clipboard,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import PropTypes from 'prop-types';
@@ -46,6 +49,7 @@ import Button, {
 import Label from '../../../component-library/components/Form/Label';
 import { TextFieldSize } from '../../../component-library/components/Form/TextField';
 import TextField from '../../../component-library/components/Form/TextField/TextField';
+import Checkbox from '../../../component-library/components/Checkbox';
 import { saveOnboardingEvent as saveEvent } from '../../../actions/onboarding';
 import { AppThemeKey } from '../../../util/theme/models';
 import { useMetrics } from '../../hooks/useMetrics';
@@ -73,8 +77,13 @@ const ManualBackupStep1 = ({
   const [view, setView] = useState(SEED_PHRASE);
   const [words, setWords] = useState([]);
   const [hasFunds, setHasFunds] = useState(false);
+  const [confirmed, setConfirmed] = useState(false);
+  const [copied, setCopied] = useState(false);
   const { colors, themeAppearance } = useTheme();
-  const styles = useMemo(() => createStyles(colors), [colors]);
+  const styles = useMemo(
+    () => createStyles(colors, themeAppearance),
+    [colors, themeAppearance],
+  );
   const { isEnabled: isMetricsEnabled, enable } = useMetrics();
 
   const backupFlow = route?.params?.backupFlow || false;
@@ -323,97 +332,255 @@ const ManualBackupStep1 = ({
     </KeyboardAvoidingView>
   );
 
+  // Copy seed phrase to clipboard
+  const handleCopy = () => {
+    Clipboard.setString(words.join(' '));
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  // Check if can proceed (revealed and confirmed)
+  const canProceed = !seedPhraseHidden && confirmed;
+
   const renderSeedphraseView = () => (
-    <View style={styles.actionViewContainer}>
-      <View style={styles.actionView}>
-        <View
-          style={styles.wrapper}
-          testID={ManualBackUpStepsSelectorsIDs.STEP_1_CONTAINER}
-        >
-          <Text variant={TextVariant.DisplayMD} color={TextColor.Default}>
-            {strings('manual_backup_step_1.action')}
-          </Text>
-          <View style={styles.infoWrapper}>
-            <Text variant={TextVariant.BodyMD} color={TextColor.Alternative}>
-              {strings('manual_backup_step_1.info-1')}{' '}
-              <Text
-                variant={TextVariant.BodyMD}
-                color={TextColor.Primary}
-                onPress={showWhatIsSeedphrase}
-              >
-                {strings('manual_backup_step_1.info-2')}{' '}
-              </Text>
-              {strings('manual_backup_step_1.info-3')}{' '}
-              <Text
-                variant={TextVariant.BodyMDMedium}
-                color={TextColor.Alternative}
-              >
-                {strings('manual_backup_step_1.info-4')}
-              </Text>
-            </Text>
-          </View>
-          {seedPhraseHidden ? (
-            <View style={styles.seedPhraseWrapper}>
-              {renderSeedPhraseConcealer()}
-            </View>
-          ) : (
-            <View style={styles.seedPhraseContainer}>
-              <FlatList
-                data={words}
-                numColumns={3}
-                keyExtractor={(_, index) => index.toString()}
-                renderItem={({ item, index }) => (
-                  <View style={[styles.inputContainer]}>
-                    <Text
-                      variant={TextVariant.BodyMD}
-                      color={TextColor.Alternative}
-                    >
-                      {index + 1}.
-                    </Text>
-                    <Text
-                      variant={TextVariant.BodyMD}
-                      color={TextColor.Default}
-                      key={index}
-                      ellipsizeMode="tail"
-                      numberOfLines={1}
-                      style={styles.word}
-                      testID={`${ManualBackUpStepsSelectorsIDs.WORD_ITEM}-${index}`}
-                      adjustsFontSizeToFit
-                      allowFontScaling
-                      minimumFontScale={0.1}
-                      maxFontSizeMultiplier={0}
-                    >
-                      {item}
-                    </Text>
-                  </View>
-                )}
+    <ScrollView
+      contentContainerStyle={styles.scrollContent}
+      showsVerticalScrollIndicator={false}
+    >
+      <View style={styles.actionViewContainer}>
+        <View style={styles.actionView}>
+          <View
+            style={styles.wrapper}
+            testID={ManualBackUpStepsSelectorsIDs.STEP_1_CONTAINER}
+          >
+            {/* OPN Logo */}
+            <View style={styles.logoContainer}>
+              <Image
+                style={[
+                  styles.logoImage,
+                  themeAppearance === 'light' && styles.logoWithRing,
+                ]}
+                resizeMode='cover'
+                source={require('../../../images/opn.png')}
               />
             </View>
+
+            {/* Title and Subtitle - centered */}
+            <View style={styles.headerContainer}>
+              <Text variant={TextVariant.HeadingLG} color={TextColor.Default} style={{ textAlign: 'center' }}>
+                {strings('manual_backup_step_1.action')}
+              </Text>
+              <Text variant={TextVariant.BodySM} color={TextColor.Alternative} style={{ textAlign: 'center', marginTop: 4 }}>
+                {strings('manual_backup_step_1.write_down_words')}
+              </Text>
+            </View>
+
+            {/* Important Security Information Card */}
+            <View style={styles.securityInfoCard}>
+              <Text
+                variant={TextVariant.BodyMDMedium}
+                color={themeAppearance === 'light' ? '#7e22ce' : 'rgba(176, 239, 255, 0.8)'}
+                style={styles.securityInfoTitle}
+              >
+                ⚠️ {strings('manual_backup_step_1.security_title')}
+              </Text>
+              <View style={styles.securityInfoItem}>
+                <Text variant={TextVariant.BodySM} color={TextColor.Alternative}>•</Text>
+                <Text variant={TextVariant.BodySM} color={TextColor.Alternative}>
+                  {strings('manual_backup_step_1.security_item_1')}
+                </Text>
+              </View>
+              <View style={styles.securityInfoItem}>
+                <Text variant={TextVariant.BodySM} color={TextColor.Alternative}>•</Text>
+                <Text variant={TextVariant.BodySM} color={TextColor.Alternative}>
+                  {strings('manual_backup_step_1.security_item_2')}
+                </Text>
+              </View>
+              <View style={styles.securityInfoItem}>
+                <Text variant={TextVariant.BodySM} color={TextColor.Alternative}>•</Text>
+                <Text variant={TextVariant.BodySM} color={TextColor.Alternative}>
+                  {strings('manual_backup_step_1.security_item_3')}
+                </Text>
+              </View>
+              <View style={styles.securityInfoItem}>
+                <Text variant={TextVariant.BodySM} color={TextColor.Alternative}>•</Text>
+                <Text variant={TextVariant.BodySM} color={TextColor.Alternative}>
+                  {strings('manual_backup_step_1.security_item_4')}
+                </Text>
+              </View>
+            </View>
+
+            {seedPhraseHidden ? (
+              <TouchableOpacity
+                onPress={revealSeedPhrase}
+                style={[
+                  styles.revealCard,
+                  themeAppearance === 'dark' && styles.revealCardDark
+                ]}
+                testID={ManualBackUpStepsSelectorsIDs.BLUR_BUTTON}
+              >
+                <Icon
+                  name={IconName.Eye}
+                  size={IconSize.Xl}
+                  color={colors.primary.default}
+                  style={styles.revealIcon}
+                />
+                <Text variant={TextVariant.BodyMDMedium} color={TextColor.Primary}>
+                  {strings('manual_backup_step_1.click_to_reveal')}
+                </Text>
+                <Text variant={TextVariant.BodyMD} color={TextColor.Primary}>
+                  {strings('manual_backup_step_1.recovery_phrase')}
+                </Text>
+              </TouchableOpacity>
+            ) : (
+              <>
+                {/* 2-column word grid */}
+                <View style={[
+                  styles.wordGridContainer,
+                  themeAppearance === 'dark' && styles.wordGridContainerDark
+                ]}>
+                  <View style={styles.wordGrid}>
+                    {words.map((word, index) => (
+                      <View key={index} style={styles.wordItem}>
+                        <Text
+                          variant={TextVariant.BodySM}
+                          color={TextColor.Alternative}
+                          style={styles.wordNumber}
+                        >
+                          {index + 1}.
+                        </Text>
+                        <Text
+                          variant={TextVariant.BodyMD}
+                          color={TextColor.Default}
+                          testID={`${ManualBackUpStepsSelectorsIDs.WORD_ITEM}-${index}`}
+                        >
+                          {word}
+                        </Text>
+                      </View>
+                    ))}
+                  </View>
+
+                  {/* Action buttons row */}
+                  <View style={styles.actionButtonsRow}>
+                    <TouchableOpacity style={styles.actionButton} onPress={handleCopy}>
+                      <Icon
+                        name={copied ? IconName.Check : IconName.Copy}
+                        size={IconSize.Sm}
+                        color={colors.primary.default}
+                      />
+                      <Text variant={TextVariant.BodySM} color={TextColor.Primary}>
+                        {copied ? strings('manual_backup_step_1.copied') : strings('manual_backup_step_1.copy')}
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={[styles.actionButton, styles.actionButtonSmall]}
+                      onPress={() => setSeedPhraseHidden(true)}
+                    >
+                      <Icon
+                        name={IconName.EyeSlash}
+                        size={IconSize.Sm}
+                        color={colors.primary.default}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+
+                {/* Confirmation checkbox card */}
+                <TouchableOpacity
+                  style={[
+                    styles.confirmationCard,
+                    themeAppearance === 'dark' && styles.confirmationCardDark
+                  ]}
+                  onPress={() => setConfirmed(!confirmed)}
+                >
+                  <Checkbox
+                    isChecked={confirmed}
+                    onPress={() => setConfirmed(!confirmed)}
+                    style={styles.checkbox}
+                  />
+                  <View style={styles.confirmationTextContainer}>
+                    <Text variant={TextVariant.BodyMDMedium} color={TextColor.Default}>
+                      {strings('manual_backup_step_1.saved_phrase')}
+                    </Text>
+                    <Text variant={TextVariant.BodySM} color={TextColor.Alternative}>
+                      {strings('manual_backup_step_1.saved_phrase_description')}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </>
+            )}
+          </View>
+        </View>
+        <View style={styles.buttonContainer}>
+          <View style={styles.buttonRow}>
+            {/* Back Button */}
+            <Button
+              variant={ButtonVariants.Secondary}
+              onPress={() => navigation.goBack()}
+              label={
+                <Text
+                  variant={TextVariant.BodyMDMedium}
+                  style={styles.backButtonLabel}
+                >
+                  {strings('manual_backup_step_1.back')}
+                </Text>
+              }
+              size={ButtonSize.Lg}
+              style={styles.backButton}
+            />
+            {/* Continue Button */}
+            <Button
+              variant={ButtonVariants.Primary}
+              style={[
+                styles.continueButton,
+                !canProceed && styles.continueButtonDisabled,
+              ]}
+              label={
+                <View style={styles.continueButtonLabel}>
+                  <Text
+                    variant={TextVariant.BodyMDMedium}
+                    color={
+                      canProceed
+                        ? '#FFFFFF'
+                        : themeAppearance === 'light'
+                        ? '#9fa3a7'
+                        : '#4f5262'
+                    }
+                  >
+                    {strings('manual_backup_step_1.continue')}
+                  </Text>
+                  <Icon
+                    name={IconName.ArrowRight}
+                    size={IconSize.Sm}
+                    color={
+                      canProceed
+                        ? '#FFFFFF'
+                        : themeAppearance === 'light'
+                        ? '#9fa3a7'
+                        : '#4f5262'
+                    }
+                  />
+                </View>
+              }
+              onPress={goNext}
+              size={ButtonSize.Lg}
+              isDisabled={!canProceed}
+              testID={ManualBackUpStepsSelectorsIDs.CONTINUE_BUTTON}
+            />
+          </View>
+          {!hasFunds && !backupFlow && !settingsBackup && (
+            <Button
+              variant={ButtonVariants.Link}
+              onPress={showRemindLater}
+              label={strings('account_backup_step_1.remind_me_later')}
+              width={ButtonWidthTypes.Full}
+              size={ButtonSize.Lg}
+              testID={ManualBackUpStepsSelectorsIDs.REMIND_ME_LATER_BUTTON}
+            />
           )}
         </View>
       </View>
-      <View style={styles.buttonContainer}>
-        <Button
-          variant={ButtonVariants.Primary}
-          onPress={goNext}
-          label={strings('manual_backup_step_1.continue')}
-          width={ButtonWidthTypes.Full}
-          size={ButtonSize.Lg}
-          isDisabled={seedPhraseHidden}
-          testID={ManualBackUpStepsSelectorsIDs.CONTINUE_BUTTON}
-        />
-        {!hasFunds && !backupFlow && !settingsBackup && (
-          <Button
-            variant={ButtonVariants.Link}
-            onPress={showRemindLater}
-            label={strings('account_backup_step_1.remind_me_later')}
-            width={ButtonWidthTypes.Full}
-            size={ButtonSize.Lg}
-            testID={ManualBackUpStepsSelectorsIDs.REMIND_ME_LATER_BUTTON}
-          />
-        )}
-      </View>
-    </View>
+    </ScrollView>
   );
 
   return ready ? (

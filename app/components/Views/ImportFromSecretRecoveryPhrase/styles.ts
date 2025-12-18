@@ -4,7 +4,7 @@ import { fontStyles, colors as importedColors } from '../../../styles/common';
 
 // TODO: Replace "any" with type
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const createStyles = (colors: any) =>
+const createStyles = (colors: any, themeAppearance: 'light' | 'dark') =>
   StyleSheet.create({
     root: {
       backgroundColor: colors.background.default,
@@ -77,7 +77,7 @@ const createStyles = (colors: any) =>
       alignItems: 'center',
       height: 40,
       borderWidth: 1,
-      borderColor: colors.border.muted,
+      borderColor: themeAppearance === 'light' ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.1)',
       borderRadius: 8,
       paddingHorizontal: 6,
       paddingVertical: 4,
@@ -113,7 +113,7 @@ const createStyles = (colors: any) =>
       alignSelf: 'flex-end',
     },
     seedPhraseInputFocused: {
-      borderColor: colors.primary.default,
+      borderColor: themeAppearance === 'light' ? 'rgba(0, 0, 0, 0.3)' : 'rgba(255, 255, 255, 0.3)',
       borderWidth: 1,
     },
     seedPhraseCtaContainer: {
@@ -175,6 +175,7 @@ const createStyles = (colors: any) =>
     passwordContainerTitle: {
       flexDirection: 'column',
       rowGap: 4,
+      alignItems: 'center',
     },
     learnMoreContainer: {
       flexDirection: 'row',
@@ -186,6 +187,8 @@ const createStyles = (colors: any) =>
       backgroundColor: colors.background.section,
       borderRadius: 8,
       padding: 16,
+      borderWidth: themeAppearance === 'dark' ? 1 : 0,
+      borderColor: 'rgba(255, 255, 255, 0.1)',
     },
     learnMoreTextContainer: {
       flexDirection: 'row',
@@ -225,6 +228,160 @@ const createStyles = (colors: any) =>
         android: 24,
         default: 16,
       }),
+    },
+    // OPN Logo and header styles
+    logoContainer: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: 16,
+      marginTop: 8,
+    },
+    logoImage: {
+      width: 80,
+      height: 80,
+      borderRadius: 40,
+    },
+    logoWithRing: {
+      borderWidth: 2,
+      borderColor: themeAppearance === 'light' ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.1)',
+    },
+    headerContainer: {
+      alignItems: 'center',
+      marginBottom: 16,
+    },
+    // Decorative background gradients
+    decorativeBackground: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      opacity: 0.15,
+      pointerEvents: 'none',
+    },
+    decorativeCircle1: {
+      position: 'absolute',
+      top: '15%',
+      left: -100,
+      width: 250,
+      height: 250,
+      borderRadius: 125,
+      backgroundColor: importedColors.opnPrimaryGradientStart,
+    },
+    decorativeCircle2: {
+      position: 'absolute',
+      bottom: '15%',
+      right: -100,
+      width: 250,
+      height: 250,
+      borderRadius: 125,
+      backgroundColor: importedColors.opnAccentBlue,
+    },
+    // Tip card
+    tipCard: {
+      borderRadius: 12,
+      padding: 8,
+      marginTop: 24,
+      marginBottom: 24,
+      borderWidth: 2,
+      borderColor: themeAppearance === 'light' ? '#bfdbfe' : 'rgba(34, 128, 205, 0.3)',
+      backgroundColor: themeAppearance === 'light' ? '#eff6ff' : colors.background.section,
+    },
+    tipText: {
+      textAlign: 'center',
+      color: themeAppearance === 'light' ? '#1d4ed8' : '#b0efff',
+    },
+    // Warning card
+    warningCard: {
+      borderRadius: 12,
+      padding: 16,
+      marginTop: 12,
+      borderWidth: 2,
+      borderColor: themeAppearance === 'light' ? '#e9d5ff' : 'rgba(255, 255, 255, 0.1)',
+      backgroundColor: themeAppearance === 'light' ? '#faf5ff' : colors.background.section,
+    },
+    warningText: {
+      textAlign: 'center',
+      color: themeAppearance === 'light' ? '#7e22ce' : 'rgba(176, 239, 255, 0.8)',
+    },
+    // Import button with arrow
+    importButtonLabel: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 8,
+    },
+    importButton: {
+      backgroundColor: '#4105b6',
+      borderColor: '#4105b6',
+      borderWidth: 1,
+      height: 54,
+      borderRadius: 12,
+      shadowColor: '#4105b2',
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: themeAppearance === 'dark' ? 0.5 : 0.3,
+      shadowRadius: 8,
+      elevation: 6,
+    },
+    importButtonDisabled: {
+      backgroundColor: themeAppearance === 'dark' ? '#1d2449' : '#f3f4f6',
+      borderColor: themeAppearance === 'dark' ? '#1d2449' : '#3d00b51c',
+    },
+    // Password requirements card
+    requirementsContainer: {
+      borderRadius: 12,
+      padding: 16,
+      marginTop: 8,
+      borderWidth: 2,
+      borderColor: themeAppearance === 'light' ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.1)',
+      backgroundColor: themeAppearance === 'light' ? 'transparent' : colors.background.section,
+    },
+    requirementsTitle: {
+      marginBottom: 12,
+    },
+    requirementRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 10,
+      marginBottom: 8,
+    },
+    requirementIcon: {
+      width: 18,
+      height: 18,
+      borderRadius: 9,
+      borderWidth: 1.5,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    requirementIconMet: {
+      backgroundColor: '#2280cd',
+      borderColor: '#2280cd',
+    },
+    requirementIconUnmet: {
+      backgroundColor: 'transparent',
+      borderColor: themeAppearance === 'light' ? '#d0d0d0' : '#4f5262',
+    },
+    requirementTextMet: {
+      color: '#2280cd',
+    },
+    requirementTextUnmet: {
+      color: themeAppearance === 'light' ? importedColors.opnMutedGrey : 'rgba(176, 239, 255, 0.6)',
+    },
+    // Button row (Back + Continue)
+    buttonRow: {
+      flexDirection: 'row',
+      gap: 12,
+    },
+    backButton: {
+      flex: 1,
+      backgroundColor: themeAppearance === 'light' ? 'transparent' : 'rgba(26, 29, 58, 0.6)',
+      borderWidth: 2,
+      borderColor: themeAppearance === 'light' ? 'rgba(0, 0, 0, 0.1)' : 'rgba(65, 5, 178, 0.2)',
+      borderRadius: 12,
+      height: 54,
+    },
+    backButtonLabel: {
+      color: themeAppearance === 'light' ? '#000000' : '#b0efff',
     },
   });
 

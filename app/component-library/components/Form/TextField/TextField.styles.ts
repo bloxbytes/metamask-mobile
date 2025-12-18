@@ -23,12 +23,17 @@ const styleSheet = (params: {
 }) => {
   const { theme, vars } = params;
   const { style, size, isError, isDisabled, isFocused } = vars;
-  let borderColor = theme.colors.border.default;
+  
+  const isDark = theme.themeAppearance === 'dark';
+  const borderWidth = isDark ? 1 : 2;
+  const defaultBorderColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+
+  let borderColor = defaultBorderColor;
   if (isError) {
     borderColor = theme.colors.error.default;
   }
   if (isFocused) {
-    borderColor = theme.colors.primary.default;
+    borderColor = isDark ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)';
   }
 
   return StyleSheet.create({
@@ -38,7 +43,7 @@ const styleSheet = (params: {
         alignItems: 'center',
         borderRadius: 8,
         height: Number(size),
-        borderWidth: BORDER_WIDTH,
+        borderWidth: borderWidth,
         borderColor,
         paddingHorizontal: 16,
         opacity: isDisabled ? 0.5 : 1,
@@ -57,7 +62,7 @@ const styleSheet = (params: {
     input: {
       backgroundColor: 'inherit',
       // subtract border width from height so it won't overflow the container
-      height: Number(size) - BORDER_WIDTH * 2,
+      height: Number(size) - borderWidth * 2,
     },
     endAccessory: {
       marginLeft: 8,

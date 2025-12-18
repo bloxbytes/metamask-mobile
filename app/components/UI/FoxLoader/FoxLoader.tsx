@@ -10,8 +10,8 @@ const FoxLoader = () => {
       <Image
         style={styles.image}
         // eslint-disable-next-line @typescript-eslint/no-require-imports
-        source={require('../../../images/branding/fox.png')}
-        resizeMode="contain"
+        source={require('../../../images/opn.png')}
+        resizeMode="cover"
       />
       <View style={styles.spacer} />
       <ActivityIndicator size="large" color="orange" />
