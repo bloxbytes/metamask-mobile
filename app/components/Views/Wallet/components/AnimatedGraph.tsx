@@ -1,12 +1,18 @@
 import React, { useEffect, useRef } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
 import Svg, { Circle, Line } from 'react-native-svg';
+import { useTheme } from '../../../../util/theme';
 
 // Animated SVG components (typed)
 const AnimatedLine = Animated.createAnimatedComponent(Line);
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 export const AnimatedGraph: React.FC = () => {
+
+  const { colors, themeAppearance } = useTheme(); // metamask hook
+
+  const isDark = themeAppearance === 'dark';
+
   // Animated opacity values
   const op1 = useRef(new Animated.Value(0.3)).current;
   const op2 = useRef(new Animated.Value(0.3)).current;
@@ -71,7 +77,7 @@ export const AnimatedGraph: React.FC = () => {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: isDark ? '#0f112a': '#f3f4f6'}]}>
       <Svg width="100%" height="100%">
         {/* Animated Lines */}
         <AnimatedLine

@@ -24,7 +24,8 @@ const NftFullView = () => {
   }, [navigation]);
 
   return (
-    <SafeAreaView style={tw`flex-1 bg-default pb-4`}>
+    // <SafeAreaView style={tw`flex-1 bg-default pb-4`}>
+    <SafeAreaView style={tw`flex-1 pb-4`}>
       {/* <BottomSheetHeader onBack={handleBackPress}>
         {strings('wallet.collectibles')}
       </BottomSheetHeader> */}

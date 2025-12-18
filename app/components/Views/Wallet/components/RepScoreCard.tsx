@@ -48,14 +48,14 @@ export const RepScoreCard = () => {
           onPress={() => setShowBadgesModal(true)}
           style={styles.shadowWrapper}
         >
-          <LinearGradient
+          {/* <LinearGradient
             colors={['#4105b6', '#6305b6']}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.badgeButton}
-          >
+          > */}
             <Text style={styles.badgeText}>View Badges</Text>
-          </LinearGradient>
+          {/* </LinearGradient> */}
         </TouchableOpacity>
       </View>
 

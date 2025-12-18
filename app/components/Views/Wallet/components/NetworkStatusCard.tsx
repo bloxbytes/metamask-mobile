@@ -24,7 +24,9 @@ const ZapIcon = () => (
 );
 
 export const NetworkStatusCard = () => {
-  const { colors } = useTheme();
+  const { colors, themeAppearance } = useTheme();
+  
+    const isDark = themeAppearance === 'dark';
 
   return (
     <View style={[styles.card, { backgroundColor: colors.background.default, borderColor: colors.border.muted,
@@ -44,8 +46,8 @@ export const NetworkStatusCard = () => {
             <Icon name={IconName.Activity} color="#FFF" />
           </LinearGradient>
           <View style={{ marginLeft: 8 }}>
-            <Text style={styles.title}>OPN Chain</Text>
-            <Text style={styles.sub}>Live Network Status</Text>
+            <Text style={[styles.title, { color: colors.text.default }]}>OPN Chain</Text>
+            <Text style={[styles.sub, { color: colors.text.alternative }]}>Live Network Status</Text>
           </View>
         </View>
 
@@ -58,19 +60,23 @@ export const NetworkStatusCard = () => {
 
       <View style={styles.grid}>
         {/* TPS BOX */}
-        <View style={styles.box}>
+        <View style={[styles.box, { backgroundColor: isDark ? 'rgba(15, 17, 42, 0.5)': '#f3f4f6',
+          borderColor: isDark ? colors.border.muted : '#3d00b51c'
+        }]}>
           <View style={styles.row}>
             <ZapIcon />
-            <Text style={styles.tpsLabel}>TPS</Text>
+            <Text style={[styles.tpsLabel, { color: colors.text.alternative }]}>TPS</Text>
           </View>
 
-          <Text style={styles.value}>15,847</Text>
+          <Text style={[styles.value, { color: colors.text.default }]}>15,847</Text>
         </View>
 
         {/* VALIDATORS BOX */}
-        <View style={styles.box}>
-          <Text style={styles.validatorsLabel}>Validators</Text>
-          <Text style={styles.value}>1,247</Text>
+        <View style={[styles.box, { backgroundColor: isDark ? 'rgba(15, 17, 42, 0.1)': '#f3f4f6',
+          borderColor: isDark ? colors.border.muted : '#3d00b51c'
+        }]}>
+          <Text style={[styles.validatorsLabel, { color: colors.text.alternative }]}>Validators</Text>
+          <Text style={[styles.value, { color: colors.text.default }]}>1,247</Text>
         </View>
       </View>
     </View>
