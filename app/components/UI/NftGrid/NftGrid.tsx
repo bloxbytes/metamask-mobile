@@ -53,6 +53,8 @@ import CustomText, {
   TextVariant,
 } from '../../../component-library/components/Texts/Text';
 import { useAccountName } from '../../hooks/useAccountName';
+import OPNLogoGlow from '../../Common/OPNLogoGlow';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface NFTNavigationParamList {
   AddAsset: { assetType: string };
@@ -227,26 +229,16 @@ const NftGrid = ({ isFullView = false }: NftGridProps) => {
   const accountName = useAccountName();
 
   return (
-    <>
-      <Image
-        source={require('../../../../logo.png')}
-        style={{
-          width: 80,
-          height: 80,
-          borderColor: '#b0efff',
-          borderRadius: 40,
-          borderWidth: 1,
-          marginTop: 2,
-          alignSelf: 'center',
-        }}
-      />
+    <SafeAreaView edges={[]}>
+      <OPNLogoGlow />
+
       <TouchableOpacity
         onPress={() => {
           navigation.navigate(...createAccountSelectorNavDetails({}));
         }}
         style={{
           padding: 16,
-          // marginTop: 32,
+          marginTop: 16,
         }}
       >
         <View
@@ -317,7 +309,7 @@ const NftGrid = ({ isFullView = false }: NftGridProps) => {
         actionSheetRef={actionSheetRef}
         longPressedCollectible={longPressedCollectible}
       />
-    </>
+    </SafeAreaView>
   );
 };
 

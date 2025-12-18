@@ -161,6 +161,7 @@ import { useEmptyNavHeaderForConfirmations } from '../../Views/confirmations/hoo
 import { trackVaultCorruption } from '../../../util/analytics/vaultCorruptionTracking';
 import SocialLoginIosUser from '../../Views/SocialLoginIosUser';
 import AUTHENTICATION_TYPE from '../../../constants/userProperties';
+import AppBackground from '../../UI/Background/AppBackground';
 
 const clearStackNavigatorOptions = {
   headerShown: false,
@@ -918,6 +919,17 @@ const AppFlow = () => {
             component={Main}
             options={{ headerShown: false }}
           />
+          // <Stack.Screen
+          //   name={Routes.ONBOARDING.HOME_NAV}
+          //   options={{ headerShown: false }}
+          // >
+          //   {() => (
+          //     <AppBackground>
+          //       <Main />
+          //     </AppBackground>
+          //   )}
+          // </Stack.Screen>
+
         )}
         <Stack.Screen name={Routes.FOX_LOADER} component={FoxLoader} />
         <Stack.Screen
@@ -1284,7 +1296,7 @@ const App: React.FC = () => {
   const { isCheckingUpdates } = useOTAUpdates();
 
   const { enable } = useMetrics();
-  
+
   useEffect(() => {
     enable(true);
   }, [])

@@ -8,7 +8,7 @@ import React, {
   useState,
 } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import ScrollableTabView from '@tommasini/react-native-scrollable-tab-view';
 import { useSelector } from 'react-redux';
 import { WalletViewSelectorsIDs } from '../../../../e2e/selectors/wallet/WalletView.selectors';
@@ -69,6 +69,7 @@ import AvatarAccount from '../../../component-library/components/Avatars/Avatar/
 import { useAccountName } from '../../hooks/useAccountName';
 import { formatAddress } from '../../../util/address';
 import { selectAvatarAccountType } from '../../../selectors/settings';
+import OPNLogoGlow from '../../Common/OPNLogoGlow';
 
 const createStyles = (params) => {
   const { theme } = params;
@@ -314,7 +315,7 @@ const ActivityView = () => {
           </Text>
         </View>
       )} */}
-      <View style={styles.wrapper}>
+      <SafeAreaView style={styles.wrapper}>
         {/* {!(isPerpsTabActive || isOrdersTabActive || isPredictTabActive) && (
           <View style={styles.controlButtonOuterWrapper}>
             <ButtonBase
@@ -361,18 +362,8 @@ const ActivityView = () => {
             />
           </View>
         )} */}
-        <Image
-          source={require('../../../../logo.png')}
-          style={{
-            width: 80,
-            height: 80,
-            borderColor: '#b0efff',
-            borderRadius: 40,
-            borderWidth: 1,
-            marginTop: 61,
-            alignSelf: 'center',
-          }}
-        />
+        
+        <OPNLogoGlow />
 
         <TouchableOpacity
           onPress={() => {
@@ -466,7 +457,7 @@ const ActivityView = () => {
             />
           )} */}
         </ScrollableTabView>
-      </View>
+      </SafeAreaView>
     </ErrorBoundary>
   );
 };

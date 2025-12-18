@@ -633,7 +633,9 @@
 				ORGANIZATIONNAME = MetaMask;
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = 67XB7B383V;
 						LastSwiftMigration = 1140;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 1;
@@ -642,15 +644,13 @@
 								enabled = 1;
 							};
 						};
-						DevelopmentTeam = "67XB7B383V";
-						ProvisioningStyle = Automatic;
 					};
 					2EF282522B0FF86900D7B4B1 = {
-						DevelopmentTeam = "67XB7B383V";
+						DevelopmentTeam = 67XB7B383V;
 						ProvisioningStyle = Automatic;
 					};
 					B339FEF8289ABD70001B89FB = {
-						DevelopmentTeam = "67XB7B383V";
+						DevelopmentTeam = 67XB7B383V;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -1294,7 +1294,7 @@
 				CURRENT_PROJECT_VERSION = 1.0.0;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = "67XB7B383V";
+				DEVELOPMENT_TEAM = 67XB7B383V;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = F99XX92LY7;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1363,7 +1363,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1.0.0;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = "67XB7B383V";
+				DEVELOPMENT_TEAM = 67XB7B383V;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = F99XX92LY7;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1430,7 +1430,7 @@
 				CURRENT_PROJECT_VERSION = 3092;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = "67XB7B383V";
+				DEVELOPMENT_TEAM = 67XB7B383V;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 48XVW22RCG;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1496,7 +1496,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 3092;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = "67XB7B383V";
+				DEVELOPMENT_TEAM = 67XB7B383V;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 48XVW22RCG;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1660,7 +1660,7 @@
 				CURRENT_PROJECT_VERSION = 3092;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = "67XB7B383V";
+				DEVELOPMENT_TEAM = 67XB7B383V;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 48XVW22RCG;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1729,7 +1729,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 3092;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = "67XB7B383V";
+				DEVELOPMENT_TEAM = 67XB7B383V;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 48XVW22RCG;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (

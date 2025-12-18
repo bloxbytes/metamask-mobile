@@ -213,6 +213,8 @@ import { NetworkStatusCard } from './components/NetworkStatusCard';
 import { RepScoreCard } from './components/RepScoreCard';
 import { goToAddEvmToken } from '../../../components/UI/Tokens/util/goToAddEvmToken';
 import BaseControlBar from '../../UI/shared/BaseControlBar';
+import OPNLogoGlow from '../../Common/OPNLogoGlow';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const createStyles = ({ colors }: Theme) =>
   RNStyleSheet.create({
@@ -1127,39 +1129,25 @@ const Wallet = ({
 
   useEffect(() => {
     if (!selectedInternalAccount) return;
+    // navigation.setOptions(
+    // getWalletNavbarOptions(
+    //   walletRef,
+    //   selectedInternalAccount,
+    //   displayName,
+    //   networkName,
+    //   networkImageSource,
+    //   onTitlePress,
+    //   navigation,
+    //   colors,
+    //   isNotificationEnabled,
+    //   isBackupAndSyncEnabled,
+    //   unreadNotificationCount,
+    //   readNotificationCount,
+    //   shouldDisplayCardButton,
+    // ),
+    // );
     navigation.setOptions({
-      // getWalletNavbarOptions(
-      //   walletRef,
-      //   selectedInternalAccount,
-      //   displayName,
-      //   networkName,
-      //   networkImageSource,
-      //   onTitlePress,
-      //   navigation,
-      //   colors,
-      //   isNotificationEnabled,
-      //   isBackupAndSyncEnabled,
-      //   unreadNotificationCount,
-      //   readNotificationCount,
-      //   shouldDisplayCardButton,
-      // ),
-      headerShown: true,
-      headerTitle: () => (
-        <Image
-          source={require('../../../../logo.png')}
-          style={{
-            width: 80,
-            height: 80,
-            borderColor: '#b0efff',
-            borderRadius: 40,
-            borderWidth: 1,
-            marginTop: 40,
-          }}
-        />
-      ),
-      headerTitleAlign: 'center',
-      headerLeft: () => null,
-      headerRight: () => null,
+      headerShown: false,
     });
   }, [
     selectedInternalAccount,
@@ -1618,7 +1606,7 @@ const Wallet = ({
           }}
           style={{
             padding: 16,
-            marginTop: 32,
+            // marginTop: 32,
           }}
         >
           <View
@@ -1852,29 +1840,32 @@ const Wallet = ({
 
   return (
     <ErrorBoundary navigation={navigation} view="Wallet">
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={baseStyles.flexGrow}>
-          {selectedInternalAccount ? (
-            <View
-              style={styles.wrapper}
-              testID={WalletViewSelectorsIDs.WALLET_CONTAINER}
-            >
-              <ConditionalScrollView
-                isScrollEnabled={isHomepageRedesignV1Enabled}
-                scrollViewProps={{
-                  contentContainerStyle: scrollViewContentStyle,
-                  showsVerticalScrollIndicator: false,
-                }}
+      <SafeAreaView edges={['top']}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={baseStyles.flexGrow}>
+            <OPNLogoGlow />
+            {selectedInternalAccount ? (
+              <View
+                style={styles.wrapper}
+                testID={WalletViewSelectorsIDs.WALLET_CONTAINER}
               >
-                {content}
-              </ConditionalScrollView>
-            </View>
-          ) : (
-            renderLoader()
-          )}
-        </View>
-        <View style={{ height: 16 }} />
-      </ScrollView>
+                <ConditionalScrollView
+                  isScrollEnabled={isHomepageRedesignV1Enabled}
+                  scrollViewProps={{
+                    contentContainerStyle: scrollViewContentStyle,
+                    showsVerticalScrollIndicator: false,
+                  }}
+                >
+                  {content}
+                </ConditionalScrollView>
+              </View>
+            ) : (
+              renderLoader()
+            )}
+          </View>
+          <View style={{ height: 16 }} />
+        </ScrollView>
+      </SafeAreaView>
     </ErrorBoundary>
   );
 };

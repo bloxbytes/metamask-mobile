@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { StyleSheet, ScrollView, Alert, Image, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, ScrollView, Alert, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import SettingsDrawer from '../../UI/SettingsDrawer';
@@ -22,7 +22,6 @@ import { isTest } from '../../../util/test/utils';
 import { isPermissionsSettingsV1Enabled } from '../../../util/networks';
 import { selectIsEvmNetworkSelected } from '../../../selectors/multichainNetworkController';
 import { selectSeedlessOnboardingLoginFlow } from '../../../selectors/seedlessOnboardingController';
-import Logo from '../../../../logo.png';
 import { createAccountSelectorNavDetails } from '../AccountSelector';
 import AvatarAccount from '../../../component-library/components/Avatars/Avatar/variants/AvatarAccount';
 import { AvatarSize } from '../../../component-library/components/Avatars/Avatar';
@@ -34,172 +33,10 @@ import { useAccountName } from '../../hooks/useAccountName';
 import BaseControlBar from '../../UI/shared/BaseControlBar';
 import { useTailwind } from '@metamask/design-system-twrnc-preset';
 import { WalletViewSelectorsIDs } from '../../../../e2e/selectors/wallet/WalletView.selectors';
-
-// /******************************
-//  *  SETTINGS CARD
-//  ******************************/
-// const SettingsCard = ({
-//   title,
-//   children,
-// }: {
-//   title: string;
-//   children: React.ReactNode;
-// }) => {
-//   const { colors } = useTheme();
-
-//   return (
-//     <View style={styless.cardWrapper}>
-//       <CustomText style={[styless.sectionTitle, { color: colors.primary.default }]}>
-//         {title}
-//       </CustomText>
-
-//       <View style={[styless.card, { borderColor: colors.border.muted }]}>
-//         {children}
-//       </View>
-//     </View>
-//   );
-// };
-
-// /******************************
-//  *  ROW INSIDE CARD
-//  ******************************/
-// const SettingsRow = ({
-//   title,
-//   subtitle,
-//   icon,
-//   onPress,
-//   rightText,
-// }: {
-//   title: string;
-//   subtitle?: string;
-//   icon: IconName;
-//   onPress: () => void;
-//   rightText?: string;
-// }) => {
-//   const { colors } = useTheme();
-
-//   return (
-//     <TouchableOpacity onPress={onPress}>
-//       <View style={[styless.row, { borderColor: colors.border.muted }]}>
-//         {/* LEFT ICON */}
-//         <View style={[styless.rowIconWrapper, { backgroundColor: colors.primary.muted }]}>
-//           <Icon name={icon} size={IconSize.Sm} color={colors.primary.default} />
-//         </View>
-
-//         {/* TEXTS */}
-//         <View style={styless.rowTextWrapper}>
-//           <CustomText style={styless.rowTitle}>{title}</CustomText>
-//           {subtitle ? (
-//             <CustomText style={styless.rowSubtitle}>{subtitle}</CustomText>
-//           ) : null}
-//         </View>
-
-//         {/* RIGHT */}
-//         {rightText && (
-//           <CustomText style={styless.rightText}>{rightText}</CustomText>
-//         )}
-
-//         <Icon
-//           name={IconName.ArrowRight}
-//           size={IconSize.Sm}
-//           color={colors.icon.muted}
-//         />
-//       </View>
-//     </TouchableOpacity>
-//   );
-// };
-
-// /******************************
-//  *  LOGOUT BUTTON
-//  ******************************/
-// const LogoutButton = ({ onPress }: { onPress: () => void }) => {
-//   const { colors } = useTheme();
-
-//   return (
-//     <TouchableOpacity onPress={onPress}>
-//       <View style={[styless.logoutBtn, { borderColor: colors.error.muted }]}>
-//         <Icon name={IconName.Logout} size={IconSize.Md} color={colors.error.default} />
-//         <CustomText style={[styless.logoutText, { color: colors.error.default }]}>
-//           Lock Wallet
-//         </CustomText>
-//       </View>
-//     </TouchableOpacity>
-//   );
-// };
-
-// const styless = StyleSheet.create({
-//   cardWrapper: {
-//     paddingHorizontal: 16,
-//     marginBottom: 20,
-//   },
-
-//   sectionTitle: {
-//     fontSize: 14,
-//     marginBottom: 8,
-//   },
-
-//   card: {
-//     borderWidth: 2,
-//     borderRadius: 14,
-//     backgroundColor: '#ffffff',
-//     overflow: 'hidden',
-//   },
-
-//   row: {
-//     flexDirection: 'row',
-//     alignItems: 'center',
-//     padding: 16,
-//     borderBottomWidth: 1,
-//   },
-
-//   rowIconWrapper: {
-//     width: 32,
-//     height: 32,
-//     borderRadius: 16,
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     marginRight: 12,
-//   },
-
-//   rowTextWrapper: {
-//     flex: 1,
-//   },
-
-//   rowTitle: {
-//     fontSize: 14,
-//     color: '#000',
-//   },
-
-//   rowSubtitle: {
-//     fontSize: 12,
-//     color: '#666',
-//     marginTop: 2,
-//   },
-
-//   rightText: {
-//     fontSize: 12,
-//     color: '#666',
-//     marginRight: 6,
-//   },
-
-//   logoutBtn: {
-//     marginHorizontal: 16,
-//     marginTop: 20,
-//     paddingVertical: 14,
-//     borderWidth: 2,
-//     borderRadius: 14,
-//     backgroundColor: '#ffe5e5',
-//     flexDirection: 'row',
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     gap: 8,
-//   },
-
-//   logoutText: {
-//     fontSize: 15,
-//     fontWeight: '500',
-//   },
-// });
+import OPNLogoGlow from '../../Common/OPNLogoGlow';
+import LogoutButton from './components/LogoutButton';
+import SettingsCard from './components/SettingsCard';
+import SettingsRow from './components/SettingsRow';
 
 const createStyles = (colors: Colors) =>
   StyleSheet.create({
@@ -220,7 +57,7 @@ const createStyles = (colors: Colors) =>
 
     accountCardWrapper: {
       padding: 16,
-      marginTop: 48,
+      marginTop: 16,
     },
 
     accountCard: {
@@ -267,20 +104,11 @@ const Settings = () => {
   //   );
   // }, [navigation, colors]);
 
-  const HeaderLogo = useCallback(
-    () => <Image source={Logo} style={styles.logo} />,
-    [styles.logo],
-  );
-
   const updateNavBar = useCallback(() => {
     navigation.setOptions({
-      headerShown: true,
-      headerTitle: HeaderLogo,
-      headerTitleAlign: 'center',
-      headerLeft: () => null,
-      headerRight: () => null,
+      headerShown: false
     });
-  }, [navigation, HeaderLogo]);
+  }, [navigation]);
 
   useEffect(() => {
     updateNavBar();
@@ -432,6 +260,10 @@ const Settings = () => {
   const accountName = useAccountName();
   const tw = useTailwind();
 
+  const resetPassword = (): void => {
+    navigation.navigate(Routes.SETTINGS.CHANGE_PASSWORD);
+  };
+
   const AccountSelectionCard = (
     <TouchableOpacity
       onPress={() => {
@@ -476,11 +308,12 @@ const Settings = () => {
 
   const oauthFlow = useSelector(selectSeedlessOnboardingLoginFlow);
   return (
-    <SafeAreaView edges={{ bottom: 'additive' }} style={styles.wrapper}>
+    <SafeAreaView edges={{ top: 'additive' }} style={styles.wrapper}>
       <ScrollView
         style={styles.wrapper}
         testID={SettingsViewSelectorsIDs.SETTINGS_SCROLL_ID}
       >
+        <OPNLogoGlow />
         {AccountSelectionCard}
 
         <BaseControlBar
@@ -637,6 +470,51 @@ const Settings = () => {
           testID={SettingsViewSelectorsIDs.LOCK}
           titleColor={TextColor.Primary}
         />
+
+        <SettingsCard title="App Info">
+          <SettingsRow
+            title="OPN Wallet"
+            icon={IconName.Global}
+            onPress={lock}
+          />
+        </SettingsCard>
+        <SettingsCard title="Security & Privacy">
+          <SettingsRow
+            title="Change Password"
+            icon={IconName.Lock}
+            onPress={resetPassword}
+          />
+          <SettingsRow
+            title="Reveal Secret Phrase"
+            icon={IconName.Eye}
+            onPress={lock}
+          />
+        </SettingsCard>
+        <SettingsCard title="Preferences">
+          <SettingsRow
+            title="Language"
+            icon={IconName.Global}
+            onPress={lock}
+          />
+          <SettingsRow
+            title="Notifications"
+            icon={IconName.Notification}
+            onPress={onPressNotifications}
+          />
+        </SettingsCard>
+        <SettingsCard title="Security & Privacy">
+          <SettingsRow
+            title="Help & Support"
+            icon={IconName.Question}
+            onPress={showHelp}
+          />
+          <SettingsRow
+            title="Terms & Privacy"
+            icon={IconName.PrivacyTip}
+            onPress={lock}
+          />
+        </SettingsCard>
+        <LogoutButton onPress={lock} />
       </ScrollView>
     </SafeAreaView>
   );

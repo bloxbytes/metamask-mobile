@@ -41,6 +41,7 @@ const darkTheme: Theme = {
     background: {
       ...baseDark.colors.background,
       default: '#0f112a',
+      // default: 'transparent',
       section: '#1a1d3a',
     },
     text: {
