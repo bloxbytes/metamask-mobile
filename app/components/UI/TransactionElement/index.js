@@ -63,6 +63,7 @@ import { selectTokensByChainIdAndAddress } from '../../../selectors/tokensContro
 import Routes from '../../../constants/navigation/Routes';
 import { selectMultichainAccountsState2Enabled } from '../../../selectors/featureFlagController/multichainAccounts';
 import { hasTransactionType } from '../../Views/confirmations/utils/transaction';
+import { TransactionHistory, TransactionHistoryItem } from './component/ActivityList';
 
 const createStyles = (colors, typography) =>
   StyleSheet.create({
@@ -710,7 +711,19 @@ class TransactionElement extends PureComponent {
     if (!transactionElement || !transactionDetails) return null;
     return (
       <>
-        <TouchableHighlight
+         <TouchableHighlight
+          style={
+            // this.props.showBottomBorder ? styles.rowWithBorder : styles.row
+            this.props.showBottomBorder ? null : styles.row
+          }
+          onPress={this.onPressItem}
+          underlayColor={colors.background.alternative}
+          activeOpacity={1}
+        >
+          <TransactionHistory transactionElement={transactionElement} time={this.renderTxTime}  />
+        </TouchableHighlight>
+
+        {/* <TouchableHighlight
           style={
             this.props.showBottomBorder ? styles.rowWithBorder : styles.row
           }
@@ -718,8 +731,10 @@ class TransactionElement extends PureComponent {
           underlayColor={colors.background.alternative}
           activeOpacity={1}
         >
+      
           {this.renderTxElement(transactionElement)}
-        </TouchableHighlight>
+        </TouchableHighlight> */}
+
         {detailsModalVisible && (
           <Modal
             isVisible={detailsModalVisible}

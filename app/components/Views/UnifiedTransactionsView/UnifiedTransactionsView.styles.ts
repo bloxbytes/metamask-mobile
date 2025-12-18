@@ -7,6 +7,7 @@ const styleSheet = (params: { theme: Theme }) => {
     container: {
       flex: 1,
       backgroundColor: colors.background.default,
+      
     },
     emptyList: {
       justifyContent: 'center',

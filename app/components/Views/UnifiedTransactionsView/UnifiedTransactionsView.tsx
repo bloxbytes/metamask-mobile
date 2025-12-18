@@ -11,7 +11,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import Modal from 'react-native-modal';
 import { useSelector } from 'react-redux';
 import { strings } from '../../../../locales/i18n';
-import Text from '../../../component-library/components/Texts/Text';
+import Text, { TextVariant } from '../../../component-library/components/Texts/Text';
 import ExtendedKeyringTypes from '../../../constants/keyringTypes';
 import { selectSelectedInternalAccount } from '../../../selectors/accountsController';
 import { selectCurrentCurrency } from '../../../selectors/currencyRateController';
@@ -63,6 +63,7 @@ import styleSheet from './UnifiedTransactionsView.styles';
 import { useUnifiedTxActions } from './useUnifiedTxActions';
 import useBlockExplorer from '../../hooks/useBlockExplorer';
 import { selectBridgeHistoryForAccount } from '../../../selectors/bridgeStatusController';
+import CustomText from '../../../component-library/components/Texts/Text';
 
 type SmartTransactionWithId = SmartTransaction & { id: string };
 type EvmTransaction = TransactionMeta | SmartTransactionWithId;
@@ -642,6 +643,9 @@ const UnifiedTransactionsView = ({
   return (
     <PriceChartProvider>
       <View style={styles.container}>
+        <CustomText variant={TextVariant.BodyMDMedium} style={{
+          padding: 10
+        }}>Activity</CustomText>  
         <PriceChartContext.Consumer>
           {({ isChartBeingTouched }) => (
             <FlashList
@@ -658,7 +662,7 @@ const UnifiedTransactionsView = ({
               }
               ListHeaderComponent={header}
               ListEmptyComponent={renderEmptyList}
-              ListFooterComponent={footerComponent}
+              // ListFooterComponent={footerComponent}
               style={baseStyles.flexGrow}
               refreshControl={
                 <RefreshControl
@@ -672,6 +676,7 @@ const UnifiedTransactionsView = ({
             />
           )}
         </PriceChartContext.Consumer>
+
         {/* Action modals for EVM Transactions */}
         {(speedUp1559IsOpen || cancel1559IsOpen) && (
           <Modal
