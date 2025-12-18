@@ -16,7 +16,7 @@ export const FloatingThemeToggle: React.FC = () => {
   const containerStyle = {
     position: 'absolute' as const,
     // Add safe area inset + small margin for better spacing
-    top: Platform.OS === 'ios' ? Math.max(insets.top, 20) : 16,
+    top: Platform.OS === 'ios' ? Math.max(insets.top, 20) : 28,
     right: 16,
     zIndex: 999,
     borderRadius: 12,
