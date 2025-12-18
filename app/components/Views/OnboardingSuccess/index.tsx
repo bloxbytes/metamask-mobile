@@ -110,7 +110,10 @@ export const OnboardingSuccessComponent: React.FC<OnboardingSuccessProps> = ({
         testID={OnboardingSuccessSelectorIDs.MANAGE_DEFAULT_SETTINGS_BUTTON}
         style={styles.footerLink}
       >
-        <Text color={TextColor.Info} variant={TextVariant.BodyMDMedium}>
+        <Text
+          style={{ color: '#2280cd' }}
+          variant={TextVariant.BodyMDMedium}
+        >
           {strings('onboarding_success.manage_default_settings')}
         </Text>
       </TouchableOpacity>
@@ -119,20 +122,43 @@ export const OnboardingSuccessComponent: React.FC<OnboardingSuccessProps> = ({
 
   return (
     <SafeAreaView edges={{ bottom: 'additive' }} style={styles.root}>
+      <View style={styles.decorativeBackground}>
+        <View style={styles.decorativeCircle1} />
+        <View style={styles.decorativeCircle2} />
+      </View>
       <View
         style={styles.container}
         testID={OnboardingSuccessSelectorIDs.CONTAINER_ID}
       >
+        <View style={styles.logoContainer}>
+          <View style={styles.logoWithRing}>
+            <Image
+              source={require('../../../images/opn.png')}
+              style={styles.logo}
+            />
+          </View>
+        </View>
+
         <View style={styles.animationSection}>{renderContent()}</View>
 
         <View style={styles.buttonSection}>
           <Button
             testID={OnboardingSuccessSelectorIDs.DONE_BUTTON}
-            label={strings('onboarding_success.done')}
+            label={
+              <View style={styles.doneButtonLabel}>
+                <Text
+                  variant={TextVariant.BodyMDMedium}
+                  style={{ color: '#FFFFFF' }}
+                >
+                  {strings('onboarding_success.done')}
+                </Text>
+              </View>
+            }
             variant={ButtonVariants.Primary}
             onPress={handleOnDone}
             size={ButtonSize.Lg}
             width={ButtonWidthTypes.Full}
+            style={styles.doneButton}
           />
           {renderFooter()}
         </View>

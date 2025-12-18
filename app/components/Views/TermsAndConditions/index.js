@@ -18,6 +18,7 @@ const createStyles = (colors) =>
     },
     link: {
       textDecorationLine: 'underline',
+      color: '#2280cd',
     },
   });
 

@@ -21,15 +21,16 @@ import { strings } from '../../../../locales/i18n';
 import Routes from '../../../constants/navigation/Routes';
 import { PREVIOUS_SCREEN, ONBOARDING } from '../../../constants/navigation';
 import CelebratingFox from '../../../animations/Celebrating_Fox.json';
-import styles from './index.styles';
-import Device from '../../../util/device';
-import { OnboardingSelectorIDs } from '../../../../e2e/selectors/Onboarding/Onboarding.selectors';
+import { useTheme } from '../../../util/theme';
+import createStyles from './index.styles';
 
 interface SocialLoginIosUserProps {
   type: 'new' | 'existing';
 }
 
 const SocialLoginIosUser: React.FC<SocialLoginIosUserProps> = ({ type }) => {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const route = useRoute();
 
@@ -63,6 +64,10 @@ const SocialLoginIosUser: React.FC<SocialLoginIosUserProps> = ({ type }) => {
 
   return (
     <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.wrapper}>
+      <View style={styles.decorativeBackground}>
+        <View style={styles.decorativeCircle1} />
+        <View style={styles.decorativeCircle2} />
+      </View>
       <View style={styles.root}>
         <View style={styles.animationContainer}>
           <View style={styles.largeFoxWrapper}>
@@ -78,6 +83,7 @@ const SocialLoginIosUser: React.FC<SocialLoginIosUserProps> = ({ type }) => {
           <Text
             variant={TextVariant.DisplayMD}
             color={TextColor.Default}
+            style={{ textAlign: 'center' }}
             testID={
               isUserTypeNew
                 ? OnboardingSelectorIDs.SOCIAL_LOGIN_IOS_NEW_USER_TITLE
@@ -102,11 +108,21 @@ const SocialLoginIosUser: React.FC<SocialLoginIosUserProps> = ({ type }) => {
             }
             width={ButtonWidthTypes.Full}
             size={Device.isMediumDevice() ? ButtonSize.Md : ButtonSize.Lg}
-            label={strings(
-              isUserTypeNew
-                ? 'social_login_ios_user.new_user_button'
-                : 'social_login_ios_user.existing_user_button',
-            )}
+            style={styles.primaryButton}
+            label={
+              <View style={styles.primaryButtonLabel}>
+                <Text
+                  variant={TextVariant.BodyMDMedium}
+                  style={{ color: '#FFFFFF' }}
+                >
+                  {strings(
+                    isUserTypeNew
+                      ? 'social_login_ios_user.new_user_button'
+                      : 'social_login_ios_user.existing_user_button',
+                  )}
+                </Text>
+              </View>
+            }
             onPress={isUserTypeNew ? handleSetMetaMaskPin : handleSecureWallet}
           />
         </View>

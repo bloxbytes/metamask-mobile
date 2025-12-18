@@ -8,6 +8,7 @@ import Icon, {
 } from '../../../../component-library/components/Icons/Icon';
 import Button, {
   ButtonSize,
+  ButtonVariants,
 } from '../../../../component-library/components/Buttons/Button';
 import Text, {
   TextVariant,
@@ -29,6 +30,10 @@ const QuizContent = ({
 
   return (
     <View style={styles.container}>
+      <View style={styles.decorativeBackground}>
+        <View style={styles.decorativeCircle1} />
+        <View style={styles.decorativeCircle2} />
+      </View>
       <>
         <View style={styles.header}>
           <View style={styles.spacer} />
@@ -66,8 +71,24 @@ const QuizContent = ({
             variant={btn.variant}
             size={ButtonSize.Lg}
             onPress={btn.onPress}
-            label={btn.label}
-            style={styles.button}
+            label={
+              btn.variant === ButtonVariants.Primary ? (
+                <View style={styles.primaryButtonLabel}>
+                  <Text
+                    variant={TextVariant.BodyMDMedium}
+                    style={{ color: '#FFFFFF' }}
+                  >
+                    {btn.label}
+                  </Text>
+                </View>
+              ) : (
+                btn.label
+              )
+            }
+            style={[
+              styles.button,
+              btn.variant === ButtonVariants.Primary && styles.primaryButton,
+            ]}
             testID={btn.testID}
           />
         ))}

@@ -29,15 +29,6 @@ const createStyles = (colors: any) =>
     selectedWordText: {
       color: colors.text.default,
     },
-    seedPhraseContainer: {
-      backgroundColor: colors.background.muted,
-      borderRadius: 10,
-      height: 'auto',
-      flexDirection: 'column',
-      marginBottom: 16,
-      padding: 16,
-      gap: 4,
-    },
     statusContainer: {
       justifyContent: 'center',
       alignItems: 'center',
@@ -45,16 +36,6 @@ const createStyles = (colors: any) =>
       gap: 16,
       padding: 16,
       width: '100%',
-    },
-    emptySlot: {
-      backgroundColor: colors.background.default,
-      opacity: 1,
-      borderColor: colors.border.default,
-      borderWidth: 2,
-    },
-    selectedSlotBox: {
-      borderColor: colors.primary.default,
-      borderWidth: 2,
     },
     missingWords: {
       flexDirection: 'row',
@@ -144,6 +125,71 @@ const createStyles = (colors: any) =>
     buttonContainer: {
       paddingHorizontal: 0,
       marginBottom: Platform.OS === 'android' ? 16 : 0,
+    },
+    logo: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: 16,
+      marginTop: 8,
+    },
+    logoImage: {
+      width: 60,
+      height: 60,
+      borderRadius: 30,
+    },
+    logoWithRing: {
+      borderWidth: 2,
+      borderColor: colors.background.default === '#000000' || colors.background.default === '#0f112a' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+    },
+    headerContainer: {
+      alignItems: 'center',
+      marginBottom: 16,
+    },
+    centeredText: {
+      textAlign: 'center',
+    },
+    confirmButton: {
+      backgroundColor: '#4105b6',
+      borderColor: '#4105b6',
+      borderWidth: 1,
+      height: 54,
+      borderRadius: 12,
+      shadowColor: '#4105b2',
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: colors.background.default === '#000000' || colors.background.default === '#0f112a' ? 0.5 : 0.3,
+      shadowRadius: 8,
+      elevation: 6,
+    },
+    confirmButtonDisabled: {
+      backgroundColor: colors.background.default === '#000000' || colors.background.default === '#0f112a' ? '#1d2449' : '#e0e0e0',
+      borderColor: colors.background.default === '#000000' || colors.background.default === '#0f112a' ? '#1d2449' : '#e0e0e0',
+    },
+    confirmButtonLabel: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 8,
+    },
+    emptySlot: {
+      backgroundColor: colors.background.default,
+      opacity: 1,
+      borderColor: colors.background.default === '#000000' || colors.background.default === '#0f112a' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+      borderWidth: 2,
+    },
+    selectedSlotBox: {
+      borderColor: '#2280cd',
+      borderWidth: 2,
+    },
+    seedPhraseContainer: {
+      backgroundColor: colors.background.default === '#000000' || colors.background.default === '#0f112a' ? colors.background.section : colors.background.muted,
+      borderRadius: 10,
+      height: 'auto',
+      flexDirection: 'column',
+      marginBottom: 16,
+      padding: 16,
+      gap: 4,
+      borderWidth: colors.background.default === '#000000' || colors.background.default === '#0f112a' ? 1 : 0,
+      borderColor: 'rgba(255, 255, 255, 0.05)',
     },
   });
 

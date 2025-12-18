@@ -43,26 +43,28 @@ const getStyles = (colors) =>
  * PureComponent that renders scrollable content above configurable buttons
  */
 export default function ActionView({
-  cancelTestID,
-  confirmTestID,
-  cancelText,
+  cancelTestID = '',
+  confirmTestID = '',
+  cancelText = '',
   children,
-  confirmText,
-  confirmButtonMode,
+  confirmText = '',
+  confirmButtonMode = 'normal',
   onCancelPress,
   onConfirmPress,
   onTouchablePress,
-  showCancelButton,
-  showConfirmButton,
-  confirmed,
+  showCancelButton = true,
+  showConfirmButton = true,
+  confirmed = false,
   confirmDisabled,
   loading = false,
   keyboardShouldPersistTaps = 'never',
   style = undefined,
   confirmButtonState = ConfirmButtonState.Normal,
   scrollViewTestID,
-  contentContainerStyle,
+  contentContainerStyle = undefined,
   buttonContainerStyle,
+  confirmButtonStyle,
+  cancelButtonStyle,
   enableOnAndroid,
   enableAutomaticScroll,
   extraScrollHeight,
@@ -96,7 +98,7 @@ export default function ActionView({
             onTouchablePress && onTouchablePress();
           }}
         >
-          {children}
+          <View style={baseStyles.flexGrow}>{children}</View>
         </TouchableWithoutFeedback>
 
         <View style={[styles.actionContainer, buttonContainerStyle]}>
@@ -107,7 +109,7 @@ export default function ActionView({
               size={ButtonSize.Lg}
               label={cancelText}
               testID={cancelTestID}
-              style={styles.button}
+              style={[styles.button, cancelButtonStyle]}
               isDisabled={confirmed}
             />
           )}
@@ -120,8 +122,12 @@ export default function ActionView({
               testID={confirmTestID}
               style={[
                 styles.button,
-                confirmButtonState === ConfirmButtonState.Warning &&
+                confirmButtonState === ConfirmButtonState.Normal &&
+                  confirmButtonStyle,
+                confirmButtonState === ConfirmButtonState.Warning && [
                   styles.confirmButtonWarning,
+                  confirmButtonStyle,
+                ],
               ]}
               isDisabled={confirmed || confirmDisabled || loading}
               loading={confirmed || loading}
@@ -133,18 +139,6 @@ export default function ActionView({
     </View>
   );
 }
-
-ActionView.defaultProps = {
-  cancelText: '',
-  confirmButtonMode: 'normal',
-  confirmText: '',
-  confirmTestID: '',
-  confirmed: false,
-  cancelTestID: '',
-  showCancelButton: true,
-  showConfirmButton: true,
-  contentContainerStyle: undefined,
-};
 
 ActionView.propTypes = {
   /**
@@ -158,7 +152,7 @@ ActionView.propTypes = {
   /**
    * Text to show in the cancel button
    */
-  cancelText: PropTypes.string,
+  cancelText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   /**
    * Content to display above the action buttons
    */
@@ -170,7 +164,7 @@ ActionView.propTypes = {
   /**
    * Text to show in the confirm button
    */
-  confirmText: PropTypes.string,
+  confirmText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   /**
    * Whether action view was confirmed in order to block any other interaction
    */

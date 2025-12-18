@@ -6,9 +6,8 @@ const deviceHeight = Device.getDeviceHeight();
 const breakPoint = deviceHeight < 700;
 
 const styleSheet = (params: { theme: Theme }) => {
-  const {
-    theme: { colors },
-  } = params;
+  const { theme } = params;
+  const { colors, themeAppearance } = theme;
 
   return StyleSheet.create({
     mainWrapper: {
@@ -79,6 +78,23 @@ const styleSheet = (params: { theme: Theme }) => {
       backgroundColor: '#4105b6',
       borderColor: '#4105b6',
       borderWidth: 1,
+      height: 54,
+      borderRadius: 12,
+      shadowColor: '#4105b2',
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: theme.themeAppearance === 'dark' ? 0.5 : 0.3,
+      shadowRadius: 8,
+      elevation: 6,
+    },
+    unlockButtonDisabled: {
+      backgroundColor: themeAppearance === 'dark' ? '#1d2449' : '#e0e0e0',
+      borderColor: themeAppearance === 'dark' ? '#1d2449' : '#e0e0e0',
+    },
+    unlockButtonLabel: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 8,
     },
     // OPN Logo styles
     logoContainer: {
@@ -101,8 +117,9 @@ const styleSheet = (params: { theme: Theme }) => {
       marginBottom: 24,
     },
     goBack: {
-      marginVertical: 0,
+      marginVertical: 16,
       alignSelf: 'center',
+      color: themeAppearance === 'dark' ? '#b0efff' : '#4105b6',
     },
     biometrics: {
       flexDirection: 'row',

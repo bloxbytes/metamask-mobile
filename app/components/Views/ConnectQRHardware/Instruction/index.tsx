@@ -35,41 +35,45 @@ const ConnectQRInstruction = (props: IConnectQRInstructionProps) => {
   const styles = createStyles(theme, insets);
 
   const navigateTo = (url: string, title: string) => {
-    navigation.navigate('Webview', {
-      screen: 'SimpleWebview',
-      params: {
-        url,
-        title: strings(title),
-      },
-    });
+    // Disabled navigation as per request
+    // navigation.navigate('Webview', {
+    //   screen: 'SimpleWebview',
+    //   params: {
+    //     url,
+    //     title: strings(title),
+    //   },
+    // });
   };
 
   const navigateToVideo = () => {
-    navigation.navigate('Webview', {
-      screen: 'SimpleWebview',
-      params: {
-        url: KEYSTONE_SUPPORT_VIDEO,
-        title: strings('connect_qr_hardware.description2'),
-      },
-    });
+    // Disabled navigation as per request
+    // navigation.navigate('Webview', {
+    //   screen: 'SimpleWebview',
+    //   params: {
+    //     url: KEYSTONE_SUPPORT_VIDEO,
+    //     title: strings('connect_qr_hardware.description2'),
+    //   },
+    // });
   };
   const navigateToLearnMoreKeystone = () => {
-    navigation.navigate('Webview', {
-      screen: 'SimpleWebview',
-      params: {
-        url: KEYSTONE_LEARN_MORE,
-        title: strings('connect_qr_hardware.keystone'),
-      },
-    });
+    // Disabled navigation as per request
+    // navigation.navigate('Webview', {
+    //   screen: 'SimpleWebview',
+    //   params: {
+    //     url: KEYSTONE_LEARN_MORE,
+    //     title: strings('connect_qr_hardware.keystone'),
+    //   },
+    // });
   };
   const navigateToTutorial = () => {
-    navigation.navigate('Webview', {
-      screen: 'SimpleWebview',
-      params: {
-        url: KEYSTONE_SUPPORT,
-        title: strings('connect_qr_hardware.description4'),
-      },
-    });
+    // Disabled navigation as per request
+    // navigation.navigate('Webview', {
+    //   screen: 'SimpleWebview',
+    //   params: {
+    //     url: KEYSTONE_SUPPORT,
+    //     title: strings('connect_qr_hardware.description4'),
+    //   },
+    // });
   };
   return (
     <View style={styles.wrapper}>

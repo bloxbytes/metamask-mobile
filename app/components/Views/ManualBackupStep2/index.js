@@ -6,7 +6,9 @@ import {
   View,
   FlatList,
   Dimensions,
+  Image,
 } from 'react-native';
+import OPN_LOGO from '../../../images/opn.png';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import PropTypes from 'prop-types';
 import ActionView from '../../UI/ActionView';
@@ -469,26 +471,57 @@ const ManualBackupStep2 = ({
       <View style={[styles.container]}>
         <ActionView
           confirmTestID={ManualBackUpStepsSelectorsIDs.CONTINUE_BUTTON}
-          confirmText={strings('manual_backup_step_2.continue')}
+          confirmText={
+            <View style={styles.confirmButtonLabel}>
+              <Text
+                variant={TextVariant.BodyMDMedium}
+                style={{
+                  color: areAllWordsPlaced
+                    ? '#FFFFFF'
+                    : colors.background.default === '#000000' ||
+                      colors.background.default === '#0f112a'
+                    ? '#4f5262'
+                    : '#9fa3a7',
+                }}
+              >
+                {strings('manual_backup_step_2.continue')}
+              </Text>
+            </View>
+          }
           onConfirmPress={validateSeedPhrase}
           confirmDisabled={!areAllWordsPlaced}
           showCancelButton={false}
           confirmButtonMode={'confirm'}
           buttonContainerStyle={styles.buttonContainer}
           contentContainerStyle={styles.actionView}
+          confirmButtonStyle={[
+            styles.confirmButton,
+            !areAllWordsPlaced && styles.confirmButtonDisabled,
+          ]}
         >
           <View
             style={styles.wrapper}
             testID={ManualBackUpStepsSelectorsIDs.PROTECT_CONTAINER}
           >
             <View style={styles.content}>
-              <Text variant={TextVariant.DisplayMD} color={TextColor.Default}>
-                {strings('manual_backup_step_2.action')}
-              </Text>
+              <View style={styles.logo}>
+                <Image
+                  source={OPN_LOGO}
+                  style={[
+                    styles.logoImage,
+                    styles.logoWithRing,
+                  ]}
+                />
+              </View>
+              <View style={styles.headerContainer}>
+                <Text variant={TextVariant.DisplayMD} color={TextColor.Default} style={styles.centeredText}>
+                  {strings('manual_backup_step_2.action')}
+                </Text>
 
-              <Text variant={TextVariant.BodyMD} color={TextColor.Alternative}>
-                {strings('manual_backup_step_2.info')}
-              </Text>
+                <Text variant={TextVariant.BodyMD} color={TextColor.Alternative} style={styles.centeredText}>
+                  {strings('manual_backup_step_2.info')}
+                </Text>
+              </View>
 
               <View style={styles.gridContainer}>
                 {renderGrid()}

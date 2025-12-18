@@ -113,12 +113,6 @@ const createStyles = ({ colors }) =>
       fontWeight: '700',
       marginTop: 8,
     },
-    sectionContainer: {
-      backgroundColor: colors.background.section,
-      borderRadius: 12,
-      padding: 16,
-      marginBottom: 16,
-    },
     imageContainer: {
       alignItems: 'center',
       marginVertical: Device.isMediumDevice() ? 8 : 12,
@@ -140,6 +134,66 @@ const createStyles = ({ colors }) =>
     },
     disabledText: {
       color: colors.text.muted,
+    },
+    // OPN Decorative Background Elements
+    decorativeBackground: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      opacity: 0.15,
+      pointerEvents: 'none',
+    },
+    decorativeCircle1: {
+      position: 'absolute',
+      top: '15%',
+      left: -100,
+      width: 250,
+      height: 250,
+      borderRadius: 125,
+      backgroundColor: '#4105b6', // opnPrimaryGradientStart
+    },
+    decorativeCircle2: {
+      position: 'absolute',
+      bottom: '15%',
+      right: -100,
+      width: 250,
+      height: 250,
+      borderRadius: 125,
+      backgroundColor: '#2280cd', // opnAccentBlue
+    },
+    primaryButton: {
+      backgroundColor: '#4105b6',
+      borderColor: '#4105b6',
+      borderWidth: 1,
+      height: 54,
+      borderRadius: 12,
+      shadowColor: '#4105b2',
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: colors.background.default === '#000000' || colors.background.default === '#0f112a' ? 0.5 : 0.3,
+      shadowRadius: 8,
+      elevation: 6,
+    },
+    primaryButtonLabel: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 8,
+    },
+    sectionContainer: {
+      backgroundColor: colors.background.default === '#000000' || colors.background.default === '#0f112a' ? 'rgba(26, 29, 58, 0.6)' : colors.background.section,
+      borderRadius: 12,
+      padding: 16,
+      marginBottom: 16,
+      borderWidth: colors.background.default === '#000000' || colors.background.default === '#0f112a' ? 1 : 0,
+      borderColor: 'rgba(255, 255, 255, 0.1)',
+    },
+    illustration: {
+      width: Device.isMediumDevice() ? 160 : 200,
+      height: Device.isMediumDevice() ? 120 : 150,
+      alignSelf: 'center',
+      opacity: colors.background.default === '#000000' || colors.background.default === '#0f112a' ? 0.8 : 1,
     },
   });
 
@@ -356,22 +410,6 @@ class OptinMetrics extends PureComponent {
     return !this.state.isBasicUsageChecked;
   }
 
-  renderActionButtons = () => {
-    const styles = this.getStyles();
-
-    return (
-      <View style={styles.actionContainer}>
-        <Button
-          variant={ButtonVariants.Primary}
-          onPress={this.onConfirm}
-          testID={MetaMetricsOptInSelectorsIDs.OPTIN_METRICS_CONTINUE_BUTTON_ID}
-          style={styles.button}
-          label={strings('privacy_policy.continue')}
-          size={ButtonSize.Lg}
-        />
-      </View>
-    );
-  };
 
   /**
    * Triggered when scroll view has reached end of content.
@@ -426,6 +464,10 @@ class OptinMetrics extends PureComponent {
 
     return (
       <SafeAreaView edges={{ bottom: 'additive' }} style={styles.root}>
+        <View style={styles.decorativeBackground}>
+          <View style={styles.decorativeCircle1} />
+          <View style={styles.decorativeCircle2} />
+        </View>
         <ScrollView
           style={styles.root}
           scrollEventThrottle={150}
@@ -548,7 +590,25 @@ class OptinMetrics extends PureComponent {
             </View>
           </View>
         </ScrollView>
-        {this.renderActionButtons()}
+        <View style={styles.actionContainer}>
+          <Button
+            variant={ButtonVariants.Primary}
+            onPress={this.onConfirm}
+            testID={MetaMetricsOptInSelectorsIDs.OPTIN_METRICS_CONTINUE_BUTTON_ID}
+            style={styles.primaryButton}
+            label={
+              <View style={styles.primaryButtonLabel}>
+                <Text
+                  variant={TextVariant.BodyMDMedium}
+                  style={{ color: '#FFFFFF' }}
+                >
+                  {strings('privacy_policy.continue')}
+                </Text>
+              </View>
+            }
+            size={ButtonSize.Lg}
+          />
+        </View>
       </SafeAreaView>
     );
   }

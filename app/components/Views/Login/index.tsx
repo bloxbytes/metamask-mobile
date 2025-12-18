@@ -589,11 +589,30 @@ const Login: React.FC<LoginProps> = ({ saveOnboardingEvent }) => {
                 width={ButtonWidthTypes.Full}
                 size={ButtonSize.Lg}
                 onPress={handleLogin}
-                label={strings('login.unlock_button')}
+                label={
+                  <View style={styles.unlockButtonLabel}>
+                    <Text
+                      variant={TextVariant.BodyMDMedium}
+                      style={{
+                        color:
+                          password.length > 0 && !loading
+                            ? '#FFFFFF'
+                            : themeAppearance === 'light'
+                            ? '#9fa3a7'
+                            : '#4f5262',
+                      }}
+                    >
+                      {strings('login.unlock_button')}
+                    </Text>
+                  </View>
+                }
                 isDisabled={password.length === 0 || loading}
                 testID={LoginViewSelectors.LOGIN_BUTTON_ID}
                 loading={loading}
-                style={styles.unlockButton}
+                style={[
+                  styles.unlockButton,
+                  (password.length === 0 || loading) && styles.unlockButtonDisabled,
+                ]}
               />
 
               <Button
@@ -601,7 +620,16 @@ const Login: React.FC<LoginProps> = ({ saveOnboardingEvent }) => {
                 variant={ButtonVariants.Link}
                 onPress={toggleWarningModal}
                 testID={LoginViewSelectors.RESET_WALLET}
-                label={strings('login.forgot_password')}
+                label={
+                  <Text
+                    variant={TextVariant.BodyMDMedium}
+                    style={{
+                      color: themeAppearance === 'dark' ? '#b0efff' : '#4105b6',
+                    }}
+                  >
+                    {strings('login.forgot_password')}
+                  </Text>
+                }
                 isDisabled={loading}
                 size={ButtonSize.Lg}
               />

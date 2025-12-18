@@ -1,5 +1,6 @@
 import React from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../../../util/theme';
 import ThemeToggleButton from '../ThemeToggleButton';
 
@@ -10,10 +11,12 @@ import ThemeToggleButton from '../ThemeToggleButton';
  */
 export const FloatingThemeToggle: React.FC = () => {
   const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
 
   const containerStyle = {
     position: 'absolute' as const,
-    top: Platform.OS === 'ios' ? 52 : 16,
+    // Add safe area inset + small margin for better spacing
+    top: Platform.OS === 'ios' ? Math.max(insets.top, 20) : 16,
     right: 16,
     zIndex: 999,
     borderRadius: 12,
