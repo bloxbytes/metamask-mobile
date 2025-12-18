@@ -51,7 +51,7 @@ import { WalletViewSelectorsIDs } from '../../../../e2e/selectors/wallet/WalletV
 import ConditionalScrollView from '../../../component-library/components-temp/ConditionalScrollView';
 import { BannerAlertSeverity } from '../../../component-library/components/Banners/Banner';
 import BannerAlert from '../../../component-library/components/Banners/Banner/variants/BannerAlert/BannerAlert';
-import { ButtonVariants } from '../../../component-library/components/Buttons/Button';
+import Button, { ButtonVariants } from '../../../component-library/components/Buttons/Button';
 import CustomText, {
   TextColor,
   TextVariant,
@@ -209,6 +209,10 @@ import { createAddressListNavigationDetails } from '../../Views/MultichainAccoun
 import { createAccountSelectorNavDetails } from '../AccountSelector';
 import { InitSendLocation } from '../confirmations/constants/send';
 import { useSendNavigation } from '../confirmations/hooks/useSendNavigation';
+import { NetworkStatusCard } from './components/NetworkStatusCard';
+import { RepScoreCard } from './components/RepScoreCard';
+import { goToAddEvmToken } from '../../../components/UI/Tokens/util/goToAddEvmToken';
+import BaseControlBar from '../../UI/shared/BaseControlBar';
 
 const createStyles = ({ colors }: Theme) =>
   RNStyleSheet.create({
@@ -1577,6 +1581,16 @@ const Wallet = ({
     setTimeout(() => setCopied(false), 1500);
   };
 
+  const goToAddToken = useCallback(() => {
+    goToAddEvmToken({
+      navigation,
+      trackEvent,
+      createEventBuilder,
+      getDecimalChainId,
+      currentChainId: chainId,
+    });
+  }, [navigation, trackEvent, createEventBuilder, chainId]);
+
   const content = (
     <>
       <AssetPollingProvider />
@@ -1613,7 +1627,8 @@ const Wallet = ({
               alignItems: 'center',
               borderRadius: 12,
               borderWidth: 1,
-              borderColor: colors.border.default,
+              // borderColor: colors.border.default,
+              borderColor: colors.border.muted,
               padding: 12,
             }}
           >
@@ -1621,7 +1636,7 @@ const Wallet = ({
               accountAddress={selectedInternalAccount?.address || ''}
               type={avatarAccountType}
               size={AvatarSize.Md}
-              // testID={AccountCellIds.AVATAR}
+            // testID={AccountCellIds.AVATAR}
             />
             <View style={{ marginLeft: 12 }}>
               <CustomText>{accountName}</CustomText>
@@ -1634,12 +1649,12 @@ const Wallet = ({
               size={IconSize.Sm}
               color={colors.icon.default}
               name={IconName.ArrowDown}
-              // style={styles.dropdownIcon}
+            // style={styles.dropdownIcon}
             />
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={() => {
             navigation.navigate(...createNetworkManagerNavDetails({}));
             // navigation.navigate(Routes.MODAL.ROOT_MODAL_FLOW, {
@@ -1674,7 +1689,17 @@ const Wallet = ({
               name={IconName.ArrowDown}
             />
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+
+        <BaseControlBar
+          networkFilterTestId={WalletViewSelectorsIDs.TOKEN_NETWORK_FILTER}
+          useEvmSelectionLogic={false}
+          customWrapper={'none'}
+          hideSort
+          // style={[tw`px-4 pb-0 -mt-4`, { marginBottom: 0, maxWidth: '100%' }]}
+          style={tw`px-4 pb-0 -mt-4`}
+          opnMaxWidth='100%'
+        />
 
         {/* Orginal code */}
         {/* {isMultichainAccountsState2Enabled ? (
@@ -1687,7 +1712,8 @@ const Wallet = ({
           style={{
             borderRadius: 12,
             borderWidth: 1,
-            borderColor: colors.border.default,
+            // borderColor: colors.border.default,
+            borderColor: colors.border.muted,
             padding: 12,
             marginHorizontal: 16,
             // backgroundColor: '#fafbff',
@@ -1750,7 +1776,7 @@ const Wallet = ({
                   iconProps={{
                     color: copied ? IconColor.Success : IconColor.Default,
                   }}
-                  // testID={MULTICHAIN_ADDRESS_ROW_COPY_BUTTON_TEST_ID}
+                // testID={MULTICHAIN_ADDRESS_ROW_COPY_BUTTON_TEST_ID}
                 />
               </View>
             </>
@@ -1784,15 +1810,21 @@ const Wallet = ({
           receiveButtonActionID={WalletViewSelectorsIDs.WALLET_RECEIVE_BUTTON}
         />
 
+        <RepScoreCard />
+
+        <NetworkStatusCard />
+
         {isCarouselBannersEnabled && <Carousel style={styles.carousel} />}
 
         <View style={{ flexDirection: 'row', paddingHorizontal: 16 }}>
           <CustomText>Assets</CustomText>
+          <View style={{ flex: 1 }} />
+          <Button label="Import" variant={ButtonVariants.Link} onPress={goToAddToken} />
         </View>
         <TokenList
           tokenKeys={sortedTokenKeys}
           refreshing={false}
-          onRefresh={() => {}}
+          onRefresh={() => { }}
           // showRemoveMenu={showRemoveMenu}
           // setShowScamWarningModal={handleScamWarningModal}
           maxItems={undefined}
@@ -1841,6 +1873,7 @@ const Wallet = ({
             renderLoader()
           )}
         </View>
+        <View style={{ height: 16 }} />
       </ScrollView>
     </ErrorBoundary>
   );

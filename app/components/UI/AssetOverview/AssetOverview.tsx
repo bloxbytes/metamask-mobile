@@ -628,7 +628,8 @@ const AssetOverview: React.FC<AssetOverviewProps> = ({
             {renderChartNavigationButton()}
           </View>
           <AssetDetailsActions
-            displayBuyButton={displayBuyButton}
+            // displayBuyButton={displayBuyButton}
+            displayBuyButton={false}
             displaySwapsButton={displaySwapsButton}
             goToSwaps={goToSwaps}
             onBuy={onBuy}
@@ -638,6 +639,7 @@ const AssetOverview: React.FC<AssetOverviewProps> = ({
               address: asset.address,
               chainId,
             }}
+            opnWallet={true}
           />
           {
             ///: BEGIN:ONLY_INCLUDE_IF(tron)

@@ -148,7 +148,7 @@ export const AssetDetailsActions: React.FC<AssetDetailsActionsProps> = ({
   };
 
   const handleSwapPress = () => {
-    let supportUrl = 'https://swap.iopn.io';
+    let supportUrl = 'https://swap.iopn.tech';
 
     goToBrowserUrl(supportUrl, strings('asset_overview.swap'));
     // trackEvent(

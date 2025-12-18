@@ -4,7 +4,10 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useCallback } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { strings } from '../../../../locales/i18n';
+import BottomSheetHeader from '../../../component-library/components/BottomSheets/BottomSheetHeader';
 import NftGrid from '../../UI/NftGrid/NftGrid';
+import { View } from 'react-native';
 
 interface NFTNavigationParamList {
   AddAsset: { assetType: string };

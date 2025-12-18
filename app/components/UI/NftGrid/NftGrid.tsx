@@ -36,9 +36,23 @@ import BaseControlBar from '../shared/BaseControlBar';
 import ButtonIcon, {
   ButtonIconSizes,
 } from '../../../component-library/components/Buttons/ButtonIcon';
-import { IconName } from '../../../component-library/components/Icons/Icon';
+import Icon, { IconName, IconSize } from '../../../component-library/components/Icons/Icon';
 import { useTailwind } from '@metamask/design-system-twrnc-preset';
 import { selectHomepageRedesignV1Enabled } from '../../../selectors/featureFlagController/homepage';
+import { Image, TouchableOpacity, View } from 'react-native';
+import { createAccountSelectorNavDetails } from '../../Views/AccountSelector';
+import AvatarAccount from '../../../component-library/components/Avatars/Avatar/variants/AvatarAccount';
+import Avatar, { AvatarSize, AvatarVariant } from '../../../component-library/components/Avatars/Avatar';
+import { formatAddress } from '../../../util/address';
+import { useTheme } from '../../../util/theme';
+import { createNetworkManagerNavDetails } from '../NetworkManager';
+import { selectSelectedInternalAccountAddress } from '../../../selectors/accountsController';
+import { selectAvatarAccountType } from '../../../selectors/settings';
+import CustomText, {
+  TextColor,
+  TextVariant,
+} from '../../../component-library/components/Texts/Text';
+import { useAccountName } from '../../hooks/useAccountName';
 
 interface NFTNavigationParamList {
   AddAsset: { assetType: string };
@@ -207,8 +221,67 @@ const NftGrid = ({ isFullView = false }: NftGridProps) => {
     );
   };
 
+  const { colors } = useTheme();
+  const selectedInternalAccountAddress = useSelector(selectSelectedInternalAccountAddress);
+  const avatarAccountType = useSelector(selectAvatarAccountType);
+  const accountName = useAccountName();
+
   return (
     <>
+      <Image
+        source={require('../../../../logo.png')}
+        style={{
+          width: 80,
+          height: 80,
+          borderColor: '#b0efff',
+          borderRadius: 40,
+          borderWidth: 1,
+          marginTop: 2,
+          alignSelf: 'center',
+        }}
+      />
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate(...createAccountSelectorNavDetails({}));
+        }}
+        style={{
+          padding: 16,
+          // marginTop: 32,
+        }}
+      >
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            borderRadius: 12,
+            borderWidth: 1,
+            // borderColor: colors.border.default,
+            borderColor: colors.border.muted,
+            padding: 12,
+          }}
+        >
+          <AvatarAccount
+            accountAddress={selectedInternalAccountAddress || ''}
+            type={avatarAccountType}
+            size={AvatarSize.Md}
+          // testID={AccountCellIds.AVATAR}
+          />
+          <View style={{ marginLeft: 12 }}>
+            <CustomText>{accountName}</CustomText>
+            <CustomText>
+              {formatAddress(selectedInternalAccountAddress || '', 'short')}
+            </CustomText>
+          </View>
+          <View style={{ flex: 1 }} />
+          <Icon
+            size={IconSize.Sm}
+            color={colors.icon.default}
+            name={IconName.ArrowDown}
+          // style={styles.dropdownIcon}
+          />
+        </View>
+      </TouchableOpacity>
+
       <BaseControlBar
         networkFilterTestId={WalletViewSelectorsIDs.TOKEN_NETWORK_FILTER}
         useEvmSelectionLogic={false}
@@ -223,7 +296,9 @@ const NftGrid = ({ isFullView = false }: NftGridProps) => {
         }
         hideSort
         style={isFullView ? tw`px-4 pb-4` : tw`pb-3`}
+        opnMaxWidth={'90%'}
       />
+
       {renderNftContent()}
       {/* View all NFTs button - shown when there are more items than maxItems */}
       {maxItems && allFilteredCollectibles.length > maxItems && (

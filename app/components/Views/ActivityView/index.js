@@ -7,7 +7,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import ScrollableTabView from '@tommasini/react-native-scrollable-tab-view';
 import { useSelector } from 'react-redux';
@@ -21,9 +21,10 @@ import ButtonBase from '../../../component-library/components/Buttons/Button/fou
 import ButtonIcon, {
   ButtonIconSizes,
 } from '../../../component-library/components/Buttons/ButtonIcon';
-import {
+import Icon, {
   IconName,
   IconColor,
+  IconSize,
 } from '../../../component-library/components/Icons/Icon';
 import TextComponent, {
   getFontFamily,
@@ -34,7 +35,7 @@ import Routes from '../../../constants/navigation/Routes';
 import { MetaMetricsEvents } from '../../../core/Analytics';
 import { isNonEvmAddress } from '../../../core/Multichain/utils';
 import { selectAccountsByChainId } from '../../../selectors/accountTrackerController';
-import { selectSelectedInternalAccountFormattedAddress } from '../../../selectors/accountsController';
+import { selectSelectedInternalAccountAddress, selectSelectedInternalAccountFormattedAddress } from '../../../selectors/accountsController';
 import { selectMultichainAccountsState2Enabled } from '../../../selectors/featureFlagController/multichainAccounts';
 import { selectIsEvmNetworkSelected } from '../../../selectors/multichainNetworkController';
 import { selectChainId } from '../../../selectors/networkController';
@@ -60,6 +61,14 @@ import ErrorBoundary from '../ErrorBoundary';
 import MultichainTransactionsView from '../MultichainTransactionsView';
 import TransactionsView from '../TransactionsView';
 import UnifiedTransactionsView from '../UnifiedTransactionsView/UnifiedTransactionsView';
+import BaseControlBar from '../../UI/shared/BaseControlBar';
+import { useTailwind } from '@metamask/design-system-twrnc-preset';
+import { TouchableOpacity } from 'react-native';
+import { createAccountSelectorNavDetails } from '../AccountSelector';
+import AvatarAccount from '../../../component-library/components/Avatars/Avatar/variants/AvatarAccount';
+import { useAccountName } from '../../hooks/useAccountName';
+import { formatAddress } from '../../../util/address';
+import { selectAvatarAccountType } from '../../../selectors/settings';
 
 const createStyles = (params) => {
   const { theme } = params;
@@ -232,7 +241,8 @@ const ActivityView = () => {
     [navigation, colors, selectedAddress, openAccountSelector, showBackButton],
   );
 
-  const renderTabBar = () => <TabBar />;
+  // const renderTabBar = () => <TabBar />;
+  const renderTabBar = () => <></>;
 
   // Calculate if Perps tab is currently active
   // Perps is the last tab, so its index depends on what other tabs are shown
@@ -273,9 +283,14 @@ const ActivityView = () => {
   );
   const showUnifiedActivityList = isMultichainAccountsState2Enabled;
 
+  const tw = useTailwind();
+  const accountName = useAccountName();
+  // const selectedInternalAccountAddress = useSelector(selectSelectedInternalAccountAddress);
+  const avatarAccountType = useSelector(selectAvatarAccountType);
+
   return (
     <ErrorBoundary navigation={navigation} view="ActivityView">
-      {showBackButton ? (
+      {/* {showBackButton ? (
         <View style={[styles.headerWithBackButton, { marginTop: insets.top }]}>
           <View style={styles.headerBackButton}>
             <ButtonIcon
@@ -298,9 +313,9 @@ const ActivityView = () => {
             {strings('transactions_view.title')}
           </Text>
         </View>
-      )}
+      )} */}
       <View style={styles.wrapper}>
-        {!(isPerpsTabActive || isOrdersTabActive || isPredictTabActive) && (
+        {/* {!(isPerpsTabActive || isOrdersTabActive || isPredictTabActive) && (
           <View style={styles.controlButtonOuterWrapper}>
             <ButtonBase
               testID={WalletViewSelectorsIDs.TOKEN_NETWORK_FILTER}
@@ -345,7 +360,73 @@ const ActivityView = () => {
               disabled={isDisabled && !isMultichainAccountsState2Enabled}
             />
           </View>
-        )}
+        )} */}
+        <Image
+          source={require('../../../../logo.png')}
+          style={{
+            width: 80,
+            height: 80,
+            borderColor: '#b0efff',
+            borderRadius: 40,
+            borderWidth: 1,
+            marginTop: 61,
+            alignSelf: 'center',
+          }}
+        />
+
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate(...createAccountSelectorNavDetails({}));
+          }}
+          style={{
+            padding: 16,
+            marginVertical: 16,
+          }}
+        >
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              borderRadius: 12,
+              borderWidth: 1,
+              // borderColor: colors.border.default,
+              borderColor: colors.border.muted,
+              padding: 12,
+            }}
+          >
+            <AvatarAccount
+              accountAddress={selectedAddress}
+              type={avatarAccountType}
+              size={AvatarSize.Md}
+            // testID={AccountCellIds.AVATAR}
+            />
+            <View style={{ marginLeft: 12 }}>
+              <TextComponent>{accountName}</TextComponent>
+              <TextComponent>
+                {formatAddress(selectedAddress || '', 'short')}
+              </TextComponent>
+            </View>
+            <View style={{ flex: 1 }} />
+            <Icon
+              size={IconSize.Sm}
+              color={colors.icon.default}
+              name={IconName.ArrowDown}
+            // style={styles.dropdownIcon}
+            />
+          </View>
+        </TouchableOpacity>
+        
+        <BaseControlBar
+          networkFilterTestId={WalletViewSelectorsIDs.TOKEN_NETWORK_FILTER}
+          useEvmSelectionLogic={false}
+          customWrapper={'none'}
+          hideSort
+          // style={[tw`px-4 pb-0 -mt-4`, { marginBottom: 0, maxWidth: '100%' }]}
+          style={tw`px-4 pb-0 -mt-4`}
+          opnMaxWidth='100%'
+        />
+
+        <View style={{ height: 16 }} />
         <ScrollableTabView
           ref={tabViewRef}
           renderTabBar={renderTabBar}
@@ -364,9 +445,10 @@ const ActivityView = () => {
           ) : (
             <TransactionsView tabLabel={strings('transactions_view.title')} />
           )}
-          <RampOrdersList
+          
+          {/* <RampOrdersList
             tabLabel={strings('fiat_on_ramp_aggregator.orders')}
-          />
+          /> */}
 
           {/* {isPerpsEnabled && (
             <PerpsConnectionProvider

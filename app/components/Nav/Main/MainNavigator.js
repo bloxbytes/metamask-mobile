@@ -692,7 +692,8 @@ const HomeTabs = () => {
         <Tab.Screen
           name={Routes.SETTINGS_VIEW}
           options={options.settings}
-          component={Settings}
+          // component={Settings}
+          component={SettingsFlow}
           layout={({ children }) => <UnmountOnBlur>{children}</UnmountOnBlur>}
         />
       </Tab.Navigator>

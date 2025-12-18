@@ -1,38 +1,38 @@
-import { SolScope } from '@metamask/keyring-api';
-import { KnownCaipNamespace } from '@metamask/utils';
-import { useNavigation } from '@react-navigation/native';
-import React, { ReactNode, useCallback, useEffect, useMemo } from 'react';
-import { View, ViewStyle } from 'react-native';
+import React, { useCallback, ReactNode, useMemo, useEffect } from 'react';
+import { StyleSheet, View, ViewStyle } from 'react-native';
 import { useSelector } from 'react-redux';
-import { WalletViewSelectorsIDs } from '../../../../../e2e/selectors/wallet/WalletView.selectors';
+import { useNavigation } from '@react-navigation/native';
+import { SolScope } from '@metamask/keyring-api';
 import { strings } from '../../../../../locales/i18n';
-import Avatar, {
-  AvatarSize,
-  AvatarVariant,
-} from '../../../../component-library/components/Avatars/Avatar';
 import ButtonBase from '../../../../component-library/components/Buttons/Button/foundation/ButtonBase';
 import ButtonIcon, {
   ButtonIconSizes,
 } from '../../../../component-library/components/Buttons/ButtonIcon';
-import { IconName } from '../../../../component-library/components/Icons/Icon';
 import TextComponent, {
   TextVariant,
 } from '../../../../component-library/components/Texts/Text';
-import { selectMultichainAccountsState2Enabled } from '../../../../selectors/featureFlagController/multichainAccounts';
-import { selectSelectedInternalAccountByScope } from '../../../../selectors/multichainAccounts/accounts';
-import { selectIsEvmNetworkSelected } from '../../../../selectors/multichainNetworkController';
+import Avatar, {
+  AvatarSize,
+  AvatarVariant,
+} from '../../../../component-library/components/Avatars/Avatar';
+import { IconName } from '../../../../component-library/components/Icons/Icon';
 import { selectNetworkName } from '../../../../selectors/networkInfos';
+import { selectIsEvmNetworkSelected } from '../../../../selectors/multichainNetworkController';
 import { getNetworkImageSource } from '../../../../util/networks';
+import { createTokensBottomSheetNavDetails } from '../../Tokens/TokensBottomSheet';
+import { createNetworkManagerNavDetails } from '../../NetworkManager';
 import { useCurrentNetworkInfo } from '../../../hooks/useCurrentNetworkInfo';
-import { useNetworkEnablement } from '../../../hooks/useNetworkEnablement/useNetworkEnablement';
 import {
   NetworkType,
   useNetworksByCustomNamespace,
 } from '../../../hooks/useNetworksByNamespace/useNetworksByNamespace';
 import { useStyles } from '../../../hooks/useStyles';
-import { createNetworkManagerNavDetails } from '../../NetworkManager';
-import { createTokensBottomSheetNavDetails } from '../../Tokens/TokensBottomSheet';
 import createControlBarStyles from '../ControlBarStyles';
+import { selectMultichainAccountsState2Enabled } from '../../../../selectors/featureFlagController/multichainAccounts';
+import { KnownCaipNamespace } from '@metamask/utils';
+import { WalletViewSelectorsIDs } from '../../../../../e2e/selectors/wallet/WalletView.selectors';
+import { selectSelectedInternalAccountByScope } from '../../../../selectors/multichainAccounts/accounts';
+import { useNetworkEnablement } from '../../../hooks/useNetworkEnablement/useNetworkEnablement';
 
 export interface BaseControlBarProps {
   /**
@@ -71,6 +71,8 @@ export interface BaseControlBarProps {
    * Custom style to apply to the action bar wrapper
    */
   style?: ViewStyle;
+
+  opnMaxWidth?: string;
 }
 
 const BaseControlBar: React.FC<BaseControlBarProps> = ({
@@ -83,6 +85,7 @@ const BaseControlBar: React.FC<BaseControlBarProps> = ({
   useEvmSelectionLogic = false,
   customWrapper = 'outer',
   style,
+  opnMaxWidth,
 }) => {
   const { styles } = useStyles(createControlBarStyles, undefined);
   const navigation = useNavigation();
@@ -199,21 +202,22 @@ const BaseControlBar: React.FC<BaseControlBarProps> = ({
       isDisabled={isDisabled}
       onPress={
         useEvmSelectionLogic &&
-        !isEvmSelected &&
-        !isMultichainAccountsState2Enabled
+          !isEvmSelected &&
+          !isMultichainAccountsState2Enabled
           ? () => null
           : handleFilterControls
       }
       endIconName={
         useEvmSelectionLogic &&
-        !isEvmSelected &&
-        !isMultichainAccountsState2Enabled
+          !isEvmSelected &&
+          !isMultichainAccountsState2Enabled
           ? undefined
           : IconName.ArrowDown
       }
-      style={isDisabled ? styles.controlButtonDisabled : styles.controlButton}
+      style={[isDisabled ? styles.controlButtonDisabled : styles.controlButton, opnMaxWidth && { maxWidth: opnMaxWidth, flexGrow: 1 }]}
       disabled={isDisabled}
       activeOpacity={0.2}
+      opnMaxWidth={opnMaxWidth}
     />
   );
 

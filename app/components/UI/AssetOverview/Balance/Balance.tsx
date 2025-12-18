@@ -1,55 +1,55 @@
-import React, { useCallback, useMemo } from 'react';
-import { View } from 'react-native';
+import { getNativeTokenAddress } from '@metamask/assets-controllers';
 import {
   CaipAssetId,
   CaipAssetType,
   Hex,
   isCaipChainId,
 } from '@metamask/utils';
-import { strings } from '../../../../../locales/i18n';
-import { useStyles } from '../../../../component-library/hooks';
-import styleSheet from './Balance.styles';
-import AssetElement from '../../AssetElement';
-import { TOKEN_AMOUNT_BALANCE_TEST_ID } from '../../AssetElement/index.constants';
+import { useNavigation } from '@react-navigation/native';
+import React, { useCallback, useMemo } from 'react';
+import { View } from 'react-native';
 import { useSelector } from 'react-redux';
-import { selectNetworkConfigurationByChainId } from '../../../../selectors/networkController';
-import {
-  getTestNetImageByChainId,
-  getDefaultNetworkByChainId,
-  isTestNet,
-} from '../../../../util/networks';
+import { strings } from '../../../../../locales/i18n';
+import { AvatarSize } from '../../../../component-library/components/Avatars/Avatar';
+import AvatarToken from '../../../../component-library/components/Avatars/Avatar/variants/AvatarToken';
+import Badge from '../../../../component-library/components/Badges/Badge/Badge';
+import { BadgeVariant } from '../../../../component-library/components/Badges/Badge/Badge.types';
 import BadgeWrapper, {
   BadgePosition,
 } from '../../../../component-library/components/Badges/BadgeWrapper';
-import { BadgeVariant } from '../../../../component-library/components/Badges/Badge/Badge.types';
-import Badge from '../../../../component-library/components/Badges/Badge/Badge';
-import AvatarToken from '../../../../component-library/components/Avatars/Avatar/variants/AvatarToken';
-import { AvatarSize } from '../../../../component-library/components/Avatars/Avatar';
-import NetworkAssetLogo from '../../NetworkAssetLogo';
+import Tag from '../../../../component-library/components/Tags/Tag';
+import SensitiveText, {
+  SensitiveTextLength,
+} from '../../../../component-library/components/Texts/SensitiveText';
 import Text, {
   TextColor,
   TextVariant,
 } from '../../../../component-library/components/Texts/Text';
-import SensitiveText, {
-  SensitiveTextLength,
-} from '../../../../component-library/components/Texts/SensitiveText';
-import { TokenI } from '../../Tokens/types';
-import { useNavigation } from '@react-navigation/native';
+import { useStyles } from '../../../../component-library/hooks';
+import { ACCOUNT_TYPE_LABELS } from '../../../../constants/account-type-labels';
+import { isNonEvmChainId } from '../../../../core/Multichain/utils';
+import { RootState } from '../../../../reducers';
+import { selectMultichainAssetsRates } from '../../../../selectors/multichain';
+import { selectNetworkConfigurationByChainId } from '../../../../selectors/networkController';
+import { selectPrivacyMode } from '../../../../selectors/preferencesController';
+import { selectPricePercentChange1d } from '../../../../selectors/tokenRatesController';
 import {
-  PopularList,
-  UnpopularNetworkList,
+  getDefaultNetworkByChainId,
+  getTestNetImageByChainId,
+  isTestNet,
+} from '../../../../util/networks';
+import {
   CustomNetworkImgMapping,
   getNonEvmNetworkImageSourceByChainId,
+  PopularList,
+  UnpopularNetworkList,
 } from '../../../../util/networks/customNetworks';
-import { RootState } from '../../../../reducers';
+import AssetElement from '../../AssetElement';
+import { TOKEN_AMOUNT_BALANCE_TEST_ID } from '../../AssetElement/index.constants';
 import EarnBalance from '../../Earn/components/EarnBalance';
-import { isNonEvmChainId } from '../../../../core/Multichain/utils';
-import { selectPricePercentChange1d } from '../../../../selectors/tokenRatesController';
-import { selectPrivacyMode } from '../../../../selectors/preferencesController';
-import { getNativeTokenAddress } from '@metamask/assets-controllers';
-import { selectMultichainAssetsRates } from '../../../../selectors/multichain';
-import Tag from '../../../../component-library/components/Tags/Tag';
-import { ACCOUNT_TYPE_LABELS } from '../../../../constants/account-type-labels';
+import NetworkAssetLogo from '../../NetworkAssetLogo';
+import { TokenI } from '../../Tokens/types';
+import styleSheet from './Balance.styles';
 
 export const ACCOUNT_TYPE_LABEL_TEST_ID = 'account-type-label';
 
@@ -217,6 +217,7 @@ const Balance = ({
           {strings('asset_overview.your_balance')}
         </Text>
       )}
+      <View style={{ height: 16 }} />
       <AssetElement
         disabled={isDisabled}
         asset={asset}

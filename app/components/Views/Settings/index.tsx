@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect } from 'react';
-import { StyleSheet, ScrollView, Alert } from 'react-native';
+import { StyleSheet, ScrollView, Alert, Image, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import SettingsDrawer from '../../UI/SettingsDrawer';
-import { getSettingsNavigationOptions } from '../../UI/Navbar';
+// import { getSettingsNavigationOptions } from '../../UI/Navbar';
 import { strings } from '../../../../locales/i18n';
 import { MetaMetricsEvents } from '../../../core/Analytics';
 import { useSelector } from 'react-redux';
@@ -15,13 +15,191 @@ import { SettingsViewSelectorsIDs } from '../../../../e2e/selectors/Settings/Set
 ///: BEGIN:ONLY_INCLUDE_IF(external-snaps)
 import { createSnapsSettingsListNavDetails } from '../Snaps/SnapsSettingsList/SnapsSettingsList';
 ///: END:ONLY_INCLUDE_IF
-import { TextColor } from '../../../component-library/components/Texts/Text';
+import CustomText, { TextColor } from '../../../component-library/components/Texts/Text';
 import { useMetrics } from '../../../components/hooks/useMetrics';
-import { isNotificationsFeatureEnabled } from '../../../util/notifications';
+// import { isNotificationsFeatureEnabled } from '../../../util/notifications';
 import { isTest } from '../../../util/test/utils';
 import { isPermissionsSettingsV1Enabled } from '../../../util/networks';
 import { selectIsEvmNetworkSelected } from '../../../selectors/multichainNetworkController';
 import { selectSeedlessOnboardingLoginFlow } from '../../../selectors/seedlessOnboardingController';
+import Logo from '../../../../logo.png';
+import { createAccountSelectorNavDetails } from '../AccountSelector';
+import AvatarAccount from '../../../component-library/components/Avatars/Avatar/variants/AvatarAccount';
+import { AvatarSize } from '../../../component-library/components/Avatars/Avatar';
+import Icon, { IconName, IconSize } from '../../../component-library/components/Icons/Icon';
+import { selectAvatarAccountType } from '../../../selectors/settings';
+import { selectSelectedInternalAccountAddress } from '../../../selectors/accountsController';
+import { formatAddress } from '../../../util/address';
+import { useAccountName } from '../../hooks/useAccountName';
+import BaseControlBar from '../../UI/shared/BaseControlBar';
+import { useTailwind } from '@metamask/design-system-twrnc-preset';
+import { WalletViewSelectorsIDs } from '../../../../e2e/selectors/wallet/WalletView.selectors';
+
+// /******************************
+//  *  SETTINGS CARD
+//  ******************************/
+// const SettingsCard = ({
+//   title,
+//   children,
+// }: {
+//   title: string;
+//   children: React.ReactNode;
+// }) => {
+//   const { colors } = useTheme();
+
+//   return (
+//     <View style={styless.cardWrapper}>
+//       <CustomText style={[styless.sectionTitle, { color: colors.primary.default }]}>
+//         {title}
+//       </CustomText>
+
+//       <View style={[styless.card, { borderColor: colors.border.muted }]}>
+//         {children}
+//       </View>
+//     </View>
+//   );
+// };
+
+// /******************************
+//  *  ROW INSIDE CARD
+//  ******************************/
+// const SettingsRow = ({
+//   title,
+//   subtitle,
+//   icon,
+//   onPress,
+//   rightText,
+// }: {
+//   title: string;
+//   subtitle?: string;
+//   icon: IconName;
+//   onPress: () => void;
+//   rightText?: string;
+// }) => {
+//   const { colors } = useTheme();
+
+//   return (
+//     <TouchableOpacity onPress={onPress}>
+//       <View style={[styless.row, { borderColor: colors.border.muted }]}>
+//         {/* LEFT ICON */}
+//         <View style={[styless.rowIconWrapper, { backgroundColor: colors.primary.muted }]}>
+//           <Icon name={icon} size={IconSize.Sm} color={colors.primary.default} />
+//         </View>
+
+//         {/* TEXTS */}
+//         <View style={styless.rowTextWrapper}>
+//           <CustomText style={styless.rowTitle}>{title}</CustomText>
+//           {subtitle ? (
+//             <CustomText style={styless.rowSubtitle}>{subtitle}</CustomText>
+//           ) : null}
+//         </View>
+
+//         {/* RIGHT */}
+//         {rightText && (
+//           <CustomText style={styless.rightText}>{rightText}</CustomText>
+//         )}
+
+//         <Icon
+//           name={IconName.ArrowRight}
+//           size={IconSize.Sm}
+//           color={colors.icon.muted}
+//         />
+//       </View>
+//     </TouchableOpacity>
+//   );
+// };
+
+// /******************************
+//  *  LOGOUT BUTTON
+//  ******************************/
+// const LogoutButton = ({ onPress }: { onPress: () => void }) => {
+//   const { colors } = useTheme();
+
+//   return (
+//     <TouchableOpacity onPress={onPress}>
+//       <View style={[styless.logoutBtn, { borderColor: colors.error.muted }]}>
+//         <Icon name={IconName.Logout} size={IconSize.Md} color={colors.error.default} />
+//         <CustomText style={[styless.logoutText, { color: colors.error.default }]}>
+//           Lock Wallet
+//         </CustomText>
+//       </View>
+//     </TouchableOpacity>
+//   );
+// };
+
+// const styless = StyleSheet.create({
+//   cardWrapper: {
+//     paddingHorizontal: 16,
+//     marginBottom: 20,
+//   },
+
+//   sectionTitle: {
+//     fontSize: 14,
+//     marginBottom: 8,
+//   },
+
+//   card: {
+//     borderWidth: 2,
+//     borderRadius: 14,
+//     backgroundColor: '#ffffff',
+//     overflow: 'hidden',
+//   },
+
+//   row: {
+//     flexDirection: 'row',
+//     alignItems: 'center',
+//     padding: 16,
+//     borderBottomWidth: 1,
+//   },
+
+//   rowIconWrapper: {
+//     width: 32,
+//     height: 32,
+//     borderRadius: 16,
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//     marginRight: 12,
+//   },
+
+//   rowTextWrapper: {
+//     flex: 1,
+//   },
+
+//   rowTitle: {
+//     fontSize: 14,
+//     color: '#000',
+//   },
+
+//   rowSubtitle: {
+//     fontSize: 12,
+//     color: '#666',
+//     marginTop: 2,
+//   },
+
+//   rightText: {
+//     fontSize: 12,
+//     color: '#666',
+//     marginRight: 6,
+//   },
+
+//   logoutBtn: {
+//     marginHorizontal: 16,
+//     marginTop: 20,
+//     paddingVertical: 14,
+//     borderWidth: 2,
+//     borderRadius: 14,
+//     backgroundColor: '#ffe5e5',
+//     flexDirection: 'row',
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     gap: 8,
+//   },
+
+//   logoutText: {
+//     fontSize: 15,
+//     fontWeight: '500',
+//   },
+// });
 
 const createStyles = (colors: Colors) =>
   StyleSheet.create({
@@ -29,6 +207,37 @@ const createStyles = (colors: Colors) =>
       backgroundColor: colors.background.default,
       flex: 1,
       zIndex: 99999999999999,
+    },
+
+    logo: {
+      width: 80,
+      height: 80,
+      borderColor: colors.border.muted,   // or create your custom color
+      borderRadius: 40,
+      borderWidth: 1,
+      marginTop: 40,
+    },
+
+    accountCardWrapper: {
+      padding: 16,
+      marginTop: 48,
+    },
+
+    accountCard: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      borderRadius: 12,
+      borderWidth: 1,
+      borderColor: colors.border.muted, // Lint-safe
+      padding: 12,
+    },
+
+    accountInfo: {
+      marginLeft: 12,
+    },
+
+    fill: {
+      flex: 1,
     },
   });
 
@@ -48,15 +257,30 @@ const Settings = () => {
 
   const isEvmSelected = useSelector(selectIsEvmNetworkSelected);
 
+  // const updateNavBar = useCallback(() => {
+  //   navigation.setOptions(
+  //     getSettingsNavigationOptions(
+  //       strings('app_settings.title'),
+  //       colors,
+  //       navigation,
+  //     ),
+  //   );
+  // }, [navigation, colors]);
+
+  const HeaderLogo = useCallback(
+    () => <Image source={Logo} style={styles.logo} />,
+    [styles.logo],
+  );
+
   const updateNavBar = useCallback(() => {
-    navigation.setOptions(
-      getSettingsNavigationOptions(
-        strings('app_settings.title'),
-        colors,
-        navigation,
-      ),
-    );
-  }, [navigation, colors]);
+    navigation.setOptions({
+      headerShown: true,
+      headerTitle: HeaderLogo,
+      headerTitleAlign: 'center',
+      headerLeft: () => null,
+      headerRight: () => null,
+    });
+  }, [navigation, HeaderLogo]);
 
   useEffect(() => {
     updateNavBar();
@@ -67,10 +291,10 @@ const Settings = () => {
     navigation.navigate('GeneralSettings');
   };
 
-  const onPressAdvanced = () => {
-    trackEvent(createEventBuilder(MetaMetricsEvents.SETTINGS_ADVANCED).build());
-    navigation.navigate('AdvancedSettings');
-  };
+  // const onPressAdvanced = () => {
+  //   trackEvent(createEventBuilder(MetaMetricsEvents.SETTINGS_ADVANCED).build());
+  //   navigation.navigate('AdvancedSettings');
+  // };
 
   const onPressNotifications = () => {
     trackEvent(
@@ -79,12 +303,12 @@ const Settings = () => {
     navigation.navigate(Routes.SETTINGS.NOTIFICATIONS);
   };
 
-  const onPressBackupAndSync = () => {
-    trackEvent(
-      createEventBuilder(MetaMetricsEvents.SETTINGS_BACKUP_AND_SYNC).build(),
-    );
-    navigation.navigate(Routes.SETTINGS.BACKUP_AND_SYNC);
-  };
+  // const onPressBackupAndSync = () => {
+  //   trackEvent(
+  //     createEventBuilder(MetaMetricsEvents.SETTINGS_BACKUP_AND_SYNC).build(),
+  //   );
+  //   navigation.navigate(Routes.SETTINGS.BACKUP_AND_SYNC);
+  // };
 
   const onPressSecurity = () => {
     trackEvent(
@@ -98,43 +322,43 @@ const Settings = () => {
     navigation.navigate('SecuritySettings');
   };
 
-  const onPressOnRamp = () => {
-    trackEvent(
-      createEventBuilder(MetaMetricsEvents.ONRAMP_SETTINGS_CLICKED).build(),
-    );
-    navigation.navigate(Routes.RAMP.SETTINGS);
-  };
+  // const onPressOnRamp = () => {
+  //   trackEvent(
+  //     createEventBuilder(MetaMetricsEvents.ONRAMP_SETTINGS_CLICKED).build(),
+  //   );
+  //   navigation.navigate(Routes.RAMP.SETTINGS);
+  // };
 
-  const onPressExperimental = () => {
-    trackEvent(
-      createEventBuilder(MetaMetricsEvents.SETTINGS_EXPERIMENTAL).build(),
-    );
-    navigation.navigate('ExperimentalSettings');
-  };
+  // const onPressExperimental = () => {
+  //   trackEvent(
+  //     createEventBuilder(MetaMetricsEvents.SETTINGS_EXPERIMENTAL).build(),
+  //   );
+  //   navigation.navigate('ExperimentalSettings');
+  // };
 
-  const onPressAesCryptoTestForm = () => {
-    navigation.navigate('AesCryptoTestForm');
-  };
+  // const onPressAesCryptoTestForm = () => {
+  //   navigation.navigate('AesCryptoTestForm');
+  // };
 
   const onPressInfo = () => {
     trackEvent(createEventBuilder(MetaMetricsEvents.SETTINGS_ABOUT).build());
     navigation.navigate('CompanySettings');
   };
 
-  const onPressContacts = () => {
-    navigation.navigate('ContactsSettings');
-  };
+  // const onPressContacts = () => {
+  //   navigation.navigate('ContactsSettings');
+  // };
 
-  const onPressDeveloperOptions = () => {
-    navigation.navigate('DeveloperOptions');
-  };
-  const onPressFeatureFlagOverride = () => {
-    navigation.navigate(Routes.FEATURE_FLAG_OVERRIDE);
-  };
+  // const onPressDeveloperOptions = () => {
+  //   navigation.navigate('DeveloperOptions');
+  // };
+  // const onPressFeatureFlagOverride = () => {
+  //   navigation.navigate(Routes.FEATURE_FLAG_OVERRIDE);
+  // };
 
-  const goToManagePermissions = () => {
-    navigation.navigate('PermissionsManager');
-  };
+  // const goToManagePermissions = () => {
+  //   navigation.navigate('PermissionsManager');
+  // };
 
   const goToBrowserUrl = (url: string, title: string) => {
     navigation.navigate('Webview', {
@@ -146,23 +370,23 @@ const Settings = () => {
     });
   };
 
-  ///: BEGIN:ONLY_INCLUDE_IF(external-snaps)
-  const onPressSnaps = () => {
-    navigation.navigate(...createSnapsSettingsListNavDetails());
-  };
-  ///: END:ONLY_INCLUDE_IF
+  // ///: BEGIN:ONLY_INCLUDE_IF(external-snaps)
+  // const onPressSnaps = () => {
+  //   navigation.navigate(...createSnapsSettingsListNavDetails());
+  // };
+  // ///: END:ONLY_INCLUDE_IF
 
-  const submitFeedback = () => {
-    // trackEvent(
-    //   createEventBuilder(
-    //     MetaMetricsEvents.NAVIGATION_TAPS_SEND_FEEDBACK,
-    //   ).build(),
-    // );
-    // goToBrowserUrl(
-    //   'https://community.metamask.io/c/feature-requests-ideas/',
-    //   strings('app_settings.request_feature'),
-    // );
-  };
+  // const submitFeedback = () => {
+  // trackEvent(
+  //   createEventBuilder(
+  //     MetaMetricsEvents.NAVIGATION_TAPS_SEND_FEEDBACK,
+  //   ).build(),
+  // );
+  // goToBrowserUrl(
+  //   'https://community.metamask.io/c/feature-requests-ideas/',
+  //   strings('app_settings.request_feature'),
+  // );
+  // };
 
   const showHelp = () => {
     let supportUrl = 'https://iopn.io/contact';
@@ -203,6 +427,43 @@ const Settings = () => {
     );
   };
 
+  const avatarAccountType = useSelector(selectAvatarAccountType);
+  const selectedInternalAccountAddress = useSelector(selectSelectedInternalAccountAddress);
+  const accountName = useAccountName();
+  const tw = useTailwind();
+
+  const AccountSelectionCard = (
+    <TouchableOpacity
+      onPress={() => {
+        navigation.navigate(...createAccountSelectorNavDetails({}));
+      }}
+      style={styles.accountCardWrapper}
+    >
+      <View style={styles.accountCard}>
+        <AvatarAccount
+          accountAddress={selectedInternalAccountAddress || ''}
+          type={avatarAccountType}
+          size={AvatarSize.Md}
+        />
+        <View style={styles.accountInfo}>
+          <CustomText>{accountName}</CustomText>
+          <CustomText>
+            {formatAddress(selectedInternalAccountAddress || '', 'short')}
+          </CustomText>
+        </View>
+
+        <View style={styles.fill} />
+
+        <Icon
+          size={IconSize.Sm}
+          color={colors.icon.default}
+          name={IconName.ArrowDown}
+        />
+      </View>
+    </TouchableOpacity>
+  );
+
+
   let aboutMetaMaskTitle = strings('app_settings.info_title');
 
   ///: BEGIN:ONLY_INCLUDE_IF(flask)
@@ -220,6 +481,28 @@ const Settings = () => {
         style={styles.wrapper}
         testID={SettingsViewSelectorsIDs.SETTINGS_SCROLL_ID}
       >
+        {AccountSelectionCard}
+
+        <BaseControlBar
+          networkFilterTestId={WalletViewSelectorsIDs.TOKEN_NETWORK_FILTER}
+          useEvmSelectionLogic={false}
+          customWrapper={'none'}
+          hideSort
+          style={tw`-mt-1 px-4 pb-0`}
+          opnMaxWidth='100%'
+        />
+
+        {/* <SettingsCard title="App Info">
+          <SettingsRow
+            title="OPN Wallet"
+            subtitle="Version 1.0.0"
+            icon={IconName.Info}
+            onPress={() => { }}
+          />
+        </SettingsCard>
+
+        <LogoutButton onPress={lock} /> */}
+
         <SettingsDrawer
           description={strings('app_settings.general_desc')}
           onPress={onPressGeneral}
@@ -237,43 +520,49 @@ const Settings = () => {
           }
           testID={SettingsViewSelectorsIDs.SECURITY}
         />
-        <SettingsDrawer
+        {/* <SettingsDrawer
           description={strings('app_settings.advanced_desc')}
           onPress={onPressAdvanced}
           title={strings('app_settings.advanced_title')}
           testID={SettingsViewSelectorsIDs.ADVANCED}
-        />
-        <SettingsDrawer
+        /> */}
+        {/* <SettingsDrawer
           description={strings('backupAndSync.description')}
           onPress={onPressBackupAndSync}
           title={strings('backupAndSync.title')}
           testID={SettingsViewSelectorsIDs.BACKUP_AND_SYNC}
-        />
-        {isNotificationsFeatureEnabled() && (
+        /> */}
+        {/* {isNotificationsFeatureEnabled() && (
           <SettingsDrawer
             description={strings('app_settings.notifications_desc')}
             onPress={onPressNotifications}
             title={strings('app_settings.notifications_title')}
             testID={SettingsViewSelectorsIDs.NOTIFICATIONS}
           />
+        )} */}
+        <SettingsDrawer
+          description={strings('app_settings.notifications_desc')}
+          onPress={onPressNotifications}
+          title={strings('app_settings.notifications_title')}
+          testID={SettingsViewSelectorsIDs.NOTIFICATIONS}
+        />
+        {isPermissionsSettingsV1Enabled && (<></>
+          // <SettingsDrawer
+          //   description={strings('app_settings.permissions_desc')}
+          //   onPress={goToManagePermissions}
+          //   title={strings('app_settings.permissions_title')}
+          //   testID={SettingsViewSelectorsIDs.PERMISSIONS}
+          // />
         )}
-        {isPermissionsSettingsV1Enabled && (
-          <SettingsDrawer
-            description={strings('app_settings.permissions_desc')}
-            onPress={goToManagePermissions}
-            title={strings('app_settings.permissions_title')}
-            testID={SettingsViewSelectorsIDs.PERMISSIONS}
-          />
+        {isEvmSelected && (<></>
+          // <SettingsDrawer
+          //   description={strings('app_settings.contacts_desc')}
+          //   onPress={onPressContacts}
+          //   title={strings('app_settings.contacts_title')}
+          //   testID={SettingsViewSelectorsIDs.CONTACTS}
+          // />
         )}
-        {isEvmSelected && (
-          <SettingsDrawer
-            description={strings('app_settings.contacts_desc')}
-            onPress={onPressContacts}
-            title={strings('app_settings.contacts_title')}
-            testID={SettingsViewSelectorsIDs.CONTACTS}
-          />
-        )}
-        {
+        {/* {
           ///: BEGIN:ONLY_INCLUDE_IF(external-snaps)
         }
         <SettingsDrawer
@@ -284,35 +573,29 @@ const Settings = () => {
         />
         {
           ///: END:ONLY_INCLUDE_IF
-        }
-        <SettingsDrawer
+        } */}
+        {/* <SettingsDrawer
           title={strings('app_settings.fiat_on_ramp.title')}
           description={strings('app_settings.fiat_on_ramp.description')}
           onPress={onPressOnRamp}
           testID={SettingsViewSelectorsIDs.ON_RAMP}
-        />
-        <SettingsDrawer
+        /> */}
+        {/* <SettingsDrawer
           title={strings('app_settings.experimental_title')}
           description={strings('app_settings.experimental_desc')}
           onPress={onPressExperimental}
           testID={SettingsViewSelectorsIDs.EXPERIMENTAL}
-        />
+        /> */}
         {
-          /**
-           * This drawer is only visible in test mode.
-           * It is used to test the AES crypto functions.
-           *
-           * If this is shown in production, it is a bug.
-           */
-          isTest && (
-            <SettingsDrawer
-              title={strings('app_settings.aes_crypto_test_form_title')}
-              description={strings(
-                'app_settings.aes_crypto_test_form_description',
-              )}
-              onPress={onPressAesCryptoTestForm}
-              testID={SettingsViewSelectorsIDs.AES_CRYPTO_TEST_FORM}
-            />
+          isTest && (<></>
+            // <SettingsDrawer
+            //   title={strings('app_settings.aes_crypto_test_form_title')}
+            //   description={strings(
+            //     'app_settings.aes_crypto_test_form_description',
+            //   )}
+            //   onPress={onPressAesCryptoTestForm}
+            //   testID={SettingsViewSelectorsIDs.AES_CRYPTO_TEST_FORM}
+            // />
           )
         }
         <SettingsDrawer
@@ -320,13 +603,13 @@ const Settings = () => {
           onPress={onPressInfo}
           testID={SettingsViewSelectorsIDs.ABOUT_METAMASK}
         />
-        {process.env.MM_ENABLE_SETTINGS_PAGE_DEV_OPTIONS === 'true' && (
+        {/* {process.env.MM_ENABLE_SETTINGS_PAGE_DEV_OPTIONS === 'true' && (
           <SettingsDrawer
             title={strings('app_settings.developer_options.title')}
             onPress={onPressDeveloperOptions}
           />
-        )}
-        {process.env.METAMASK_ENVIRONMENT !== 'production' && (
+        )} */}
+        {/* {process.env.METAMASK_ENVIRONMENT !== 'production' && (
           <SettingsDrawer
             title={strings('app_settings.feature_flag_override.title')}
             description={strings(
@@ -334,13 +617,13 @@ const Settings = () => {
             )}
             onPress={onPressFeatureFlagOverride}
           />
-        )}
-        <SettingsDrawer
+        )} */}
+        {/* <SettingsDrawer
           title={strings('app_settings.request_feature')}
           onPress={submitFeedback}
           renderArrowRight={false}
           testID={SettingsViewSelectorsIDs.REQUEST}
-        />
+        /> */}
         <SettingsDrawer
           title={strings('app_settings.contact_support')}
           onPress={showHelp}
@@ -360,3 +643,4 @@ const Settings = () => {
 };
 
 export default Settings;
+

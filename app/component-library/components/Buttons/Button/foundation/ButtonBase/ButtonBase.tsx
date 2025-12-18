@@ -2,7 +2,7 @@
 
 // Third party dependencies.
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 
 // External dependencies.
 import Text from '../../../../Texts/Text';
@@ -31,6 +31,7 @@ const ButtonBase = ({
   style,
   width = DEFAULT_BUTTONBASE_WIDTH,
   isDisabled,
+  opnMaxWidth,
   ...props
 }: ButtonBaseProps) => {
   const { styles } = useStyles(styleSheet, {
@@ -45,7 +46,7 @@ const ButtonBase = ({
       disabled={isDisabled}
       activeOpacity={1}
       onPress={onPress}
-      style={styles.base}
+      style={[styles.base, style]}
       accessibilityRole="button"
       accessible
       {...props}
@@ -69,6 +70,7 @@ const ButtonBase = ({
       ) : (
         label
       )}
+      {opnMaxWidth && <View style={{ flex: 1 }} />}
       {endIconName && (
         <Icon
           color={labelColor.toString()}

@@ -93,8 +93,8 @@ const AssetElement: React.FC<AssetElementProps> = ({
     <View
       style={{
         borderRadius: 12,
+        borderColor: colors.border.muted,
         borderWidth: 1,
-        borderColor: colors.border.default,
         paddingHorizontal: 12,
         // marginHorizontal: 16,
         // backgroundColor: '#fafbff',
@@ -120,7 +120,7 @@ const AssetElement: React.FC<AssetElementProps> = ({
             <SensitiveText
               variant={
                 asset?.hasBalanceError ||
-                asset.balanceFiat === TOKEN_RATE_UNDEFINED
+                  asset.balanceFiat === TOKEN_RATE_UNDEFINED
                   ? TextVariant.BodySM
                   : TextVariant.BodyMDMedium
               }
@@ -129,7 +129,7 @@ const AssetElement: React.FC<AssetElementProps> = ({
               testID={BALANCE_TEST_ID}
             >
               {balance === TOKEN_BALANCE_LOADING ||
-              balance === TOKEN_BALANCE_LOADING_UPPERCASE ? (
+                balance === TOKEN_BALANCE_LOADING_UPPERCASE ? (
                 <SkeletonText thin style={styles.skeleton} />
               ) : (
                 balance
@@ -150,7 +150,7 @@ const AssetElement: React.FC<AssetElementProps> = ({
               testID={SECONDARY_BALANCE_TEST_ID}
             >
               {secondaryBalance === TOKEN_BALANCE_LOADING ||
-              secondaryBalance === TOKEN_BALANCE_LOADING_UPPERCASE ? (
+                secondaryBalance === TOKEN_BALANCE_LOADING_UPPERCASE ? (
                 <SkeletonText thin style={styles.skeleton} />
               ) : (
                 secondaryBalance
