@@ -464,10 +464,6 @@ class OptinMetrics extends PureComponent {
 
     return (
       <SafeAreaView edges={{ bottom: 'additive' }} style={styles.root}>
-        <View style={styles.decorativeBackground}>
-          <View style={styles.decorativeCircle1} />
-          <View style={styles.decorativeCircle2} />
-        </View>
         <ScrollView
           style={styles.root}
           scrollEventThrottle={150}

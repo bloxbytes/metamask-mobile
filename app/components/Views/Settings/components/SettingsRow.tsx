@@ -20,19 +20,19 @@ const SettingsRow = ({ title, subtitle, icon, onPress, rightText }: Props) => {
       <View style={[styles.row, { borderColor: colors.border.muted }]}>
         
         <View style={[styles.iconWrapper, { backgroundColor: colors.primary.muted }]}>
-          <Icon name={icon} size={IconSize.Sm} color={colors.primary.default} />
+          <Icon name={icon} size={IconSize.Sm} color={colors.icon.default} />
         </View>
 
         <View style={styles.textWrapper}>
-          <CustomText style={styles.rowTitle}>{title}</CustomText>
+          <CustomText style={[styles.rowTitle, { color: colors.text.default }]}>{title}</CustomText>
 
           {subtitle ? (
-            <CustomText style={styles.rowSubtitle}>{subtitle}</CustomText>
+            <CustomText style={[styles.rowSubtitle, { color: colors.text.alternative }]}>{subtitle}</CustomText>
           ) : null}
         </View>
 
         {rightText ? (
-          <CustomText style={styles.rightText}>{rightText}</CustomText>
+          <CustomText style={[styles.rightText, { color: colors.text.alternative }]}>{rightText}</CustomText>
         ) : null}
 
         <Icon name={IconName.ArrowRight} size={IconSize.Sm} color={colors.icon.muted} />
@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
   },
   rowTitle: {
     fontSize: 14,
+    fontWeight: '500',
   },
   rowSubtitle: {
     fontSize: 12,
@@ -69,6 +70,7 @@ const styles = StyleSheet.create({
   rightText: {
     fontSize: 12,
     marginRight: 6,
+    maxWidth: '40%', // Prevent it from taking over the row
   },
 });
 

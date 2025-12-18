@@ -940,13 +940,6 @@ class Onboarding extends PureComponent {
     return (
       <View style={[styles.ctas, { justifyContent: 'center' }]}>
         {/* Decorative Background Elements (dark mode only) */}
-        {isDarkMode && (
-          <View style={styles.decorativeBackground} pointerEvents="none">
-            <View style={styles.decorativeCircle1} />
-            <View style={styles.decorativeCircle2} />
-          </View>
-        )}
-
         {/* Welcome Title */}
         <Text
           variant={TextVariant.HeadingLG}

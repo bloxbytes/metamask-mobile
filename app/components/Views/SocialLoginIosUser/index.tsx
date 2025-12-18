@@ -64,10 +64,6 @@ const SocialLoginIosUser: React.FC<SocialLoginIosUserProps> = ({ type }) => {
 
   return (
     <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.wrapper}>
-      <View style={styles.decorativeBackground}>
-        <View style={styles.decorativeCircle1} />
-        <View style={styles.decorativeCircle2} />
-      </View>
       <View style={styles.root}>
         <View style={styles.animationContainer}>
           <View style={styles.largeFoxWrapper}>

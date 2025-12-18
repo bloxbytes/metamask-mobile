@@ -5,12 +5,25 @@ import Icon, { IconName, IconSize } from '../../../../component-library/componen
 import CustomText from '../../../../component-library/components/Texts/Text';
 
 const LogoutButton = ({ onPress }: { onPress: () => void }) => {
-  const { colors } = useTheme();
+  const { colors, themeAppearance } = useTheme();
 
   return (
     <TouchableOpacity onPress={onPress}>
-      <View style={[styles.button, { borderColor: colors.error.muted }]}>
-        <Icon name={IconName.Logout} size={IconSize.Md} color={colors.error.default} />
+      <View
+        style={[
+          styles.button,
+          {
+            borderColor: colors.error.inverse,
+            backgroundColor: colors.error.muted,
+            borderWidth: themeAppearance === 'dark' ? 1 : 2,
+          },
+        ]}
+      >
+        <Icon
+          name={IconName.Logout}
+          size={IconSize.Md}
+          color={colors.error.default}
+        />
 
         <CustomText style={[styles.text, { color: colors.error.default }]}>
           Lock Wallet
@@ -23,15 +36,22 @@ const LogoutButton = ({ onPress }: { onPress: () => void }) => {
 const styles = StyleSheet.create({
   button: {
     marginHorizontal: 16,
-    marginTop: 20,
+    marginTop: 24,
     paddingVertical: 14,
-    borderWidth: 2,
     borderRadius: 14,
-    backgroundColor: 'white',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     gap: 8,
+    // Shadow for "shadow-lg" effect
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 4,
   },
   text: {
     fontSize: 15,

@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from 'react';
 import { StyleSheet, ScrollView, Alert, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import SettingsDrawer from '../../UI/SettingsDrawer';
+// import SettingsDrawer from '../../UI/SettingsDrawer';
 // import { getSettingsNavigationOptions } from '../../UI/Navbar';
 import { strings } from '../../../../locales/i18n';
 import { MetaMetricsEvents } from '../../../core/Analytics';
@@ -15,13 +15,13 @@ import { SettingsViewSelectorsIDs } from '../../../../e2e/selectors/Settings/Set
 ///: BEGIN:ONLY_INCLUDE_IF(external-snaps)
 import { createSnapsSettingsListNavDetails } from '../Snaps/SnapsSettingsList/SnapsSettingsList';
 ///: END:ONLY_INCLUDE_IF
-import CustomText, { TextColor } from '../../../component-library/components/Texts/Text';
+import CustomText from '../../../component-library/components/Texts/Text';
 import { useMetrics } from '../../../components/hooks/useMetrics';
 // import { isNotificationsFeatureEnabled } from '../../../util/notifications';
-import { isTest } from '../../../util/test/utils';
-import { isPermissionsSettingsV1Enabled } from '../../../util/networks';
-import { selectIsEvmNetworkSelected } from '../../../selectors/multichainNetworkController';
-import { selectSeedlessOnboardingLoginFlow } from '../../../selectors/seedlessOnboardingController';
+// import { isTest } from '../../../util/test/utils';
+// import { isPermissionsSettingsV1Enabled } from '../../../util/networks';
+// import { selectIsEvmNetworkSelected } from '../../../selectors/multichainNetworkController';
+// import { selectSeedlessOnboardingLoginFlow } from '../../../selectors/seedlessOnboardingController';
 import { createAccountSelectorNavDetails } from '../AccountSelector';
 import AvatarAccount from '../../../component-library/components/Avatars/Avatar/variants/AvatarAccount';
 import { AvatarSize } from '../../../component-library/components/Avatars/Avatar';
@@ -37,6 +37,7 @@ import OPNLogoGlow from '../../Common/OPNLogoGlow';
 import LogoutButton from './components/LogoutButton';
 import SettingsCard from './components/SettingsCard';
 import SettingsRow from './components/SettingsRow';
+import LanguagePickerRow from './components/LanguagePickerRow';
 
 const createStyles = (colors: Colors) =>
   StyleSheet.create({
@@ -86,13 +87,13 @@ const Settings = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const navigation = useNavigation<any>();
 
-  const seedphraseBackedUp = useSelector(
-    // TODO: Replace "any" with type
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (state: any) => state.user.seedphraseBackedUp,
-  );
+  // const seedphraseBackedUp = useSelector(
+  //   // TODO: Replace "any" with type
+  //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  //   (state: any) => state.user.seedphraseBackedUp,
+  // );
 
-  const isEvmSelected = useSelector(selectIsEvmNetworkSelected);
+  // const isEvmSelected = useSelector(selectIsEvmNetworkSelected);
 
   // const updateNavBar = useCallback(() => {
   //   navigation.setOptions(
@@ -114,10 +115,7 @@ const Settings = () => {
     updateNavBar();
   }, [updateNavBar]);
 
-  const onPressGeneral = () => {
-    trackEvent(createEventBuilder(MetaMetricsEvents.SETTINGS_GENERAL).build());
-    navigation.navigate('GeneralSettings');
-  };
+
 
   // const onPressAdvanced = () => {
   //   trackEvent(createEventBuilder(MetaMetricsEvents.SETTINGS_ADVANCED).build());
@@ -138,16 +136,15 @@ const Settings = () => {
   //   navigation.navigate(Routes.SETTINGS.BACKUP_AND_SYNC);
   // };
 
-  const onPressSecurity = () => {
+  const onRevealSeed = () => {
     trackEvent(
       createEventBuilder(
         MetaMetricsEvents.SETTINGS_SECURITY_AND_PRIVACY,
       ).build(),
     );
-    trackEvent(
-      createEventBuilder(MetaMetricsEvents.VIEW_SECURITY_SETTINGS).build(),
-    );
-    navigation.navigate('SecuritySettings');
+     navigation.navigate(Routes.MODAL.ROOT_MODAL_FLOW, {
+      screen: Routes.MODAL.SRP_REVEAL_QUIZ,
+    });
   };
 
   // const onPressOnRamp = () => {
@@ -296,17 +293,7 @@ const Settings = () => {
   );
 
 
-  let aboutMetaMaskTitle = strings('app_settings.info_title');
-
-  ///: BEGIN:ONLY_INCLUDE_IF(flask)
-  aboutMetaMaskTitle = strings('app_settings.info_title_flask');
-  ///: END:ONLY_INCLUDE_IF
-
-  ///: BEGIN:ONLY_INCLUDE_IF(beta)
-  aboutMetaMaskTitle = strings('app_settings.info_title_beta');
-  ///: END:ONLY_INCLUDE_IF
-
-  const oauthFlow = useSelector(selectSeedlessOnboardingLoginFlow);
+  // const oauthFlow = useSelector(selectSeedlessOnboardingLoginFlow);
   return (
     <SafeAreaView edges={{ top: 'additive' }} style={styles.wrapper}>
       <ScrollView
@@ -325,159 +312,15 @@ const Settings = () => {
           opnMaxWidth='100%'
         />
 
-        {/* <SettingsCard title="App Info">
-          <SettingsRow
-            title="OPN Wallet"
-            subtitle="Version 1.0.0"
-            icon={IconName.Info}
-            onPress={() => { }}
-          />
-        </SettingsCard>
-
-        <LogoutButton onPress={lock} /> */}
-
-        <SettingsDrawer
-          description={strings('app_settings.general_desc')}
-          onPress={onPressGeneral}
-          title={strings('app_settings.general_title')}
-          testID={SettingsViewSelectorsIDs.GENERAL}
-        />
-        <SettingsDrawer
-          description={strings('app_settings.security_desc')}
-          onPress={onPressSecurity}
-          title={strings('app_settings.security_title')}
-          warning={
-            !oauthFlow && !seedphraseBackedUp
-              ? strings('drawer.settings_warning')
-              : ''
-          }
-          testID={SettingsViewSelectorsIDs.SECURITY}
-        />
-        {/* <SettingsDrawer
-          description={strings('app_settings.advanced_desc')}
-          onPress={onPressAdvanced}
-          title={strings('app_settings.advanced_title')}
-          testID={SettingsViewSelectorsIDs.ADVANCED}
-        /> */}
-        {/* <SettingsDrawer
-          description={strings('backupAndSync.description')}
-          onPress={onPressBackupAndSync}
-          title={strings('backupAndSync.title')}
-          testID={SettingsViewSelectorsIDs.BACKUP_AND_SYNC}
-        /> */}
-        {/* {isNotificationsFeatureEnabled() && (
-          <SettingsDrawer
-            description={strings('app_settings.notifications_desc')}
-            onPress={onPressNotifications}
-            title={strings('app_settings.notifications_title')}
-            testID={SettingsViewSelectorsIDs.NOTIFICATIONS}
-          />
-        )} */}
-        <SettingsDrawer
-          description={strings('app_settings.notifications_desc')}
-          onPress={onPressNotifications}
-          title={strings('app_settings.notifications_title')}
-          testID={SettingsViewSelectorsIDs.NOTIFICATIONS}
-        />
-        {isPermissionsSettingsV1Enabled && (<></>
-          // <SettingsDrawer
-          //   description={strings('app_settings.permissions_desc')}
-          //   onPress={goToManagePermissions}
-          //   title={strings('app_settings.permissions_title')}
-          //   testID={SettingsViewSelectorsIDs.PERMISSIONS}
-          // />
-        )}
-        {isEvmSelected && (<></>
-          // <SettingsDrawer
-          //   description={strings('app_settings.contacts_desc')}
-          //   onPress={onPressContacts}
-          //   title={strings('app_settings.contacts_title')}
-          //   testID={SettingsViewSelectorsIDs.CONTACTS}
-          // />
-        )}
-        {/* {
-          ///: BEGIN:ONLY_INCLUDE_IF(external-snaps)
-        }
-        <SettingsDrawer
-          title={strings('app_settings.snaps.title')}
-          description={strings('app_settings.snaps.description')}
-          onPress={onPressSnaps}
-          testID={SettingsViewSelectorsIDs.SNAPS}
-        />
-        {
-          ///: END:ONLY_INCLUDE_IF
-        } */}
-        {/* <SettingsDrawer
-          title={strings('app_settings.fiat_on_ramp.title')}
-          description={strings('app_settings.fiat_on_ramp.description')}
-          onPress={onPressOnRamp}
-          testID={SettingsViewSelectorsIDs.ON_RAMP}
-        /> */}
-        {/* <SettingsDrawer
-          title={strings('app_settings.experimental_title')}
-          description={strings('app_settings.experimental_desc')}
-          onPress={onPressExperimental}
-          testID={SettingsViewSelectorsIDs.EXPERIMENTAL}
-        /> */}
-        {
-          isTest && (<></>
-            // <SettingsDrawer
-            //   title={strings('app_settings.aes_crypto_test_form_title')}
-            //   description={strings(
-            //     'app_settings.aes_crypto_test_form_description',
-            //   )}
-            //   onPress={onPressAesCryptoTestForm}
-            //   testID={SettingsViewSelectorsIDs.AES_CRYPTO_TEST_FORM}
-            // />
-          )
-        }
-        <SettingsDrawer
-          title={aboutMetaMaskTitle}
-          onPress={onPressInfo}
-          testID={SettingsViewSelectorsIDs.ABOUT_METAMASK}
-        />
-        {/* {process.env.MM_ENABLE_SETTINGS_PAGE_DEV_OPTIONS === 'true' && (
-          <SettingsDrawer
-            title={strings('app_settings.developer_options.title')}
-            onPress={onPressDeveloperOptions}
-          />
-        )} */}
-        {/* {process.env.METAMASK_ENVIRONMENT !== 'production' && (
-          <SettingsDrawer
-            title={strings('app_settings.feature_flag_override.title')}
-            description={strings(
-              'app_settings.feature_flag_override.description',
-            )}
-            onPress={onPressFeatureFlagOverride}
-          />
-        )} */}
-        {/* <SettingsDrawer
-          title={strings('app_settings.request_feature')}
-          onPress={submitFeedback}
-          renderArrowRight={false}
-          testID={SettingsViewSelectorsIDs.REQUEST}
-        /> */}
-        <SettingsDrawer
-          title={strings('app_settings.contact_support')}
-          onPress={showHelp}
-          renderArrowRight={false}
-          testID={SettingsViewSelectorsIDs.CONTACT}
-        />
-        <SettingsDrawer
-          title={strings('drawer.lock')}
-          onPress={lock}
-          renderArrowRight={false}
-          testID={SettingsViewSelectorsIDs.LOCK}
-          titleColor={TextColor.Primary}
-        />
-
         <SettingsCard title="App Info">
           <SettingsRow
             title="OPN Wallet"
+            subtitle={'Version ' + strings('app_settings.version_number')}
             icon={IconName.Global}
-            onPress={lock}
+            onPress={onPressInfo}
           />
         </SettingsCard>
+
         <SettingsCard title="Security & Privacy">
           <SettingsRow
             title="Change Password"
@@ -487,22 +330,20 @@ const Settings = () => {
           <SettingsRow
             title="Reveal Secret Phrase"
             icon={IconName.Eye}
-            onPress={lock}
+            onPress={onRevealSeed}
           />
         </SettingsCard>
+
         <SettingsCard title="Preferences">
-          <SettingsRow
-            title="Language"
-            icon={IconName.Global}
-            onPress={lock}
-          />
+          <LanguagePickerRow />
           <SettingsRow
             title="Notifications"
             icon={IconName.Notification}
             onPress={onPressNotifications}
           />
         </SettingsCard>
-        <SettingsCard title="Security & Privacy">
+
+        <SettingsCard title="About">
           <SettingsRow
             title="Help & Support"
             icon={IconName.Question}
@@ -511,9 +352,10 @@ const Settings = () => {
           <SettingsRow
             title="Terms & Privacy"
             icon={IconName.PrivacyTip}
-            onPress={lock}
+            onPress={onPressInfo}
           />
         </SettingsCard>
+
         <LogoutButton onPress={lock} />
       </ScrollView>
     </SafeAreaView>

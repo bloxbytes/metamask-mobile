@@ -12,7 +12,7 @@ const SettingsCard = ({ title, children }: { title: string; children: React.Reac
         {title}
       </CustomText>
 
-      <View style={[styles.card, { borderColor: colors.border.muted }]}>
+      <View style={[styles.card, { borderColor: colors.border.muted, backgroundColor: colors.background.alternative }]}>
         {children}
       </View>
     </View>
@@ -22,16 +22,15 @@ const SettingsCard = ({ title, children }: { title: string; children: React.Reac
 const styles = StyleSheet.create({
   cardWrapper: {
     paddingHorizontal: 16,
-    marginBottom: 20,
+    marginBottom: 24,
   },
   sectionTitle: {
     fontSize: 14,
-    marginBottom: 8,
+    marginBottom: 12,
   },
   card: {
-    borderWidth: 2,
+    borderWidth: 1,
     borderRadius: 14,
-    backgroundColor: 'white',
     overflow: 'hidden',
   },
 });

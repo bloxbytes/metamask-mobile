@@ -122,22 +122,11 @@ export const OnboardingSuccessComponent: React.FC<OnboardingSuccessProps> = ({
 
   return (
     <SafeAreaView edges={{ bottom: 'additive' }} style={styles.root}>
-      <View style={styles.decorativeBackground}>
-        <View style={styles.decorativeCircle1} />
-        <View style={styles.decorativeCircle2} />
-      </View>
       <View
         style={styles.container}
         testID={OnboardingSuccessSelectorIDs.CONTAINER_ID}
       >
-        <View style={styles.logoContainer}>
-          <View style={styles.logoWithRing}>
-            <Image
-              source={require('../../../images/opn.png')}
-              style={styles.logo}
-            />
-          </View>
-        </View>
+
 
         <View style={styles.animationSection}>{renderContent()}</View>
 

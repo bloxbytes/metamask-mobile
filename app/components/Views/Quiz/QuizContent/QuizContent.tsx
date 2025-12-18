@@ -30,10 +30,6 @@ const QuizContent = ({
 
   return (
     <View style={styles.container}>
-      <View style={styles.decorativeBackground}>
-        <View style={styles.decorativeCircle1} />
-        <View style={styles.decorativeCircle2} />
-      </View>
       <>
         <View style={styles.header}>
           <View style={styles.spacer} />
