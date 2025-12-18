@@ -54,6 +54,7 @@ const styleSheet = (params: {
     },
     linkText: {
       textDecorationLine: 'underline',
+      color: '#2280cd',
     },
     bottomTextContainer: {
       flexDirection: 'column',

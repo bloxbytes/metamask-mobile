@@ -21,6 +21,7 @@ import AppleWhiteIcon from 'images/apple-white.svg';
 import { OnboardingSheetSelectorIDs } from '../../../../e2e/selectors/Onboarding/OnboardingSheet.selectors';
 import { useNavigation } from '@react-navigation/native';
 import AppConstants from '../../../core/AppConstants';
+import { colors as importedColors } from '../../../styles/common';
 
 export interface OnboardingSheetParams {
   onPressCreate?: () => void;
@@ -84,7 +85,7 @@ const createStyles = (colors: Colors) =>
       lineHeight: 20,
     },
     link: {
-      color: colors.primary.default,
+      color: importedColors.opnAccentBlue,
     },
     centeredText: {
       textAlign: 'center',
@@ -250,7 +251,8 @@ const OnboardingSheet = (props: OnboardingSheetProps) => {
             {strings('onboarding.by_continuing')}{' '}
             <Text
               variant={TextVariant.BodyXSMedium}
-              style={styles.link}
+              color={importedColors.opnAccentBlue}
+              style={{ textDecorationLine: 'underline' }}
               onPress={onPressTermsOfUse}
               suppressHighlighting
               testID="terms-of-use-link"
@@ -260,7 +262,8 @@ const OnboardingSheet = (props: OnboardingSheetProps) => {
             {strings('onboarding.and')}{' '}
             <Text
               variant={TextVariant.BodyXSMedium}
-              style={styles.link}
+              color={importedColors.opnAccentBlue}
+              style={{ textDecorationLine: 'underline' }}
               onPress={onPressPrivacyNotice}
               suppressHighlighting
               testID="privacy-notice-link"

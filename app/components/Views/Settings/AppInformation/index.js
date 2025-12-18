@@ -60,7 +60,7 @@ const createStyles = (colors) =>
       textAlign: 'left',
       marginBottom: 20,
       ...fontStyles.normal,
-      color: colors.primary.default,
+      color: '#2280cd',
     },
     division: {
       borderBottomColor: colors.border.muted,

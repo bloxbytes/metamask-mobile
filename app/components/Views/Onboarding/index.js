@@ -317,7 +317,7 @@ const createStyles = (colors, themeAppearance) =>
       color: themeAppearance === 'dark' ? importedColors.whiteTransparent : importedColors.opnTermsTextLight,
     },
     dynamicTermsLink: {
-      color: themeAppearance === 'dark' ? importedColors.opnAccentBlue : importedColors.opnPrimaryPurple,
+      color: importedColors.opnAccentBlue,
     },
   });
 
@@ -1021,7 +1021,8 @@ class Onboarding extends PureComponent {
             {strings('onboarding.by_continuing_agree')}{' '}
             <Text
               variant={TextVariant.BodyXS}
-              style={[styles.dynamicTermsLink, { textDecorationLine: 'underline' }]}
+              color={importedColors.opnAccentBlue}
+              style={{ textDecorationLine: 'underline' }}
               onPress={this.onTermsPress}
             >
               {strings('onboarding.terms_of_use')}
@@ -1029,7 +1030,8 @@ class Onboarding extends PureComponent {
             {' '}{strings('onboarding.and')}{' '}
             <Text
               variant={TextVariant.BodyXS}
-              style={[styles.dynamicTermsLink, { textDecorationLine: 'underline' }]}
+              color={importedColors.opnAccentBlue}
+              style={{ textDecorationLine: 'underline' }}
               onPress={this.onPrivacyPress}
             >
               {strings('onboarding.privacy_notice')}
