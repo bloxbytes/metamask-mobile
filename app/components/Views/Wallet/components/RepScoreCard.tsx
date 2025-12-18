@@ -39,7 +39,7 @@ export const RepScoreCard = () => {
         </LinearGradient>
         <View style={{ flex: 1, marginLeft: 12 }}>
           <Text style={styles.level}>Level 12</Text>
-          <Text style={styles.score}>8,547</Text>
+          <Text style={[styles.score, { color: colors.text.default }]}>8,547</Text>
           <Text style={styles.sub}>REP Score</Text>
         </View>
 

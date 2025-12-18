@@ -122,7 +122,8 @@ const TokenListComponent = ({
   const tokenList =
     isHomepageRedesignV1Enabled && !isFullView ? (
       <Box
-        twClassName={'bg-default'}
+        // twClassName={'bg-default'}
+        twClassName={''}
         testID={WalletViewSelectorsIDs.TOKENS_CONTAINER_LIST}
       >
         {displayTokenKeys.map((item, index) => (
@@ -149,7 +150,8 @@ const TokenListComponent = ({
         )}
       </Box>
     ) : (
-      <Box twClassName={'flex-1 bg-default'}>
+      // <Box twClassName={'flex-1 bg-default'}>
+      <Box twClassName={'flex-1'}>
         <FlashList
           ref={listRef}
           testID={WalletViewSelectorsIDs.TOKENS_CONTAINER_LIST}
