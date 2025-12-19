@@ -1915,8 +1915,11 @@ const Wallet = ({
             </ScrollView>
           </LinearGradient>
         ) : (
-          <View style={[baseStyles.flexGrow, { backgroundColor: colors.background.default, paddingTop: insets.top }]}>
-            <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={[baseStyles.flexGrow, { backgroundColor: colors.background.default }]}>
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{ paddingTop: insets.top }}
+            >
               <View style={baseStyles.flexGrow}>
                 <OPNLogoGlow />
                 {selectedInternalAccount ? (

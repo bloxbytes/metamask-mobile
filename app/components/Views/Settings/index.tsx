@@ -261,7 +261,7 @@ const Settings = () => {
           {content}
         </LinearGradient>
       ) : (
-        <View style={[styles.fill, { backgroundColor: colors.background.default, paddingTop: insets.top }]}>
+        <View style={[styles.fill, { backgroundColor: colors.background.default }]}>
           {content}
         </View>
       )}
