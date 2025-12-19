@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { StyleSheet, ScrollView, Alert, View } from 'react-native';
 import { useNavigation, NavigationProp, ParamListBase } from '@react-navigation/native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { strings } from '../../../../locales/i18n';
 import { MetaMetricsEvents } from '../../../core/Analytics';
 import { useSelector } from 'react-redux';
@@ -169,9 +169,12 @@ const Settings = () => {
     />
   );
 
+  const insets = useSafeAreaInsets();
+
   const content = (
     <ScrollView
       style={styles.scrollContainer}
+      contentContainerStyle={{ paddingTop: insets.top }}
       testID={SettingsViewSelectorsIDs.SETTINGS_SCROLL_ID}
     >
       <OPNLogoGlow />
@@ -248,19 +251,21 @@ const Settings = () => {
   );
 
   return (
-    <SafeAreaView edges={{ top: 'additive' }} style={styles.wrapper}>
+    <View style={styles.wrapper}>
       {isDark ? (
         <LinearGradient
-          colors={isDark ? ['#121431', '#0f132a'] : [colors.background.default, colors.background.default]}
+          colors={['#0a0b22', '#0f132a']}
           style={styles.linearGradient}
         >
           {/* <OPNBackgroundBlobs /> */}
           {content}
         </LinearGradient>
       ) : (
-        content
+        <View style={[styles.fill, { backgroundColor: colors.background.default, paddingTop: insets.top }]}>
+          {content}
+        </View>
       )}
-    </SafeAreaView>
+    </View>
   );
 };
 

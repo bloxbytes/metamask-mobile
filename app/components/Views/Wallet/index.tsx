@@ -215,7 +215,7 @@ import { RepScoreCard } from './components/RepScoreCard';
 import { goToAddEvmToken } from '../../../components/UI/Tokens/util/goToAddEvmToken';
 import BaseControlBar from '../../UI/shared/BaseControlBar';
 import OPNLogoGlow from '../../Common/OPNLogoGlow';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AccountSelectorButton from './components/AccountSelectorButton';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -1876,34 +1876,73 @@ const Wallet = ({
     [styles],
   );
 
+  const insets = useSafeAreaInsets();
+
   return (
     <ErrorBoundary navigation={navigation} view="Wallet">
-      <SafeAreaView edges={['top']}>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={baseStyles.flexGrow}>
-            <OPNLogoGlow />
-            {selectedInternalAccount ? (
-              <View
-                style={styles.wrapper}
-                testID={WalletViewSelectorsIDs.WALLET_CONTAINER}
-              >
-                <ConditionalScrollView
-                  isScrollEnabled={isHomepageRedesignV1Enabled}
-                  scrollViewProps={{
-                    contentContainerStyle: scrollViewContentStyle,
-                    showsVerticalScrollIndicator: false,
-                  }}
-                >
-                  {content}
-                </ConditionalScrollView>
+      <View style={baseStyles.flexGrow}>
+        {themeAppearance === 'dark' ? (
+          <LinearGradient
+            colors={['#0a0b22', '#0f132a']}
+            style={baseStyles.flexGrow}
+          >
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{ paddingTop: insets.top }}
+            >
+              <View style={baseStyles.flexGrow}>
+                <OPNLogoGlow />
+                {selectedInternalAccount ? (
+                  <View
+                    style={styles.wrapper}
+                    testID={WalletViewSelectorsIDs.WALLET_CONTAINER}
+                  >
+                    <ConditionalScrollView
+                      isScrollEnabled={isHomepageRedesignV1Enabled}
+                      scrollViewProps={{
+                        contentContainerStyle: scrollViewContentStyle,
+                        showsVerticalScrollIndicator: false,
+                      }}
+                    >
+                      {content}
+                    </ConditionalScrollView>
+                  </View>
+                ) : (
+                  renderLoader()
+                )}
               </View>
-            ) : (
-              renderLoader()
-            )}
+              <View style={{ height: 16 }} />
+            </ScrollView>
+          </LinearGradient>
+        ) : (
+          <View style={[baseStyles.flexGrow, { backgroundColor: colors.background.default, paddingTop: insets.top }]}>
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <View style={baseStyles.flexGrow}>
+                <OPNLogoGlow />
+                {selectedInternalAccount ? (
+                  <View
+                    style={styles.wrapper}
+                    testID={WalletViewSelectorsIDs.WALLET_CONTAINER}
+                  >
+                    <ConditionalScrollView
+                      isScrollEnabled={isHomepageRedesignV1Enabled}
+                      scrollViewProps={{
+                        contentContainerStyle: scrollViewContentStyle,
+                        showsVerticalScrollIndicator: false,
+                      }}
+                    >
+                      {content}
+                    </ConditionalScrollView>
+                  </View>
+                ) : (
+                  renderLoader()
+                )}
+              </View>
+              <View style={{ height: 16 }} />
+            </ScrollView>
           </View>
-          <View style={{ height: 16 }} />
-        </ScrollView>
-      </SafeAreaView>
+        )}
+      </View>
     </ErrorBoundary>
   );
 };
