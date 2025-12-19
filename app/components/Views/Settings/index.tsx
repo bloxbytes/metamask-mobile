@@ -54,6 +54,7 @@ const createStyles = () =>
     },
     content: {
       paddingBottom: 40,
+      paddingTop: 16,
     },
   });
 
@@ -176,6 +177,8 @@ const Settings = () => {
       <OPNLogoGlow />
       <View style={styles.content}>
         {AccountSelectionCard}
+
+        <View style={tw`h-1`} />
 
         <BaseControlBar
           networkFilterTestId={WalletViewSelectorsIDs.TOKEN_NETWORK_FILTER}
