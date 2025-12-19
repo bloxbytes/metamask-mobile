@@ -76,7 +76,7 @@ const AssetElement: React.FC<AssetElementProps> = ({
   hideSecondaryBalanceInPrivacyMode = true,
   disabled = false,
 }) => {
-  const { colors } = useTheme();
+  const { colors, themeAppearance } = useTheme();
   const styles = createStyles(colors);
 
   const handleOnPress = () => {
@@ -93,18 +93,23 @@ const AssetElement: React.FC<AssetElementProps> = ({
     <View
       style={{
         borderRadius: 12,
-        borderColor: colors.border.muted,
-        borderWidth: 1,
+        // borderColor: colors.border.muted,
+        borderWidth: 2,
         paddingHorizontal: 12,
         // marginHorizontal: 16,
         // backgroundColor: '#fafbff',
-        backgroundColor: colors.background.default,
+        // backgroundColor: colors.background.default,
+
+        backgroundColor: (themeAppearance == 'dark' ? '#1a1d3a' : colors.background.default),
+        borderColor: (themeAppearance == 'dark' ? '#rgba(65,5,182,0.2)' : colors.border.muted),
 
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 6 }, // pushes shadow down
         shadowOpacity: 0.1,
         shadowRadius: 10,
         elevation: 8, // Android
+
+        marginBottom: 24,
       }}
     >
       <TouchableOpacity

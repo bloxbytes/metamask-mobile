@@ -15,6 +15,7 @@ import {
   Linking,
   StyleSheet as RNStyleSheet,
   ScrollView,
+  StyleSheet,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -215,6 +216,8 @@ import { goToAddEvmToken } from '../../../components/UI/Tokens/util/goToAddEvmTo
 import BaseControlBar from '../../UI/shared/BaseControlBar';
 import OPNLogoGlow from '../../Common/OPNLogoGlow';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import AccountSelectorButton from './components/AccountSelectorButton';
+import LinearGradient from 'react-native-linear-gradient';
 
 const createStyles = ({ colors }: Theme) =>
   RNStyleSheet.create({
@@ -559,7 +562,7 @@ const Wallet = ({
   const { toastRef } = useContext(ToastContext);
   const { trackEvent, createEventBuilder, addTraitsToUser } = useMetrics();
   const styles = useMemo(() => createStyles(theme), [theme]);
-  const { colors } = theme;
+  const { colors, themeAppearance } = theme;
   const dispatch = useDispatch();
   const { navigateToSendPage } = useSendNavigation();
 
@@ -1600,7 +1603,7 @@ const Wallet = ({
         <NetworkConnectionBanner />
       </View>
       <>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={() => {
             navigation.navigate(...createAccountSelectorNavDetails({}));
           }}
@@ -1640,7 +1643,20 @@ const Wallet = ({
             // style={styles.dropdownIcon}
             />
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+
+        <AccountSelectorButton
+          onPress={() =>
+            navigation.navigate(...createAccountSelectorNavDetails({}))
+          }
+          accountName={accountName}
+          accountAddress={selectedInternalAccount?.address || ''}
+          avatarAccountType={avatarAccountType}
+          colors={colors}
+          theme={themeAppearance} // ← already exists in your project
+        />
+
+
 
         {/* <TouchableOpacity
           onPress={() => {
@@ -1699,13 +1715,13 @@ const Wallet = ({
         <View
           style={{
             borderRadius: 12,
-            borderWidth: 1,
+            borderWidth: 2,
             // borderColor: colors.border.default,
-            borderColor: colors.border.muted,
+            borderColor: themeAppearance == 'dark' ? 'rgba(65,5,182,0.2)' : colors.border.muted,
             padding: 12,
             marginHorizontal: 16,
-            // backgroundColor: '#fafbff',
-            backgroundColor: colors.background.default,
+            backgroundColor: themeAppearance == 'dark' ? '#1a1d3a' : colors.background.default,
+            // backgroundColor: colors.background.default,
 
             shadowColor: '#000',
             shadowOffset: { width: 0, height: 6 }, // pushes shadow down
@@ -1714,14 +1730,28 @@ const Wallet = ({
             elevation: 8, // Android
           }}
         >
+          {themeAppearance == 'dark' && (
+            <LinearGradient
+              colors={[
+                'rgba(26,29,58,0.6)',
+                'rgba(26,29,58,0.4)',
+              ]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={StyleSheet.absoluteFill}
+            />
+          )}
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <CustomText style={{}}>Total Balance</CustomText>
+            <CustomText color={themeAppearance === 'dark'
+              ? 'rgba(176, 239, 255, 0.7)' // #b0efff at 70% opacity
+              : '#4b5563'} style={{}}>Total Balance</CustomText>
             <View style={{ flex: 1 }} />
             <TouchableOpacity onPress={() => setPrivacyMode(!privacyMode)}>
               <Icon
                 name={privacyMode ? IconName.EyeSlash : IconName.Eye}
                 size={IconSize.Sm}
                 style={{ marginLeft: 8 }}
+                color={themeAppearance == 'dark' ? '#ffffff' : 'blue'}
               />
             </TouchableOpacity>
           </View>
@@ -1733,7 +1763,7 @@ const Wallet = ({
                 testID={WalletViewSelectorsIDs.TOTAL_BALANCE_TEXT}
                 variant={TextVariant.DisplayLG}
                 style={{
-                  fontWeight: '400',
+                  fontWeight: '300',
                   marginVertical: 8,
                 }}
               >
@@ -1743,15 +1773,20 @@ const Wallet = ({
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
-                  borderColor: '#3d00b51c',
+                  borderColor: themeAppearance == 'dark' ? 'rgba(65,5,182,0.2)' : '#3d00b51c',
                   borderWidth: 1,
                   borderRadius: 12,
                   paddingHorizontal: 12,
                   paddingVertical: 4,
                   alignSelf: 'flex-start',
+                  backgroundColor: themeAppearance == 'dark' ? '#0f112a' : colors.background.default,
                 }}
               >
-                <CustomText>
+                <CustomText
+                  variant={TextVariant.BodySM}
+                  color={themeAppearance === 'dark'
+                    ? 'rgba(176, 239, 255, 0.6)' // #b0efff at 60% opacity
+                    : '#6b7280'}>
                   {formatAddress(
                     selectedInternalAccount?.address || '',
                     'short',
@@ -1764,6 +1799,9 @@ const Wallet = ({
                   iconProps={{
                     color: copied ? IconColor.Success : IconColor.Default,
                   }}
+                  iconColor={themeAppearance === 'dark'
+                    ? 'rgba(176, 239, 255, 0.6)' // #b0efff at 60% opacity
+                    : '#6b7280'}
                 // testID={MULTICHAIN_ADDRESS_ROW_COPY_BUTTON_TEST_ID}
                 />
               </View>

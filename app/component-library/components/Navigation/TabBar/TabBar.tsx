@@ -2,7 +2,7 @@
 
 // Third party dependencies.
 import React, { useCallback, useRef } from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
 // External dependencies.
@@ -28,6 +28,8 @@ import {
   LABEL_BY_TAB_BAR_ICON_KEY,
 } from './TabBar.constants';
 import { TabBarProps } from './TabBar.types';
+import { useTheme } from '../../../../util/theme';
+import LinearGradient from 'react-native-linear-gradient';
 
 const TabBar = ({ state, descriptors, navigation }: TabBarProps) => {
   const { trackEvent, createEventBuilder } = useMetrics();
@@ -139,12 +141,62 @@ const TabBar = ({ state, descriptors, navigation }: TabBarProps) => {
     [state, renderTabBarItem],
   );
 
+  const { themeAppearance } = useTheme()
+
   return (
+    themeAppearance == 'dark' ?
+    <View
+      ref={tabBarRef}
+      style={{
+        position: 'relative',
+        backgroundColor: '#0f112a', // fallback
+      }}
+    >
+      {/* Background gradient (does NOT affect layout) */}
+      <LinearGradient
+        colors={['#0f112a', '#1d2449']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 0, y: 1 }}
+        style={StyleSheet.absoluteFill}
+      />
+
+      {/* Top glowing divider (dark only) */}
+      {themeAppearance === 'dark' && (
+        <LinearGradient
+          colors={[
+            'rgba(176,239,255,0)',
+            'rgba(176,239,255,0.3)',
+            'rgba(176,239,255,0)',
+          ]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: 1,
+          }}
+        />
+      )}
+
+      {/* REAL TAB BAR CONTENT (unchanged layout) */}
+      <Box
+        flexDirection={BoxFlexDirection.Row}
+        alignItems={BoxAlignItems.End}
+        twClassName="w-full pt-3 mb-1 px-2"
+        style={[tw.style(`pb-[${bottomInset}px]`)]}
+      >
+        {renderTabBarItems()}
+      </Box>
+    </View>
+    :
     <View ref={tabBarRef}>
       <Box
         flexDirection={BoxFlexDirection.Row}
         alignItems={BoxAlignItems.End}
-        twClassName="w-full pt-3 mb-1 px-2 bg-default border-t border-muted"
+        // twClassName="w-full pt-3 mb-1 px-2 bg-default border-t border-muted"
+        twClassName="w-full pt-3 mb-1 px-2"
         style={[tw.style(`pb-[${bottomInset}px]`)]}
       >
         {renderTabBarItems()}

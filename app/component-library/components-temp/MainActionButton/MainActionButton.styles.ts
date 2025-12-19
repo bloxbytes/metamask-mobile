@@ -56,6 +56,25 @@ const styleSheet = (params: {
       flexShrink: 0,
       minWidth: 0,
     },
+
+    shadowWrapper: {
+  position: 'relative',
+},
+
+fakeShadow: {
+  position: 'absolute',
+  left: 6,
+  right: 6,
+  bottom: -4,
+  height: 8,
+  borderRadius: 14,
+  backgroundColor: 'rgba(0,0,0,0.08)',
+},
+
+fakeShadowDark: {
+  backgroundColor: 'rgba(0,0,0,0.25)',
+},
+
   });
 };
 

@@ -70,6 +70,7 @@ import { useAccountName } from '../../hooks/useAccountName';
 import { formatAddress } from '../../../util/address';
 import { selectAvatarAccountType } from '../../../selectors/settings';
 import OPNLogoGlow from '../../Common/OPNLogoGlow';
+import AccountSelectorButton from '../Wallet/components/AccountSelectorButton';
 
 const createStyles = (params) => {
   const { theme } = params;
@@ -141,7 +142,7 @@ const createStyles = (params) => {
 };
 
 const ActivityView = () => {
-  const { colors } = useTheme();
+  const { colors, themeAppearance } = useTheme();
   const insets = useSafeAreaInsets();
 
   const { styles } = useStyles(createStyles, {
@@ -362,10 +363,10 @@ const ActivityView = () => {
             />
           </View>
         )} */}
-        
+
         <OPNLogoGlow />
 
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={() => {
             navigation.navigate(...createAccountSelectorNavDetails({}));
           }}
@@ -405,8 +406,23 @@ const ActivityView = () => {
             // style={styles.dropdownIcon}
             />
           </View>
-        </TouchableOpacity>
-        
+        </TouchableOpacity> */}
+
+        <View style={{ height: 16 }} />
+
+        <AccountSelectorButton
+          onPress={() =>
+            navigation.navigate(...createAccountSelectorNavDetails({}))
+          }
+          accountName={accountName}
+          accountAddress={selectedAddress || ''}
+          avatarAccountType={avatarAccountType}
+          colors={colors}
+          theme={themeAppearance} // ← already exists in your project
+        />
+
+        <View style={{ height: 16 }} />
+
         <BaseControlBar
           networkFilterTestId={WalletViewSelectorsIDs.TOKEN_NETWORK_FILTER}
           useEvmSelectionLogic={false}
@@ -436,7 +452,7 @@ const ActivityView = () => {
           ) : (
             <TransactionsView tabLabel={strings('transactions_view.title')} />
           )}
-          
+
           {/* <RampOrdersList
             tabLabel={strings('fiat_on_ramp_aggregator.orders')}
           /> */}

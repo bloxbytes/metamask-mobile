@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
-import { StyleSheet, ScrollView, Alert, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, ScrollView, Alert, View
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 // import SettingsDrawer from '../../UI/SettingsDrawer';
@@ -15,7 +16,7 @@ import { SettingsViewSelectorsIDs } from '../../../../e2e/selectors/Settings/Set
 ///: BEGIN:ONLY_INCLUDE_IF(external-snaps)
 import { createSnapsSettingsListNavDetails } from '../Snaps/SnapsSettingsList/SnapsSettingsList';
 ///: END:ONLY_INCLUDE_IF
-import CustomText from '../../../component-library/components/Texts/Text';
+// import CustomText from '../../../component-library/components/Texts/Text';
 import { useMetrics } from '../../../components/hooks/useMetrics';
 // import { isNotificationsFeatureEnabled } from '../../../util/notifications';
 // import { isTest } from '../../../util/test/utils';
@@ -23,12 +24,12 @@ import { useMetrics } from '../../../components/hooks/useMetrics';
 // import { selectIsEvmNetworkSelected } from '../../../selectors/multichainNetworkController';
 // import { selectSeedlessOnboardingLoginFlow } from '../../../selectors/seedlessOnboardingController';
 import { createAccountSelectorNavDetails } from '../AccountSelector';
-import AvatarAccount from '../../../component-library/components/Avatars/Avatar/variants/AvatarAccount';
-import { AvatarSize } from '../../../component-library/components/Avatars/Avatar';
-import Icon, { IconName, IconSize } from '../../../component-library/components/Icons/Icon';
+// import AvatarAccount from '../../../component-library/components/Avatars/Avatar/variants/AvatarAccount';
+// import { AvatarSize } from '../../../component-library/components/Avatars/Avatar';
+import { IconName } from '../../../component-library/components/Icons/Icon';
 import { selectAvatarAccountType } from '../../../selectors/settings';
 import { selectSelectedInternalAccountAddress } from '../../../selectors/accountsController';
-import { formatAddress } from '../../../util/address';
+// import { formatAddress } from '../../../util/address';
 import { useAccountName } from '../../hooks/useAccountName';
 import BaseControlBar from '../../UI/shared/BaseControlBar';
 import { useTailwind } from '@metamask/design-system-twrnc-preset';
@@ -38,6 +39,7 @@ import LogoutButton from './components/LogoutButton';
 import SettingsCard from './components/SettingsCard';
 import SettingsRow from './components/SettingsRow';
 import LanguagePickerRow from './components/LanguagePickerRow';
+import AccountSelectorButton from '../Wallet/components/AccountSelectorButton';
 
 const createStyles = (colors: Colors) =>
   StyleSheet.create({
@@ -77,10 +79,17 @@ const createStyles = (colors: Colors) =>
     fill: {
       flex: 1,
     },
+
+    account: {
+      marginTop: 16,
+    },
+    network: {
+      marginTop: 4,
+    },
   });
 
 const Settings = () => {
-  const { colors } = useTheme();
+  const { colors, themeAppearance } = useTheme();
   const { trackEvent, createEventBuilder } = useMetrics();
   const styles = createStyles(colors);
   // TODO: Replace "any" with type
@@ -261,36 +270,36 @@ const Settings = () => {
     navigation.navigate(Routes.SETTINGS.CHANGE_PASSWORD);
   };
 
-  const AccountSelectionCard = (
-    <TouchableOpacity
-      onPress={() => {
-        navigation.navigate(...createAccountSelectorNavDetails({}));
-      }}
-      style={styles.accountCardWrapper}
-    >
-      <View style={styles.accountCard}>
-        <AvatarAccount
-          accountAddress={selectedInternalAccountAddress || ''}
-          type={avatarAccountType}
-          size={AvatarSize.Md}
-        />
-        <View style={styles.accountInfo}>
-          <CustomText>{accountName}</CustomText>
-          <CustomText>
-            {formatAddress(selectedInternalAccountAddress || '', 'short')}
-          </CustomText>
-        </View>
+  // const AccountSelectionCard = (
+  //   <TouchableOpacity
+  //     onPress={() => {
+  //       navigation.navigate(...createAccountSelectorNavDetails({}));
+  //     }}
+  //     style={styles.accountCardWrapper}
+  //   >
+  //     <View style={styles.accountCard}>
+  //       <AvatarAccount
+  //         accountAddress={selectedInternalAccountAddress || ''}
+  //         type={avatarAccountType}
+  //         size={AvatarSize.Md}
+  //       />
+  //       <View style={styles.accountInfo}>
+  //         <CustomText>{accountName}</CustomText>
+  //         <CustomText>
+  //           {formatAddress(selectedInternalAccountAddress || '', 'short')}
+  //         </CustomText>
+  //       </View>
 
-        <View style={styles.fill} />
+  //       <View style={styles.fill} />
 
-        <Icon
-          size={IconSize.Sm}
-          color={colors.icon.default}
-          name={IconName.ArrowDown}
-        />
-      </View>
-    </TouchableOpacity>
-  );
+  //       <Icon
+  //         size={IconSize.Sm}
+  //         color={colors.icon.default}
+  //         name={IconName.ArrowDown}
+  //       />
+  //     </View>
+  //   </TouchableOpacity>
+  // );
 
 
   // const oauthFlow = useSelector(selectSeedlessOnboardingLoginFlow);
@@ -301,7 +310,23 @@ const Settings = () => {
         testID={SettingsViewSelectorsIDs.SETTINGS_SCROLL_ID}
       >
         <OPNLogoGlow />
-        {AccountSelectionCard}
+
+        {/* {AccountSelectionCard} */}
+
+        <View style={styles.account} />
+
+        <AccountSelectorButton
+          onPress={() =>
+            navigation.navigate(...createAccountSelectorNavDetails({}))
+          }
+          accountName={accountName}
+          accountAddress={selectedInternalAccountAddress || ''}
+          avatarAccountType={avatarAccountType}
+          colors={colors}
+          theme={themeAppearance} // ← already exists in your project
+        />
+
+        <View style={styles.network} />
 
         <BaseControlBar
           networkFilterTestId={WalletViewSelectorsIDs.TOKEN_NETWORK_FILTER}

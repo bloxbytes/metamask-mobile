@@ -6,13 +6,16 @@ import { useTheme } from '../../../../util/theme';
 import { BadgesModal } from './Badge/BadgesModal';
 
 export const RepScoreCard = () => {
-  const { colors } = useTheme();
+  const { colors, themeAppearance } = useTheme();
   const [showBadgesModal, setShowBadgesModal] = useState(false);
+  const isDark = themeAppearance === 'dark';
 
   return (
     <View style={[styles.card, {
-      backgroundColor: colors.background.default, borderColor: colors.border.muted,
-      borderWidth: 1,
+      // backgroundColor: colors.background.default, borderColor: colors.border.muted,
+      borderWidth: 2,
+      backgroundColor:(isDark ? '#1a1d3a' : colors.background.default),
+      borderColor: (isDark ? '#rgba(65,5,182,0.2)' : colors.border.muted),
     }]}>
       <View
         style={{
@@ -54,7 +57,7 @@ export const RepScoreCard = () => {
             end={{ x: 1, y: 0 }}
             style={styles.badgeButton}
           > */}
-            <Text style={styles.badgeText}>View Badges</Text>
+          <Text style={styles.badgeText}>View Badges</Text>
           {/* </LinearGradient> */}
         </TouchableOpacity>
       </View>
