@@ -55,6 +55,7 @@ import CustomText, {
 import { useAccountName } from '../../hooks/useAccountName';
 import OPNLogoGlow from '../../Common/OPNLogoGlow';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import AccountSelectorButton from '../../Views/Wallet/components/AccountSelectorButton';
 
 interface NFTNavigationParamList {
   AddAsset: { assetType: string };
@@ -223,7 +224,7 @@ const NftGrid = ({ isFullView = false }: NftGridProps) => {
     );
   };
 
-  const { colors } = useTheme();
+  const { colors, themeAppearance } = useTheme();
   const selectedInternalAccountAddress = useSelector(selectSelectedInternalAccountAddress);
   const avatarAccountType = useSelector(selectAvatarAccountType);
   const accountName = useAccountName();
@@ -232,7 +233,8 @@ const NftGrid = ({ isFullView = false }: NftGridProps) => {
     <SafeAreaView edges={[]}>
       <OPNLogoGlow />
 
-      <TouchableOpacity
+      <View style={{ height: 16 }} />
+      {/* <TouchableOpacity
         onPress={() => {
           navigation.navigate(...createAccountSelectorNavDetails({}));
         }}
@@ -272,8 +274,20 @@ const NftGrid = ({ isFullView = false }: NftGridProps) => {
           // style={styles.dropdownIcon}
           />
         </View>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
+      <AccountSelectorButton
+        onPress={() =>
+          navigation.navigate(...createAccountSelectorNavDetails({}))
+        }
+        accountName={accountName}
+        accountAddress={selectedInternalAccountAddress || ''}
+        avatarAccountType={avatarAccountType}
+        colors={colors}
+        theme={themeAppearance} // ← already exists in your project
+      />
+
+      <View style={{ marginTop: -8 }} />
       <BaseControlBar
         networkFilterTestId={WalletViewSelectorsIDs.TOKEN_NETWORK_FILTER}
         useEvmSelectionLogic={false}

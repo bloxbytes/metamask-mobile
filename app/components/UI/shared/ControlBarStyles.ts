@@ -1,8 +1,8 @@
 import { StyleSheet, Platform } from 'react-native';
 import { Theme } from '../../../util/theme/models';
 
-const GLASS_BG_COLOR = 'rgba(26, 29, 58, 0.3)';
-const GLASS_BORDER_COLOR = 'rgba(65, 5, 182, 0.3)';
+const GLASS_BG_COLOR = '#1a1d3a';
+const GLASS_BORDER_COLOR = 'rgba(65, 5, 182, 0.2)';
 
 /**
  * Shared styles for control bar components

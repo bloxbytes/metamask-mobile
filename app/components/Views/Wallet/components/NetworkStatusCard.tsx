@@ -25,12 +25,16 @@ const ZapIcon = () => (
 
 export const NetworkStatusCard = () => {
   const { colors, themeAppearance } = useTheme();
-  
-    const isDark = themeAppearance === 'dark';
+
+  const isDark = themeAppearance === 'dark';
 
   return (
-    <View style={[styles.card, { backgroundColor: colors.background.default, borderColor: colors.border.muted,
-          borderWidth: 1, }]}>
+    <View style={[styles.card, {
+      // backgroundColor: colors.background.default, borderColor: colors.border.muted,
+      borderWidth: 2,
+      backgroundColor: (isDark ? '#1a1d3a' : colors.background.default),
+      borderColor: (isDark ? '#rgba(65,5,182,0.2)' : colors.border.muted),
+    }]}>
       {/* HEADER */}
       <View style={styles.headerRow}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -60,8 +64,10 @@ export const NetworkStatusCard = () => {
 
       <View style={styles.grid}>
         {/* TPS BOX */}
-        <View style={[styles.box, { backgroundColor: isDark ? 'rgba(15, 17, 42, 0.5)': '#f3f4f6',
-          borderColor: isDark ? colors.border.muted : '#3d00b51c'
+        <View style={[styles.box, {
+          backgroundColor: isDark ? 'rgba(15, 17, 42, 0.5)' : '#f3f4f6',
+          // borderColor: isDark ? colors.border.muted : '#3d00b51c',
+          borderColor: (isDark ? '#rgba(65,5,182,0.2)' : colors.border.muted),
         }]}>
           <View style={styles.row}>
             <ZapIcon />
@@ -72,8 +78,11 @@ export const NetworkStatusCard = () => {
         </View>
 
         {/* VALIDATORS BOX */}
-        <View style={[styles.box, { backgroundColor: isDark ? 'rgba(15, 17, 42, 0.1)': '#f3f4f6',
-          borderColor: isDark ? colors.border.muted : '#3d00b51c'
+        <View style={[styles.box, {
+          // backgroundColor: isDark ? 'rgba(15, 17, 42, 0.1)' : '#f3f4f6',
+          backgroundColor: isDark ? 'rgba(15, 17, 42, 0.5)' : '#f3f4f6',
+          // borderColor: isDark ? colors.border.muted : '#3d00b51c'
+          borderColor: (isDark ? '#rgba(65,5,182,0.2)' : colors.border.muted),
         }]}>
           <Text style={[styles.validatorsLabel, { color: colors.text.alternative }]}>Validators</Text>
           <Text style={[styles.value, { color: colors.text.default }]}>1,247</Text>

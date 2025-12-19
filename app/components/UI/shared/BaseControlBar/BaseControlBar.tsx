@@ -33,6 +33,7 @@ import { KnownCaipNamespace } from '@metamask/utils';
 import { WalletViewSelectorsIDs } from '../../../../../e2e/selectors/wallet/WalletView.selectors';
 import { selectSelectedInternalAccountByScope } from '../../../../selectors/multichainAccounts/accounts';
 import { useNetworkEnablement } from '../../../hooks/useNetworkEnablement/useNetworkEnablement';
+import { useTheme } from '../../../../util/theme';
 
 export interface BaseControlBarProps {
   /**
@@ -171,6 +172,8 @@ const BaseControlBar: React.FC<BaseControlBarProps> = ({
     chainId: firstEnabledChainId,
   });
 
+  const { themeAppearance } = useTheme()
+
   // Shared network label rendering
   const renderNetworkLabel = () => (
     <View style={styles.networkManagerWrapper}>
@@ -182,11 +185,14 @@ const BaseControlBar: React.FC<BaseControlBarProps> = ({
           imageSource={networkImageSource}
         />
       )}
+      <View style={{ width: 8}}/>
       <TextComponent
-        variant={TextVariant.BodyMDMedium}
+        // variant={TextVariant.BodyMDMedium}
+        variant={opnMaxWidth ? TextVariant.BodySMMedium : TextVariant.BodyMDMedium}
         style={styles.controlButtonText}
         numberOfLines={1}
         testID={`${networkFilterTestId}-${currentNetworkCaipChainId}`}
+        color={opnMaxWidth && themeAppearance == 'dark' ? '#f8fdf1' : '#000000' }
       >
         {displayAllNetworks
           ? strings('wallet.popular_networks')

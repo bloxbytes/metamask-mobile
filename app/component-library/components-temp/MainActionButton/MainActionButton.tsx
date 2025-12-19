@@ -7,6 +7,7 @@ import {
   Easing,
   GestureResponderEvent,
   Pressable,
+  StyleSheet,
   View,
 } from 'react-native';
 
@@ -63,7 +64,7 @@ const MainActionButton = ({
     onPressOut?.(pressEvent);
   };
 
-  const { colors } = useTheme();
+  const { colors, themeAppearance } = useTheme();
 
   return (
     <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
@@ -73,18 +74,23 @@ const MainActionButton = ({
           pressed && styles.pressed,
           {
             // backgroundColor: '#fafbff',
-            backgroundColor: colors.background.default,
-            borderWidth: 1,
-            borderColor: '#3d00b51c',
+            // backgroundColor: colors.background.default,
+            backgroundColor: themeAppearance == 'dark' ? '#1a1d3a' : colors.background.default,
+            borderWidth: 2,
+            // borderColor: '#3d00b51c',
+            borderColor: themeAppearance == 'dark' ? '#rgba(65,5,182,0.2)' : colors.border.muted,
 
-            // // Shadow-lg equivalent
-            // shadowColor: '#000',
-            // shadowOffset: { width: 0, height: 6 },
-            // shadowOpacity: 0.12,
-            // shadowRadius: 12,
 
-            // // Required for Android shadow
-            // elevation: 12,
+            // ✅ Subtle bottom shadow ONLY
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 2 }, // ⬇️ very small
+            shadowOpacity: 0.1,
+            shadowRadius: 2,
+
+            // ✅ Android: keep LOW
+            elevation: 2,
+
+            margin: 4,
           },
         ]}
         onPress={!isDisabled ? onPress : undefined}
@@ -94,6 +100,17 @@ const MainActionButton = ({
         disabled={isDisabled}
         {...props}
       >
+        {(opnWallet && themeAppearance == 'dark') && (
+          <LinearGradient
+            colors={[
+              'rgba(26,29,58,0.6)',
+              'rgba(26,29,58,0.4)',
+            ]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={StyleSheet.absoluteFill}
+          />
+        )}
         <View style={styles.container}>
           {opnWallet ? (
             <LinearGradient

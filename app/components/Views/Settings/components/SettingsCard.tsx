@@ -2,8 +2,8 @@ import React from 'react';
 import { View, StyleSheet, Platform, Text } from 'react-native';
 import { useTheme } from '../../../../util/theme';
 
-const GLASS_BG_COLOR = 'rgba(26, 29, 58, 0.3)';
-const GLASS_BORDER_COLOR = 'rgba(65, 5, 182, 0.3)';
+const GLASS_BG_COLOR = '#1a1d3a';
+const GLASS_BORDER_COLOR = 'rgba(65, 5, 182, 0.2)';
 
 const SettingsCard = ({ title, children }: { title: string; children: React.ReactNode }) => {
   const { colors, themeAppearance } = useTheme();
