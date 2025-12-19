@@ -20,7 +20,7 @@ import BaseControlBar from '../../UI/shared/BaseControlBar';
 import { useTailwind } from '@metamask/design-system-twrnc-preset';
 import { WalletViewSelectorsIDs } from '../../../../e2e/selectors/wallet/WalletView.selectors';
 import OPNLogoGlow from '../../Common/OPNLogoGlow';
-import OPNBackgroundBlobs from '../../Common/OPNBackgroundBlobs';
+// import OPNBackgroundBlobs from '../../Common/OPNBackgroundBlobs';
 import LogoutButton from './components/LogoutButton';
 import SettingsCard from './components/SettingsCard';
 import SettingsRow from './components/SettingsRow';
@@ -251,7 +251,7 @@ const Settings = () => {
           colors={isDark ? ['#121431', '#0f132a'] : [colors.background.default, colors.background.default]}
           style={styles.linearGradient}
         >
-          <OPNBackgroundBlobs />
+          {/* <OPNBackgroundBlobs /> */}
           {content}
         </LinearGradient>
       ) : (
