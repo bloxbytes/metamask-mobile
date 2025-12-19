@@ -1,5 +1,8 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 import { Theme } from '../../../util/theme/models';
+
+const GLASS_BG_COLOR = 'rgba(26, 29, 58, 0.3)';
+const GLASS_BORDER_COLOR = 'rgba(65, 5, 182, 0.3)';
 
 /**
  * Shared styles for control bar components
@@ -30,22 +33,52 @@ const createControlBarStyles = (params: { theme: Theme }) => {
       alignItems: 'center',
     },
     controlButton: {
-      backgroundColor: colors.background.default,
-      borderColor: colors.border.muted,
-      borderWidth: 1,
-      borderRadius: 8,
+      backgroundColor: params.theme.themeAppearance === 'dark'
+        ? GLASS_BG_COLOR 
+        : colors.background.default,
+      borderColor: params.theme.themeAppearance === 'dark'
+        ? GLASS_BORDER_COLOR 
+        : colors.border.muted,
+      borderWidth: params.theme.themeAppearance === 'dark' ? 1 : 2,
+      borderRadius: 12,
       maxWidth: '80%',
       paddingHorizontal: 12,
+      ...Platform.select({
+        ios: {
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 6 },
+          shadowOpacity: (params.theme.themeAppearance === 'dark') ? 0.1 : 0.08,
+          shadowRadius: (params.theme.themeAppearance === 'dark') ? 6 : 4,
+        },
+        android: {
+          elevation: (params.theme.themeAppearance === 'dark') ? 8 : 4,
+        },
+      }),
     },
     controlButtonDisabled: {
-      backgroundColor: colors.background.default,
-      borderColor: colors.border.muted,
+      backgroundColor: params.theme.themeAppearance === 'dark'
+        ? GLASS_BG_COLOR 
+        : colors.background.default,
+      borderColor: params.theme.themeAppearance === 'dark'
+        ? GLASS_BORDER_COLOR 
+        : colors.border.muted,
       marginRight: 4,
-      borderWidth: 1,
-      borderRadius: 8,
+      borderWidth: params.theme.themeAppearance === 'dark' ? 1 : 2,
+      borderRadius: 12,
       maxWidth: '80%',
       paddingHorizontal: 12,
       opacity: 0.5,
+      ...Platform.select({
+        ios: {
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 6 },
+          shadowOpacity: (params.theme.themeAppearance === 'dark') ? 0.1 : 0.08,
+          shadowRadius: (params.theme.themeAppearance === 'dark') ? 6 : 4,
+        },
+        android: {
+          elevation: (params.theme.themeAppearance === 'dark') ? 8 : 4,
+        },
+      }),
     },
     controlButtonText: {
       color: colors.text.default,

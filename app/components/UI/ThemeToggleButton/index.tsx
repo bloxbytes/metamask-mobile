@@ -43,8 +43,8 @@ export const ThemeToggleButton: React.FC = () => {
     justifyContent: 'center' as const,
     alignItems: 'center' as const,
     backgroundColor: isLightMode ? '#FFFFFF' : '#1d2449',
-    borderWidth: 2,
-    borderColor: isLightMode ? '#3d00b51c' : '#4105b6',
+    borderWidth: isLightMode ? 2 : 0,
+    borderColor: isLightMode ? '#3d00b51c' : 'transparent',
   };
 
   return (

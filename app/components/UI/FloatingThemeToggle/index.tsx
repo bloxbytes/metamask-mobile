@@ -20,7 +20,7 @@ export const FloatingThemeToggle: React.FC = () => {
     right: 16,
     zIndex: 999,
     borderRadius: 12,
-    backgroundColor: colors.background.alternative || '#F2F2F7',
+    backgroundColor: 'transparent',
     padding: 2,
     elevation: 10,
     shadowColor: colors.shadow?.default || '#000000',

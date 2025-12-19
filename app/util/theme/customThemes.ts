@@ -18,13 +18,21 @@ const lightTheme: Theme = {
     },
     background: {
       ...baseLight.colors.background,
-      //   default: '#0f112a',
-      //   default: '#1d2449',
       default: '#FFFFFF',
     },
     text: {
       ...baseLight.colors.text,
-      default: baseLight.colors.text.default,
+      default: '#000000', // Black for light mode
+      alternative: '#6b7280', // Grey for wallet address, version, etc.
+      muted: '#9ca3af', // Lighter grey
+    },
+    border: {
+      ...baseLight.colors.border,
+      muted: '#e0e0e0', // Grey border for cards
+    },
+    icon: {
+      ...baseLight.colors.icon,
+      default: '#4105b6', // OPN Purple for icons in light mode
     },
     error: {
       ...baseLight.colors.error,
@@ -47,20 +55,28 @@ const darkTheme: Theme = {
     background: {
       ...baseDark.colors.background,
       default: '#0f112a',
-      // default: 'transparent',
       section: '#1a1d3a',
     },
     text: {
       ...baseDark.colors.text,
-      default: '#f8fdf1',
-      alternative: '#b0efff',
-      muted: '#4f5262',
+      default: '#f8fdf1', // White for dark mode
+      alternative: 'rgba(176, 239, 255, 0.6)', // Bluish 60% for wallet address
+      muted: 'rgba(176, 239, 255, 0.7)', // Bluish 70% for section titles, subtitles
+    },
+    border: {
+      ...baseDark.colors.border,
+      muted: 'rgba(65, 5, 182, 0.3)', // Purplish border for cards
+    },
+    icon: {
+      ...baseDark.colors.icon,
+      default: '#b0efff', // Bluish for icons
+      alternative: 'rgba(176, 239, 255, 0.7)', // Bluish 70% for chevrons
     },
     error: {
       ...baseDark.colors.error,
       default: '#f87171', // red-400
       muted: 'rgba(239, 68, 68, 0.2)', // red-500/20
-      inverse: 'rgba(248, 113, 113, 0.3)', // red-400/30 (using inverse for border in this specific case context)
+      inverse: 'rgba(248, 113, 113, 0.3)', // red-400/30
     },
   },
 };

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { StyleSheet, ScrollView, Alert, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, ScrollView, Alert, TouchableOpacity, View, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 // import SettingsDrawer from '../../UI/SettingsDrawer';
@@ -34,17 +34,26 @@ import BaseControlBar from '../../UI/shared/BaseControlBar';
 import { useTailwind } from '@metamask/design-system-twrnc-preset';
 import { WalletViewSelectorsIDs } from '../../../../e2e/selectors/wallet/WalletView.selectors';
 import OPNLogoGlow from '../../Common/OPNLogoGlow';
+import OPNBackgroundBlobs from '../../Common/OPNBackgroundBlobs';
 import LogoutButton from './components/LogoutButton';
 import SettingsCard from './components/SettingsCard';
 import SettingsRow from './components/SettingsRow';
 import LanguagePickerRow from './components/LanguagePickerRow';
+import LinearGradient from 'react-native-linear-gradient';
 
-const createStyles = (colors: Colors) =>
+const GLASS_BG_COLOR = 'rgba(26, 29, 58, 0.3)';
+const GLASS_BORDER_COLOR = 'rgba(65, 5, 182, 0.3)';
+
+const createStyles = (colors: Colors, isDark: boolean) =>
   StyleSheet.create({
     wrapper: {
-      backgroundColor: colors.background.default,
       flex: 1,
-      zIndex: 99999999999999,
+    },
+    linearGradient: {
+      flex: 1,
+    },
+    scrollContainer: {
+      flex: 1,
     },
 
     logo: {
@@ -65,24 +74,58 @@ const createStyles = (colors: Colors) =>
       flexDirection: 'row',
       alignItems: 'center',
       borderRadius: 12,
-      borderWidth: 1,
-      borderColor: colors.border.muted, // Lint-safe
+      borderWidth: isDark ? 1 : 2,
+      borderColor: isDark ? GLASS_BORDER_COLOR : colors.border.muted,
       padding: 12,
+      backgroundColor: isDark ? GLASS_BG_COLOR : colors.background.default,
+      ...Platform.select({
+        ios: {
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 6 },
+          shadowOpacity: isDark ? 0.1 : 0.08,
+          shadowRadius: isDark ? 6 : 4,
+        },
+        android: {
+          elevation: isDark ? 8 : 4,
+        },
+      }),
     },
-
     accountInfo: {
       marginLeft: 12,
+    },
+    accountName: {
+      fontSize: 14, // text-sm
+      fontWeight: '400',
+      color: colors.text.default,
+    },
+    accountAddress: {
+      fontSize: 12, // text-xs
+      fontWeight: '400',
+      color: isDark ? colors.text.muted : colors.text.alternative,
     },
 
     fill: {
       flex: 1,
     },
+    settingsHeaderWrapper: {
+      paddingHorizontal: 16,
+      marginTop: 16,
+      marginBottom: 16,
+    },
+    settingsHeaderText: {
+      fontSize: 18,
+      fontWeight: '600',
+    },
+    content: {
+      paddingBottom: 40,
+    },
   });
 
 const Settings = () => {
-  const { colors } = useTheme();
+  const { colors, themeAppearance } = useTheme();
+  const isDark = themeAppearance === 'dark';
   const { trackEvent, createEventBuilder } = useMetrics();
-  const styles = createStyles(colors);
+  const styles = createStyles(colors, isDark);
   // TODO: Replace "any" with type
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const navigation = useNavigation<any>();
@@ -275,8 +318,8 @@ const Settings = () => {
           size={AvatarSize.Md}
         />
         <View style={styles.accountInfo}>
-          <CustomText>{accountName}</CustomText>
-          <CustomText>
+          <CustomText style={styles.accountName}>{accountName}</CustomText>
+          <CustomText style={styles.accountAddress}>
             {formatAddress(selectedInternalAccountAddress || '', 'short')}
           </CustomText>
         </View>
@@ -294,13 +337,13 @@ const Settings = () => {
 
 
   // const oauthFlow = useSelector(selectSeedlessOnboardingLoginFlow);
-  return (
-    <SafeAreaView edges={{ top: 'additive' }} style={styles.wrapper}>
-      <ScrollView
-        style={styles.wrapper}
-        testID={SettingsViewSelectorsIDs.SETTINGS_SCROLL_ID}
-      >
-        <OPNLogoGlow />
+  const content = (
+    <ScrollView
+      style={styles.scrollContainer}
+      testID={SettingsViewSelectorsIDs.SETTINGS_SCROLL_ID}
+    >
+      <OPNLogoGlow />
+      <View style={styles.content}>
         {AccountSelectionCard}
 
         <BaseControlBar
@@ -309,8 +352,17 @@ const Settings = () => {
           customWrapper={'none'}
           hideSort
           style={tw`-mt-1 px-4 pb-0`}
-          opnMaxWidth='100%'
+          opnMaxWidth={'100%'}
         />
+
+        {/* Settings Header - matching React: text-lg mb-4 text-black */}
+        <View style={styles.settingsHeaderWrapper}>
+          <CustomText
+            style={[styles.settingsHeaderText, { color: colors.text.default }]}
+          >
+            Settings
+          </CustomText>
+        </View>
 
         <SettingsCard title="App Info">
           <SettingsRow
@@ -318,6 +370,7 @@ const Settings = () => {
             subtitle={'Version ' + strings('app_settings.version_number')}
             icon={IconName.Global}
             onPress={onPressInfo}
+            large
           />
         </SettingsCard>
 
@@ -357,7 +410,23 @@ const Settings = () => {
         </SettingsCard>
 
         <LogoutButton onPress={lock} />
-      </ScrollView>
+      </View>
+    </ScrollView>
+  );
+
+  return (
+    <SafeAreaView edges={{ top: 'additive' }} style={styles.wrapper}>
+      {isDark ? (
+        <LinearGradient
+          colors={isDark ? ['#0a0b22', '#0f132a'] : [colors.background.default, colors.background.default]}
+          style={styles.linearGradient}
+        >
+          <OPNBackgroundBlobs />
+          {content}
+        </LinearGradient>
+      ) : (
+        content
+      )}
     </SafeAreaView>
   );
 };
