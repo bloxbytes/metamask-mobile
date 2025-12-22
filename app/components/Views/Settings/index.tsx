@@ -88,7 +88,7 @@ const Settings = () => {
         MetaMetricsEvents.SETTINGS_SECURITY_AND_PRIVACY,
       ).build(),
     );
-     navigation.navigate(Routes.MODAL.ROOT_MODAL_FLOW, {
+    navigation.navigate(Routes.MODAL.ROOT_MODAL_FLOW, {
       screen: Routes.MODAL.SRP_REVEAL_QUIZ,
     });
   };
@@ -249,6 +249,19 @@ const Settings = () => {
       </View>
     </ScrollView>
   );
+
+  const [ready, setReady] = React.useState(false);
+
+  React.useEffect(() => {
+    const id = requestAnimationFrame(() => {
+      setReady(true);
+    });
+    return () => cancelAnimationFrame(id);
+  }, []);
+
+  if (!ready) {
+    return <View style={styles.fill} />; // or skeleton
+  }
 
   return (
     <View style={styles.wrapper}>

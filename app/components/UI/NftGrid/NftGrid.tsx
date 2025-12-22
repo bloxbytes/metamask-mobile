@@ -229,6 +229,19 @@ const NftGrid = ({ isFullView = false }: NftGridProps) => {
   const avatarAccountType = useSelector(selectAvatarAccountType);
   const accountName = useAccountName();
 
+  const [ready, setReady] = React.useState(false);
+
+  React.useEffect(() => {
+    const id = requestAnimationFrame(() => {
+      setReady(true);
+    });
+    return () => cancelAnimationFrame(id);
+  }, []);
+
+  if (!ready) {
+    return <View style={{ flex: 1 }} />; // or skeleton
+  }
+
   return (
     <SafeAreaView edges={[]}>
       <OPNLogoGlow />

@@ -290,6 +290,19 @@ const ActivityView = () => {
   // const selectedInternalAccountAddress = useSelector(selectSelectedInternalAccountAddress);
   const avatarAccountType = useSelector(selectAvatarAccountType);
 
+  const [ready, setReady] = React.useState(false);
+
+  React.useEffect(() => {
+    const id = requestAnimationFrame(() => {
+      setReady(true);
+    });
+    return () => cancelAnimationFrame(id);
+  }, []);
+
+  if (!ready) {
+    return <View style={{ flex: 1 }} />; // or skeleton
+  }
+
   return (
     <ErrorBoundary navigation={navigation} view="ActivityView">
       {/* {showBackButton ? (

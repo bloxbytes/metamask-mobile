@@ -577,7 +577,7 @@ const HomeTabs = () => {
         );
       },
       rootScreenName: Routes.TRANSACTIONS_VIEW,
-      unmountOnBlur: true,
+      // unmountOnBlur: true,
     },
     rewards: {
       tabBarIconKey: TabBarIconKey.Rewards,
@@ -599,7 +599,7 @@ const HomeTabs = () => {
         );
       },
       rootScreenName: Routes.TRENDING_VIEW,
-      unmountOnBlur: true,
+      // unmountOnBlur: true,
     },
     settings: {
       tabBarIconKey: TabBarIconKey.Setting,
@@ -611,7 +611,7 @@ const HomeTabs = () => {
         );
       },
       rootScreenName: Routes.SETTINGS_VIEW,
-      unmountOnBlur: true,
+      // unmountOnBlur: true,
     },
   };
 
@@ -681,20 +681,20 @@ const HomeTabs = () => {
             headerShown: false,
           }}
           component={NftFullView}
-          layout={({ children }) => <UnmountOnBlur>{children}</UnmountOnBlur>}
+          // layout={({ children }) => <UnmountOnBlur>{children}</UnmountOnBlur>}
         />
         <Tab.Screen
           name={Routes.TRANSACTIONS_VIEW}
           options={options.activity}
           component={TransactionsHome}
-          layout={({ children }) => <UnmountOnBlur>{children}</UnmountOnBlur>}
+          // layout={({ children }) => <UnmountOnBlur>{children}</UnmountOnBlur>}
         />
         <Tab.Screen
           name={Routes.SETTINGS_VIEW}
           options={options.settings}
           // component={Settings}
           component={SettingsFlow}
-          layout={({ children }) => <UnmountOnBlur>{children}</UnmountOnBlur>}
+          // layout={({ children }) => <UnmountOnBlur>{children}</UnmountOnBlur>}
         />
       </Tab.Navigator>
       <FloatingThemeToggle />
